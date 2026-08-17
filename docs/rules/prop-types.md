@@ -111,6 +111,20 @@ function Foo({ bar = "" as string }): JSX.Element {
 }
 ```
 
+Local aliases for React component types are also supported:
+
+```tsx
+import { FC } from "react";
+
+type Props = { name: string };
+type Greeting = FC<Props>;
+
+const Hello: Greeting = ({ name }) => <div>Hello {name}</div>;
+```
+
+The rule follows aliases and interfaces declared in the same file. It does not
+resolve aliases imported from another file.
+
 In Flow:
 
 ```tsx

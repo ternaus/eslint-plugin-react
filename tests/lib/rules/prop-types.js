@@ -3325,6 +3325,32 @@ ruleTester.run('prop-types', rule, {
       },
       {
         code: `
+        import { FC } from 'react';
+
+        type PersonProps = {
+          username: string;
+        };
+        type PersonComponent = FC<PersonProps>;
+
+        const Person: PersonComponent = ({ username }) => <div>{username}</div>;
+      `,
+        features: ['ts'],
+      },
+      {
+        code: `
+        import { FC } from 'react';
+
+        interface PersonProps {
+          username: string;
+        }
+        interface PersonComponent extends FC<PersonProps> {}
+
+        const Person: PersonComponent = ({ username }) => <div>{username}</div>;
+      `,
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as X from 'react';
         interface PersonProps {
             username: string;
@@ -8976,6 +9002,23 @@ ruleTester.run('prop-types', rule, {
           {
             messageId: 'missingPropType',
             data: { name: 'nonExistent' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
+        type PersonProps = {
+          username: string;
+        };
+        type PersonComponent = (props: PersonProps) => JSX.Element;
+
+        const Person: PersonComponent = ({ username }) => <div>{username}</div>;
+      `,
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'username' },
           },
         ],
         features: ['ts'],
