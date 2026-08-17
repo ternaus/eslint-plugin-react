@@ -44,6 +44,11 @@ export default [
 ];
 ```
 
+Keep this React config scoped to JavaScript and TypeScript source files that
+your parser can handle as JSX. Configure Markdown, JSON, CSS, and other
+processor-managed files separately instead of applying React rules to a broad
+`**/*` glob.
+
 ### Use `defineConfig`
 
 `defineConfig` can resolve the plugin's flat presets by name. Register the
