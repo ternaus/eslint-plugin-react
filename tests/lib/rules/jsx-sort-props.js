@@ -9,6 +9,8 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
+const assert = require('assert');
+const { Linter } = require('eslint');
 const RuleTester = require('../../helpers/ruleTester');
 const rule = require('../../../lib/rules/jsx-sort-props');
 
@@ -353,6 +355,29 @@ ruleTester.run('jsx-sort-props', rule, {
   ),
   invalid: parsers.all(
     [].concat(
+      {
+        code: `
+        <div
+          onClick={() => console.log()} // Comment
+          className="flex">
+          <span>Problematic Component</span>
+        </div>
+      `,
+        output: null,
+        errors: [{ messageId: 'sortPropsByAlpha' }],
+      },
+      {
+        code: `
+        <Column
+          visible
+          caption="Country"
+          // setCellValue={setCountryStateValue}
+          dataType="string"
+        />
+      `,
+        output: null,
+        errors: [{ messageId: 'sortPropsByAlpha' }, { messageId: 'sortPropsByAlpha' }],
+      },
       {
         code: '<App b a />;',
         errors: [expectedError],
@@ -890,19 +915,7 @@ ruleTester.run('jsx-sort-props', rule, {
           d={0}
         />
       `,
-        output: `
-        <foo
-          a={0}
-          b={0}
-          d={0}
-          m={0}
-          n={0} // this is n
-          o={0}
-          c={0} // this is c
-          // fofof
-          f={0} // this is f
-        />
-      `,
+        output: null,
         errors: [
           {
             messageId: 'sortPropsByAlpha',
@@ -940,19 +953,7 @@ ruleTester.run('jsx-sort-props', rule, {
           d={0}
         />
       `,
-        output: `
-        <foo
-          a={0}
-          b={0}
-          c={0} // this is c
-          d={0}
-          e={0}
-          f={0} // this is f
-          m={0}
-          n={0} // this is n
-          o={0}
-        />
-      `,
+        output: null,
         errors: [
           {
             messageId: 'sortPropsByAlpha',
@@ -995,20 +996,7 @@ ruleTester.run('jsx-sort-props', rule, {
           f={0}
         />
       `,
-        output: `
-        <foo
-          a1={0}
-          ab={1} // comment for ab
-          f={0}
-          g={0}
-          c={0} // comment for c
-          // comment for c and e
-          e={1}
-          d={0} // comment for d
-          // comment for d and aa
-          aa={0}
-        />
-      `,
+        output: null,
         errors: [
           {
             messageId: 'sortPropsByAlpha',
@@ -1051,20 +1039,7 @@ ruleTester.run('jsx-sort-props', rule, {
           aa={1} // comment for aa
         />
       `,
-        output: `
-        <foo
-          a1={0}
-          aa={1} // comment for aa
-          d={0}
-          g={0}
-          ab={1}
-          // comment for ab and f
-          f={0}
-          c={0} // comment for c
-          // comment for c and e
-          e={1}
-        />
-      `,
+        output: null,
         errors: [
           {
             messageId: 'sortPropsByAlpha',
@@ -1088,9 +1063,7 @@ ruleTester.run('jsx-sort-props', rule, {
         code: `
         <foo a={0} b={1} /* comment for b and ab */ ab={1} aa={0} />
       `,
-        output: `
-        <foo a={0} aa={0} b={1} /* comment for b and ab */ ab={1} />
-      `,
+        output: null,
         errors: [
           {
             messageId: 'sortPropsByAlpha',
@@ -1106,9 +1079,7 @@ ruleTester.run('jsx-sort-props', rule, {
         code: `
         <ReactJson src={rowResult} name="data" collapsed={4} collapseStringsAfterLength={60} onEdit={onEdit} /* onDelete={onEdit} */ />
       `,
-        output: `
-        <ReactJson collapseStringsAfterLength={60} collapsed={4} name="data" src={rowResult} onEdit={onEdit} /* onDelete={onEdit} */ />
-      `,
+        output: null,
         errors: [
           {
             messageId: 'sortPropsByAlpha',
@@ -1235,4 +1206,35 @@ ruleTester.run('jsx-sort-props', rule, {
       },
     ),
   ),
+});
+
+it('does not create a circular fix around comments between props', () => {
+  const source = `
+    <Column
+      visible
+      caption="Country"
+      // setCellValue={setCountryStateValue}
+      dataType="string"
+    />
+  `;
+  const result = new Linter().verifyAndFix(
+    source,
+    {
+      files: ['**/*.jsx'],
+      languageOptions: {
+        ecmaVersion: 2022,
+        parserOptions: { ecmaFeatures: { jsx: true } },
+      },
+      plugins: { react: { rules: { 'jsx-sort-props': rule } } },
+      rules: { 'react/jsx-sort-props': 'error' },
+    },
+    { filename: 'fixture.jsx' },
+  );
+
+  assert.strictEqual(result.fixed, false);
+  assert.strictEqual(result.output, source);
+  assert.deepStrictEqual(
+    result.messages.map((message) => message.messageId),
+    ['sortPropsByAlpha', 'sortPropsByAlpha'],
+  );
 });

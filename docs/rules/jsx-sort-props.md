@@ -12,6 +12,10 @@ Some developers prefer to sort props names alphabetically to be able to find nec
 
 This rule checks all JSX components and verifies that all props are sorted alphabetically. A spread attribute resets the verification. The default configuration of the rule is case-sensitive.
 
+The rule autofixes unambiguous prop lists. When a comment appears alongside
+props in the opening tag, it reports the sorting problem without autofixing
+because the comment's intended attachment cannot be determined safely.
+
 Examples of **incorrect** code for this rule:
 
 ```jsx
