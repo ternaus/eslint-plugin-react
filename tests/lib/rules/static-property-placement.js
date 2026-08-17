@@ -826,14 +826,17 @@ ruleTester.run('static-property-placement', rule, {
         }
       `,
       features: ['class fields'],
-      options: [PROPERTY_ASSIGNMENT, {
-        childContextTypes: STATIC_PUBLIC_FIELD,
-        contextTypes: STATIC_PUBLIC_FIELD,
-        contextType: STATIC_PUBLIC_FIELD,
-        displayName: STATIC_PUBLIC_FIELD,
-        defaultProps: STATIC_PUBLIC_FIELD,
-        propTypes: STATIC_PUBLIC_FIELD,
-      }],
+      options: [
+        PROPERTY_ASSIGNMENT,
+        {
+          childContextTypes: STATIC_PUBLIC_FIELD,
+          contextTypes: STATIC_PUBLIC_FIELD,
+          contextType: STATIC_PUBLIC_FIELD,
+          displayName: STATIC_PUBLIC_FIELD,
+          defaultProps: STATIC_PUBLIC_FIELD,
+          propTypes: STATIC_PUBLIC_FIELD,
+        },
+      ],
     },
     // ------------------------------------------------------------------------------
     // multiple - static getter
@@ -914,14 +917,17 @@ ruleTester.run('static-property-placement', rule, {
           }
         }
       `,
-      options: [PROPERTY_ASSIGNMENT, {
-        childContextTypes: STATIC_GETTER,
-        contextTypes: STATIC_GETTER,
-        contextType: STATIC_GETTER,
-        displayName: STATIC_GETTER,
-        defaultProps: STATIC_GETTER,
-        propTypes: STATIC_GETTER,
-      }],
+      options: [
+        PROPERTY_ASSIGNMENT,
+        {
+          childContextTypes: STATIC_GETTER,
+          contextTypes: STATIC_GETTER,
+          contextType: STATIC_GETTER,
+          displayName: STATIC_GETTER,
+          defaultProps: STATIC_GETTER,
+          propTypes: STATIC_GETTER,
+        },
+      ],
     },
     // ------------------------------------------------------------------------------
     // multiple - assignment
@@ -982,13 +988,16 @@ ruleTester.run('static-property-placement', rule, {
           name: PropTypes.string.isRequired
         }
       `,
-      options: [STATIC_PUBLIC_FIELD, {
-        childContextTypes: PROPERTY_ASSIGNMENT,
-        contextTypes: PROPERTY_ASSIGNMENT,
-        displayName: PROPERTY_ASSIGNMENT,
-        defaultProps: PROPERTY_ASSIGNMENT,
-        propTypes: PROPERTY_ASSIGNMENT,
-      }],
+      options: [
+        STATIC_PUBLIC_FIELD,
+        {
+          childContextTypes: PROPERTY_ASSIGNMENT,
+          contextTypes: PROPERTY_ASSIGNMENT,
+          displayName: PROPERTY_ASSIGNMENT,
+          defaultProps: PROPERTY_ASSIGNMENT,
+          propTypes: PROPERTY_ASSIGNMENT,
+        },
+      ],
     },
     // ------------------------------------------------------------------------------
     // combined - mixed
@@ -1019,11 +1028,14 @@ ruleTester.run('static-property-placement', rule, {
         }
       `,
       features: ['class fields'],
-      options: [STATIC_PUBLIC_FIELD, {
-        displayName: STATIC_GETTER,
-        defaultProps: PROPERTY_ASSIGNMENT,
-        propTypes: PROPERTY_ASSIGNMENT,
-      }],
+      options: [
+        STATIC_PUBLIC_FIELD,
+        {
+          displayName: STATIC_GETTER,
+          defaultProps: PROPERTY_ASSIGNMENT,
+          propTypes: PROPERTY_ASSIGNMENT,
+        },
+      ],
     },
     {
       // Do not error if mixed property positions and match config
@@ -1051,11 +1063,14 @@ ruleTester.run('static-property-placement', rule, {
         }
       `,
       features: ['class fields'],
-      options: [PROPERTY_ASSIGNMENT, {
-        childContextTypes: STATIC_PUBLIC_FIELD,
-        contextTypes: STATIC_PUBLIC_FIELD,
-        displayName: STATIC_GETTER,
-      }],
+      options: [
+        PROPERTY_ASSIGNMENT,
+        {
+          childContextTypes: STATIC_PUBLIC_FIELD,
+          contextTypes: STATIC_PUBLIC_FIELD,
+          displayName: STATIC_GETTER,
+        },
+      ],
     },
     // ------------------------------------------------------------------------------
     // mixed component types
@@ -1236,14 +1251,17 @@ ruleTester.run('static-property-placement', rule, {
           name: PropTypes.string.isRequired
         }
       `,
-      options: [PROPERTY_ASSIGNMENT, {
-        childContextTypes: STATIC_PUBLIC_FIELD,
-        contextTypes: STATIC_PUBLIC_FIELD,
-        contextType: STATIC_PUBLIC_FIELD,
-        displayName: STATIC_PUBLIC_FIELD,
-        defaultProps: STATIC_PUBLIC_FIELD,
-        propTypes: STATIC_PUBLIC_FIELD,
-      }],
+      options: [
+        PROPERTY_ASSIGNMENT,
+        {
+          childContextTypes: STATIC_PUBLIC_FIELD,
+          contextTypes: STATIC_PUBLIC_FIELD,
+          contextType: STATIC_PUBLIC_FIELD,
+          displayName: STATIC_PUBLIC_FIELD,
+          defaultProps: STATIC_PUBLIC_FIELD,
+          propTypes: STATIC_PUBLIC_FIELD,
+        },
+      ],
       errors: [
         {
           messageId: 'notStaticClassProp',

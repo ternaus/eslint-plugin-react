@@ -58,7 +58,7 @@ ruleTester.run('no-access-state-in-setstate', rule, {
       parserOptions,
     },
     {
-    // issue 1559: don't crash
+      // issue 1559: don't crash
       code: `
         var SearchForm = createReactClass({
           render: function () {
@@ -77,7 +77,7 @@ ruleTester.run('no-access-state-in-setstate', rule, {
       parserOptions,
     },
     {
-    // issue 1604: allow this.state in callback
+      // issue 1604: allow this.state in callback
       code: `
         var Hello = React.createClass({
           onClick: function() {

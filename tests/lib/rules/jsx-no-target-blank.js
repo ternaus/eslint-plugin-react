@@ -41,8 +41,8 @@ ruleTester.run('jsx-no-target-blank', rule, {
     { code: '<a href="foobar" target="_blank" rel={"noreferrer"}></a>' },
     { code: '<a href={"foobar"} target={"_blank"} rel={"noopener noreferrer"}></a>' },
     { code: '<a href={"foobar"} target={"_blank"} rel={"noreferrer"}></a>' },
-    { code: '<a href={\'foobar\'} target={\'_blank\'} rel={\'noopener noreferrer\'}></a>' },
-    { code: '<a href={\'foobar\'} target={\'_blank\'} rel={\'noreferrer\'}></a>' },
+    { code: "<a href={'foobar'} target={'_blank'} rel={'noopener noreferrer'}></a>" },
+    { code: "<a href={'foobar'} target={'_blank'} rel={'noreferrer'}></a>" },
     { code: '<a href={`foobar`} target={`_blank`} rel={`noopener noreferrer`}></a>' },
     { code: '<a href={`foobar`} target={`_blank`} rel={`noreferrer`}></a>' },
     { code: '<a target="_blank" {...spreadProps} rel="noopener noreferrer"></a>' },
@@ -89,7 +89,7 @@ ruleTester.run('jsx-no-target-blank', rule, {
       options: [{ enforceDynamicLinks: 'never' }],
     },
     {
-      code: '<a target={\'_blank\'} href={ dynamicLink }></a>',
+      code: "<a target={'_blank'} href={ dynamicLink }></a>",
       options: [{ enforceDynamicLinks: 'never' }],
     },
     {

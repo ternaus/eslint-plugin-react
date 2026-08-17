@@ -22,12 +22,10 @@ const parserOptions = {
 };
 
 const settings = {
-  propWrapperFunctions: [
-    { property: 'exact', exact: true },
-  ],
+  propWrapperFunctions: [{ property: 'exact', exact: true }],
 };
 
-const PROP_TYPES_MESSAGE = 'Component propTypes should be exact by using \'exact\'.';
+const PROP_TYPES_MESSAGE = "Component propTypes should be exact by using 'exact'.";
 const FLOW_MESSAGE = 'Component flow props should be set with exact objects.';
 
 const ruleTester = new RuleTester({ parserOptions });
@@ -364,7 +362,7 @@ ruleTester.run('prefer-exact-props', rule, {
           { property: 'forbidExtraProps', exact: true },
         ],
       },
-      errors: [{ message: 'Component propTypes should be exact by using one of \'exact\', \'forbidExtraProps\'.' }],
+      errors: [{ message: "Component propTypes should be exact by using one of 'exact', 'forbidExtraProps'." }],
     },
     {
       code: `
@@ -387,7 +385,7 @@ ruleTester.run('prefer-exact-props', rule, {
           { property: 'forbidExtraProps', exact: true },
         ],
       },
-      errors: [{ message: 'Component propTypes should be exact by using one of \'exact\', \'forbidExtraProps\'.' }],
+      errors: [{ message: "Component propTypes should be exact by using one of 'exact', 'forbidExtraProps'." }],
     },
     {
       code: `
@@ -401,7 +399,7 @@ ruleTester.run('prefer-exact-props', rule, {
         });
       `,
       settings,
-      errors: [{ message: 'Component propTypes should be exact by using \'exact\'.' }],
+      errors: [{ message: "Component propTypes should be exact by using 'exact'." }],
     },
     {
       code: `
@@ -420,7 +418,7 @@ ruleTester.run('prefer-exact-props', rule, {
         Component.propTypes = somethingElse(props);
       `,
       settings,
-      errors: [{ message: 'Component propTypes should be exact by using \'exact\'.' }],
+      errors: [{ message: "Component propTypes should be exact by using 'exact'." }],
     },
     {
       code: `
@@ -440,7 +438,7 @@ ruleTester.run('prefer-exact-props', rule, {
       `,
       settings,
       features: ['class fields'],
-      errors: [{ message: 'Component propTypes should be exact by using \'exact\'.' }],
+      errors: [{ message: "Component propTypes should be exact by using 'exact'." }],
     },
   ]),
 });

@@ -2,19 +2,21 @@
 
 const react = require('../../../..');
 
-module.exports = [{
-  files: ['**/*.jsx'],
-  languageOptions: {
-    parserOptions: {
-      ecmaFeatures: {
-        jsx: true,
+module.exports = [
+  {
+    files: ['**/*.jsx'],
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
     },
+    plugins: {
+      react,
+    },
+    rules: {
+      'react/jsx-no-literals': 1,
+    },
   },
-  plugins: {
-    react,
-  },
-  rules: {
-    'react/jsx-no-literals': 1,
-  },
-}];
+];

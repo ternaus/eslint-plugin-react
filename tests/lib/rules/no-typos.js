@@ -8,9 +8,6 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
-const babelEslintVersion = require('babel-eslint/package.json').version;
-const semver = require('semver');
-const version = require('eslint/package.json').version;
 const RuleTester = require('../../helpers/ruleTester');
 
 const rule = require('../../../lib/rules/no-typos');
@@ -31,9 +28,10 @@ const parserOptions = {
 
 const ruleTester = new RuleTester();
 ruleTester.run('no-typos', rule, {
-  valid: parsers.all([].concat(
-    {
-      code: `
+  valid: parsers.all(
+    [].concat(
+      {
+        code: `
           import createReactClass from 'create-react-class'
           function hello (extra = {}) {
             return createReactClass({
@@ -45,11 +43,10 @@ ruleTester.run('no-typos', rule, {
             })
           }
       `,
-      parserOptions,
-      features: ['no-babel'], // TODO: FIXME: remove no-babel and fix crash
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class First {
           static PropTypes = {key: "myValue"};
           static ContextTypes = {key: "myValue"};
@@ -57,21 +54,21 @@ ruleTester.run('no-typos', rule, {
           static DefaultProps = {key: "myValue"};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+      },
+      {
+        code: `
         class First {}
         First.PropTypes = {key: "myValue"};
         First.ContextTypes = {key: "myValue"};
         First.ChildContextTypes = {key: "myValue"};
         First.DefaultProps = {key: "myValue"};
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class First extends React.Component {
           static propTypes = {key: "myValue"};
           static contextTypes = {key: "myValue"};
@@ -79,21 +76,21 @@ ruleTester.run('no-typos', rule, {
           static defaultProps = {key: "myValue"};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+      },
+      {
+        code: `
         class First extends React.Component {}
         First.propTypes = {key: "myValue"};
         First.contextTypes = {key: "myValue"};
         First.childContextTypes = {key: "myValue"};
         First.defaultProps = {key: "myValue"};
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {
           propTypes = {key: "myValue"};
           contextTypes = {key: "myValue"};
@@ -101,11 +98,11 @@ ruleTester.run('no-typos', rule, {
           defaultProps = {key: "myValue"};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {
           PropTypes = {key: "myValue"};
           ContextTypes = {key: "myValue"};
@@ -113,11 +110,11 @@ ruleTester.run('no-typos', rule, {
           DefaultProps = {key: "myValue"};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {
           proptypes = {key: "myValue"};
           contexttypes = {key: "myValue"};
@@ -125,11 +122,11 @@ ruleTester.run('no-typos', rule, {
           defaultprops = {key: "myValue"};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {
           static PropTypes() {};
           static ContextTypes() {};
@@ -137,10 +134,10 @@ ruleTester.run('no-typos', rule, {
           static DefaultProps() {};
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {
           static proptypes() {};
           static contexttypes() {};
@@ -148,62 +145,62 @@ ruleTester.run('no-typos', rule, {
           static defaultprops() {};
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {}
         MyClass.prototype.PropTypes = function() {};
         MyClass.prototype.ContextTypes = function() {};
         MyClass.prototype.ChildContextTypes = function() {};
         MyClass.prototype.DefaultProps = function() {};
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {}
         MyClass.PropTypes = function() {};
         MyClass.ContextTypes = function() {};
         MyClass.ChildContextTypes = function() {};
         MyClass.DefaultProps = function() {};
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         function MyRandomFunction() {}
         MyRandomFunction.PropTypes = {};
         MyRandomFunction.ContextTypes = {};
         MyRandomFunction.ChildContextTypes = {};
         MyRandomFunction.DefaultProps = {};
       `,
-      parserOptions,
-    },
-    {
-      // This case is currently not supported
-      code: `
+        parserOptions,
+      },
+      {
+        // This case is currently not supported
+        code: `
         class First extends React.Component {}
         First["prop" + "Types"] = {};
         First["context" + "Types"] = {};
         First["childContext" + "Types"] = {};
         First["default" + "Props"] = {};
       `,
-      parserOptions,
-    },
-    {
-      // This case is currently not supported
-      code: `
+        parserOptions,
+      },
+      {
+        // This case is currently not supported
+        code: `
         class First extends React.Component {}
         First["PROP" + "TYPES"] = {};
         First["CONTEXT" + "TYPES"] = {};
         First["CHILDCONTEXT" + "TYPES"] = {};
         First["DEFAULT" + "PROPS"] = {};
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         const propTypes = "PROPTYPES"
         const contextTypes = "CONTEXTTYPES"
         const childContextTypes = "CHILDCONTEXTTYPES"
@@ -215,10 +212,10 @@ ruleTester.run('no-typos', rule, {
         First[childContextTypes] = {};
         First[defaultProps] = {};
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static getDerivedStateFromProps() { }
           componentWillMount() { }
@@ -233,19 +230,19 @@ ruleTester.run('no-typos', rule, {
           }
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class Hello extends React.Component {
           "componentDidMount"() { }
           "my-method"() { }
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {
           componentWillMount() { }
           componentDidMount() { }
@@ -257,10 +254,10 @@ ruleTester.run('no-typos', rule, {
           render() { }
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {
           componentwillmount() { }
           componentdidmount() { }
@@ -272,10 +269,10 @@ ruleTester.run('no-typos', rule, {
           render() { }
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class MyClass {
           Componentwillmount() { }
           Componentdidmount() { }
@@ -287,30 +284,30 @@ ruleTester.run('no-typos', rule, {
           Render() { }
         }
       `,
-      parserOptions,
-    },
-    {
-      // https://github.com/jsx-eslint/eslint-plugin-react/issues/1353
-      code: `
+        parserOptions,
+      },
+      {
+        // https://github.com/jsx-eslint/eslint-plugin-react/issues/1353
+        code: `
         function test(b) {
           return a.bind(b);
         }
         function a() {}
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
           a: PropTypes.number.isRequired
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
@@ -319,10 +316,10 @@ ruleTester.run('no-typos', rule, {
           })
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
@@ -334,10 +331,10 @@ ruleTester.run('no-typos', rule, {
           }).isRequired
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
@@ -347,10 +344,10 @@ ruleTester.run('no-typos', rule, {
           ])
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
@@ -360,10 +357,10 @@ ruleTester.run('no-typos', rule, {
           ])
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.childContextTypes = {
@@ -375,10 +372,10 @@ ruleTester.run('no-typos', rule, {
           }).isRequired
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.contextTypes = {
@@ -390,10 +387,10 @@ ruleTester.run('no-typos', rule, {
           }).isRequired
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import PropTypes from 'prop-types'
         import * as MyPropTypes from 'lib/my-prop-types'
         class Component extends React.Component {};
@@ -403,10 +400,10 @@ ruleTester.run('no-typos', rule, {
           c: MyPropTypes.MYSTRING.isRequired,
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import PropTypes from "prop-types"
         import * as MyPropTypes from 'lib/my-prop-types'
         class Component extends React.Component {};
@@ -415,21 +412,21 @@ ruleTester.run('no-typos', rule, {
           a: MyPropTypes.MYSTRING,
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import CustomReact from "react"
         class Component extends React.Component {};
         Component.propTypes = {
           b: CustomReact.PropTypes.string,
         }
       `,
-      parserOptions,
-    },
-    {
-      // ensure that an absent arg to PropTypes.shape does not crash
-      code: `
+        parserOptions,
+      },
+      {
+        // ensure that an absent arg to PropTypes.shape does not crash
+        code: `
         class Component extends React.Component {};
         Component.propTypes = {
           a: PropTypes.shape(),
@@ -438,19 +435,19 @@ ruleTester.run('no-typos', rule, {
           a: PropTypes.shape(),
         };
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         const fn = (err, res) => {
           const { body: data = {} } = { ...res };
           data.time = data.time || {};
         };
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class Component extends React.Component {};
         Component.propTypes = {
           b: string.isRequired,
@@ -459,10 +456,10 @@ ruleTester.run('no-typos', rule, {
           }).isRequired
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import React from 'react';
         import PropTypes from 'prop-types';
         const Component = React.createReactClass({
@@ -474,10 +471,10 @@ ruleTester.run('no-typos', rule, {
           }
         });
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import React from 'react';
         import PropTypes from 'prop-types';
         const Component = React.createReactClass({
@@ -489,10 +486,10 @@ ruleTester.run('no-typos', rule, {
           }
         });
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import React from 'react';
         const Component = React.createReactClass({
           propTypes: {},
@@ -510,10 +507,10 @@ ruleTester.run('no-typos', rule, {
           }
         });
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import { string, element } from "prop-types";
 
         class Sample extends React.Component {
@@ -525,10 +522,10 @@ ruleTester.run('no-typos', rule, {
           body: element.isRequired
         };
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import React from 'react';
 
         const A = { B: 'C' };
@@ -539,26 +536,26 @@ ruleTester.run('no-typos', rule, {
           }
         }
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         const MyComponent = React.forwardRef((props, ref) => <div />);
         MyComponent.defaultProps = { value: "" };
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         import styled from "styled-components";
 
         const MyComponent = styled.div;
         MyComponent.defaultProps = { value: "" };
       `,
-      parserOptions,
-    },
-    {
-      code: `
+        parserOptions,
+      },
+      {
+        code: `
         class Editor extends React.Component {
             #somethingPrivate() {
               // ...
@@ -575,258 +572,246 @@ ruleTester.run('no-typos', rule, {
           }
         }
       `,
-      features: [].concat('class fields', semver.satisfies(babelEslintVersion, '< 9') ? 'no-babel-old' : []),
-      parserOptions: Object.assign({}, parserOptions, {
-        babelOptions: {
-          // classPrivateMethods: true,
-        },
-        shippedProposals: true,
-      }),
-    }
-  )),
+        features: [].concat('class fields', []),
+        parserOptions: Object.assign({}, parserOptions, {
+          babelOptions: {
+            // classPrivateMethods: true,
+          },
+          shippedProposals: true,
+        }),
+      },
+    ),
+  ),
 
-  invalid: parsers.all([].concat(
-    {
-      code: `
+  invalid: parsers.all(
+    [].concat(
+      {
+        code: `
         class Component extends React.Component {
           static PropTypes = {};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [
-        { messageId: 'typoStaticClassProp', type: 'Identifier' },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp', type: 'Identifier' }],
+      },
+      {
+        code: `
         class Component extends React.Component {}
         Component.PropTypes = {}
       `,
-      parserOptions,
-      errors: [
-        { messageId: 'typoStaticClassProp', type: 'Identifier' },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp', type: 'Identifier' }],
+      },
+      {
+        code: `
         function MyComponent() { return (<div>{this.props.myProp}</div>) }
         MyComponent.PropTypes = {}
       `,
-      parserOptions,
-      errors: [
-        { messageId: 'typoStaticClassProp', type: 'Identifier' },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp', type: 'Identifier' }],
+      },
+      {
+        code: `
         class Component extends React.Component {
           static proptypes = {};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {}
         Component.proptypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         function MyComponent() { return (<div>{this.props.myProp}</div>) }
         MyComponent.proptypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {
           static ContextTypes = {};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [
-        { messageId: 'typoStaticClassProp', type: 'Identifier' },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp', type: 'Identifier' }],
+      },
+      {
+        code: `
         class Component extends React.Component {}
         Component.ContextTypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         function MyComponent() { return (<div>{this.props.myProp}</div>) }
         MyComponent.ContextTypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {
           static contexttypes = {};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {}
         Component.contexttypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         function MyComponent() { return (<div>{this.props.myProp}</div>) }
         MyComponent.contexttypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {
           static ChildContextTypes = {};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {}
         Component.ChildContextTypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         function MyComponent() { return (<div>{this.props.myProp}</div>) }
         MyComponent.ChildContextTypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {
           static childcontexttypes = {};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {}
         Component.childcontexttypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         function MyComponent() { return (<div>{this.props.myProp}</div>) }
         MyComponent.childcontexttypes = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {
           static DefaultProps = {};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [
-        { messageId: 'typoStaticClassProp', type: 'Identifier' },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp', type: 'Identifier' }],
+      },
+      {
+        code: `
         class Component extends React.Component {}
         Component.DefaultProps = {}
       `,
-      parserOptions,
-      errors: [
-        { messageId: 'typoStaticClassProp', type: 'Identifier' },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp', type: 'Identifier' }],
+      },
+      {
+        code: `
         function MyComponent() { return (<div>{this.props.myProp}</div>) }
         MyComponent.DefaultProps = {}
       `,
-      parserOptions,
-      errors: [
-        { messageId: 'typoStaticClassProp', type: 'Identifier' },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp', type: 'Identifier' }],
+      },
+      {
+        code: `
         class Component extends React.Component {
           static defaultprops = {};
         }
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Component extends React.Component {}
         Component.defaultprops = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         function MyComponent() { return (<div>{this.props.myProp}</div>) }
         MyComponent.defaultprops = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         Component.defaultprops = {}
         class Component extends React.Component {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         /** @extends React.Component */
         class MyComponent extends BaseComponent {}
         MyComponent.PROPTYPES = {}
       `,
-      parserOptions,
-      errors: [{ messageId: 'typoStaticClassProp' }],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [{ messageId: 'typoStaticClassProp' }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static GetDerivedStateFromProps()  { }
           ComponentWillMount() { }
@@ -846,129 +831,129 @@ ruleTester.run('no-typos', rule, {
           }
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'GetDerivedStateFromProps',
-            expected: 'getDerivedStateFromProps',
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'GetDerivedStateFromProps',
+              expected: 'getDerivedStateFromProps',
+            },
+            type: 'MethodDefinition',
+            line: 3,
           },
-          type: 'MethodDefinition',
-          line: 3,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentWillMount',
-            expected: 'componentWillMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentWillMount',
+              expected: 'componentWillMount',
+            },
+            type: 'MethodDefinition',
+            line: 4,
           },
-          type: 'MethodDefinition',
-          line: 4,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'UNSAFE_ComponentWillMount',
-            expected: 'UNSAFE_componentWillMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'UNSAFE_ComponentWillMount',
+              expected: 'UNSAFE_componentWillMount',
+            },
+            type: 'MethodDefinition',
+            line: 5,
           },
-          type: 'MethodDefinition',
-          line: 5,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentDidMount',
-            expected: 'componentDidMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentDidMount',
+              expected: 'componentDidMount',
+            },
+            type: 'MethodDefinition',
+            line: 6,
           },
-          type: 'MethodDefinition',
-          line: 6,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentWillReceiveProps',
-            expected: 'componentWillReceiveProps',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentWillReceiveProps',
+              expected: 'componentWillReceiveProps',
+            },
+            type: 'MethodDefinition',
+            line: 7,
           },
-          type: 'MethodDefinition',
-          line: 7,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'UNSAFE_ComponentWillReceiveProps',
-            expected: 'UNSAFE_componentWillReceiveProps',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'UNSAFE_ComponentWillReceiveProps',
+              expected: 'UNSAFE_componentWillReceiveProps',
+            },
+            type: 'MethodDefinition',
+            line: 8,
           },
-          type: 'MethodDefinition',
-          line: 8,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ShouldComponentUpdate',
-            expected: 'shouldComponentUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ShouldComponentUpdate',
+              expected: 'shouldComponentUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 9,
           },
-          type: 'MethodDefinition',
-          line: 9,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentWillUpdate',
-            expected: 'componentWillUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentWillUpdate',
+              expected: 'componentWillUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 10,
           },
-          type: 'MethodDefinition',
-          line: 10,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'UNSAFE_ComponentWillUpdate',
-            expected: 'UNSAFE_componentWillUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'UNSAFE_ComponentWillUpdate',
+              expected: 'UNSAFE_componentWillUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 11,
           },
-          type: 'MethodDefinition',
-          line: 11,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'GetSnapshotBeforeUpdate',
-            expected: 'getSnapshotBeforeUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'GetSnapshotBeforeUpdate',
+              expected: 'getSnapshotBeforeUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 12,
           },
-          type: 'MethodDefinition',
-          line: 12,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentDidUpdate',
-            expected: 'componentDidUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentDidUpdate',
+              expected: 'componentDidUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 13,
           },
-          type: 'MethodDefinition',
-          line: 13,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentDidCatch',
-            expected: 'componentDidCatch',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentDidCatch',
+              expected: 'componentDidCatch',
+            },
+            type: 'MethodDefinition',
+            line: 14,
           },
-          type: 'MethodDefinition',
-          line: 14,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentWillUnmount',
-            expected: 'componentWillUnmount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentWillUnmount',
+              expected: 'componentWillUnmount',
+            },
+            type: 'MethodDefinition',
+            line: 15,
           },
-          type: 'MethodDefinition',
-          line: 15,
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static Getderivedstatefromprops() { }
           Componentwillmount() { }
@@ -988,138 +973,138 @@ ruleTester.run('no-typos', rule, {
           }
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Getderivedstatefromprops',
-            expected: 'getDerivedStateFromProps',
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Getderivedstatefromprops',
+              expected: 'getDerivedStateFromProps',
+            },
+            type: 'MethodDefinition',
+            line: 3,
           },
-          type: 'MethodDefinition',
-          line: 3,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Componentwillmount',
-            expected: 'componentWillMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Componentwillmount',
+              expected: 'componentWillMount',
+            },
+            type: 'MethodDefinition',
+            line: 4,
           },
-          type: 'MethodDefinition',
-          line: 4,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'UNSAFE_Componentwillmount',
-            expected: 'UNSAFE_componentWillMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'UNSAFE_Componentwillmount',
+              expected: 'UNSAFE_componentWillMount',
+            },
+            type: 'MethodDefinition',
+            line: 5,
           },
-          type: 'MethodDefinition',
-          line: 5,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Componentdidmount',
-            expected: 'componentDidMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Componentdidmount',
+              expected: 'componentDidMount',
+            },
+            type: 'MethodDefinition',
+            line: 6,
           },
-          type: 'MethodDefinition',
-          line: 6,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Componentwillreceiveprops',
-            expected: 'componentWillReceiveProps',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Componentwillreceiveprops',
+              expected: 'componentWillReceiveProps',
+            },
+            type: 'MethodDefinition',
+            line: 7,
           },
-          type: 'MethodDefinition',
-          line: 7,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'UNSAFE_Componentwillreceiveprops',
-            expected: 'UNSAFE_componentWillReceiveProps',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'UNSAFE_Componentwillreceiveprops',
+              expected: 'UNSAFE_componentWillReceiveProps',
+            },
+            type: 'MethodDefinition',
+            line: 8,
           },
-          type: 'MethodDefinition',
-          line: 8,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Shouldcomponentupdate',
-            expected: 'shouldComponentUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Shouldcomponentupdate',
+              expected: 'shouldComponentUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 9,
           },
-          type: 'MethodDefinition',
-          line: 9,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Componentwillupdate',
-            expected: 'componentWillUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Componentwillupdate',
+              expected: 'componentWillUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 10,
           },
-          type: 'MethodDefinition',
-          line: 10,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'UNSAFE_Componentwillupdate',
-            expected: 'UNSAFE_componentWillUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'UNSAFE_Componentwillupdate',
+              expected: 'UNSAFE_componentWillUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 11,
           },
-          type: 'MethodDefinition',
-          line: 11,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Getsnapshotbeforeupdate',
-            expected: 'getSnapshotBeforeUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Getsnapshotbeforeupdate',
+              expected: 'getSnapshotBeforeUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 12,
           },
-          type: 'MethodDefinition',
-          line: 12,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Componentdidupdate',
-            expected: 'componentDidUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Componentdidupdate',
+              expected: 'componentDidUpdate',
+            },
+            type: 'MethodDefinition',
+            line: 13,
           },
-          type: 'MethodDefinition',
-          line: 13,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Componentdidcatch',
-            expected: 'componentDidCatch',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Componentdidcatch',
+              expected: 'componentDidCatch',
+            },
+            type: 'MethodDefinition',
+            line: 14,
           },
-          type: 'MethodDefinition',
-          line: 14,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Componentwillunmount',
-            expected: 'componentWillUnmount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Componentwillunmount',
+              expected: 'componentWillUnmount',
+            },
+            type: 'MethodDefinition',
+            line: 15,
           },
-          type: 'MethodDefinition',
-          line: 15,
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'Render',
-            expected: 'render',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'Render',
+              expected: 'render',
+            },
+            type: 'MethodDefinition',
+            line: 16,
           },
-          type: 'MethodDefinition',
-          line: 16,
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static getderivedstatefromprops() { }
           componentwillmount() { }
@@ -1139,148 +1124,148 @@ ruleTester.run('no-typos', rule, {
           }
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'getderivedstatefromprops',
-            expected: 'getDerivedStateFromProps',
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'getderivedstatefromprops',
+              expected: 'getDerivedStateFromProps',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'componentwillmount',
-            expected: 'componentWillMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'componentwillmount',
+              expected: 'componentWillMount',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'unsafe_componentwillmount',
-            expected: 'UNSAFE_componentWillMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'unsafe_componentwillmount',
+              expected: 'UNSAFE_componentWillMount',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'componentdidmount',
-            expected: 'componentDidMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'componentdidmount',
+              expected: 'componentDidMount',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'componentwillreceiveprops',
-            expected: 'componentWillReceiveProps',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'componentwillreceiveprops',
+              expected: 'componentWillReceiveProps',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'unsafe_componentwillreceiveprops',
-            expected: 'UNSAFE_componentWillReceiveProps',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'unsafe_componentwillreceiveprops',
+              expected: 'UNSAFE_componentWillReceiveProps',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'shouldcomponentupdate',
-            expected: 'shouldComponentUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'shouldcomponentupdate',
+              expected: 'shouldComponentUpdate',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'componentwillupdate',
-            expected: 'componentWillUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'componentwillupdate',
+              expected: 'componentWillUpdate',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'unsafe_componentwillupdate',
-            expected: 'UNSAFE_componentWillUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'unsafe_componentwillupdate',
+              expected: 'UNSAFE_componentWillUpdate',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'getsnapshotbeforeupdate',
-            expected: 'getSnapshotBeforeUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'getsnapshotbeforeupdate',
+              expected: 'getSnapshotBeforeUpdate',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'componentdidupdate',
-            expected: 'componentDidUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'componentdidupdate',
+              expected: 'componentDidUpdate',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'componentdidcatch',
-            expected: 'componentDidCatch',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'componentdidcatch',
+              expected: 'componentDidCatch',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'componentwillunmount',
-            expected: 'componentWillUnmount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'componentwillunmount',
+              expected: 'componentWillUnmount',
+            },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-      ],
-    },
-    {
-      code: `
+        ],
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
             a: PropTypes.Number.isRequired
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Number' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Number' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
             a: PropTypes.number.isrequired
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {
           static propTypes = {
@@ -1288,17 +1273,17 @@ ruleTester.run('no-typos', rule, {
           }
         };
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {
           static propTypes = {
@@ -1306,33 +1291,33 @@ ruleTester.run('no-typos', rule, {
           }
         };
       `,
-      features: ['class fields'],
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Number' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Number' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
             a: PropTypes.Number
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Number' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Number' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
@@ -1342,16 +1327,16 @@ ruleTester.run('no-typos', rule, {
           })
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'String' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'String' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
@@ -1361,16 +1346,16 @@ ruleTester.run('no-typos', rule, {
           ])
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'bools' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'bools' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.propTypes = {
@@ -1380,28 +1365,28 @@ ruleTester.run('no-typos', rule, {
           d: PropTypes.objectof,
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'bools' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Array' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'function' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'objectof' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'bools' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Array' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'function' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'objectof' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from "prop-types";
         class Component extends React.Component {};
         Component.childContextTypes = {
@@ -1411,28 +1396,28 @@ ruleTester.run('no-typos', rule, {
           d: PropTypes.objectof,
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'bools' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Array' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'function' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'objectof' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'bools' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Array' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'function' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'objectof' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from 'prop-types';
         class Component extends React.Component {};
         Component.childContextTypes = {
@@ -1442,28 +1427,28 @@ ruleTester.run('no-typos', rule, {
           d: PropTypes.objectof,
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'bools' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Array' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'function' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'objectof' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'bools' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Array' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'function' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'objectof' },
+          },
+        ],
+      },
+      {
+        code: `
         import PropTypes from 'prop-types';
         class Component extends React.Component {};
         Component.propTypes = {
@@ -1473,20 +1458,20 @@ ruleTester.run('no-typos', rule, {
           }).isrequired
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+        ],
+      },
+      {
+        code: `
         import RealPropTypes from 'prop-types';
         class Component extends React.Component {};
         Component.childContextTypes = {
@@ -1496,28 +1481,28 @@ ruleTester.run('no-typos', rule, {
           d: RealPropTypes.objectof,
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'bools' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Array' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'function' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'objectof' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'bools' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Array' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'function' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'objectof' },
+          },
+        ],
+      },
+      {
+        code: `
       import React from 'react';
       class Component extends React.Component {};
       Component.propTypes = {
@@ -1527,20 +1512,20 @@ ruleTester.run('no-typos', rule, {
         }).isrequired
       }
     `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+        ],
+      },
+      {
+        code: `
         import React from 'react';
         class Component extends React.Component {};
         Component.childContextTypes = {
@@ -1550,28 +1535,28 @@ ruleTester.run('no-typos', rule, {
           d: React.PropTypes.objectof,
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'bools' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Array' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'function' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'objectof' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'bools' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Array' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'function' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'objectof' },
+          },
+        ],
+      },
+      {
+        code: `
       import { PropTypes } from 'react';
       class Component extends React.Component {};
       Component.propTypes = {
@@ -1581,32 +1566,32 @@ ruleTester.run('no-typos', rule, {
         }).isrequired
       }
     `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+        ],
+      },
+      {
+        code: `
       import 'react';
       class Component extends React.Component {};
     `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'noReactBinding',
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'noReactBinding',
+          },
+        ],
+      },
+      {
+        code: `
         import { PropTypes } from 'react';
         class Component extends React.Component {};
         Component.childContextTypes = {
@@ -1616,28 +1601,28 @@ ruleTester.run('no-typos', rule, {
           d: PropTypes.objectof,
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'bools' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Array' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'function' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'objectof' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'bools' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Array' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'function' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'objectof' },
+          },
+        ],
+      },
+      {
+        code: `
       import PropTypes from 'prop-types';
       class Component extends React.Component {};
       Component.propTypes = {
@@ -1647,20 +1632,20 @@ ruleTester.run('no-typos', rule, {
         }).isrequired
       }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+        ],
+      },
+      {
+        code: `
       import PropTypes from 'prop-types';
       class Component extends React.Component {};
       Component.propTypes = {
@@ -1670,20 +1655,20 @@ ruleTester.run('no-typos', rule, {
         }).isrequired
       }
     `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+        ],
+      },
+      {
+        code: `
         import React from 'react';
         import PropTypes from 'prop-types';
         const Component = React.createReactClass({
@@ -1695,20 +1680,20 @@ ruleTester.run('no-typos', rule, {
           }
         });
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-        {
-          messageId: 'typoPropTypeChain',
-          data: { name: 'isrequired' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+          {
+            messageId: 'typoPropTypeChain',
+            data: { name: 'isrequired' },
+          },
+        ],
+      },
+      {
+        code: `
         import React from 'react';
         import PropTypes from 'prop-types';
         const Component = React.createReactClass({
@@ -1720,28 +1705,28 @@ ruleTester.run('no-typos', rule, {
           }
         });
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropType',
-          data: { name: 'bools' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'Array' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'function' },
-        },
-        {
-          messageId: 'typoPropType',
-          data: { name: 'objectof' },
-        },
-      ],
-    },
-    {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropType',
+            data: { name: 'bools' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'Array' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'function' },
+          },
+          {
+            messageId: 'typoPropType',
+            data: { name: 'objectof' },
+          },
+        ],
+      },
+      {
+        code: `
         import React from 'react';
         const Component = React.createReactClass({
           proptypes: {},
@@ -1762,162 +1747,148 @@ ruleTester.run('no-typos', rule, {
           }
         });
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'typoPropDeclaration',
-          type: 'Identifier',
-        },
-        {
-          messageId: 'typoPropDeclaration',
-          type: 'Identifier',
-        },
-        {
-          messageId: 'typoPropDeclaration',
-          type: 'Identifier',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'getdefaultProps',
-            expected: 'getDefaultProps',
+        parserOptions,
+        errors: [
+          {
+            messageId: 'typoPropDeclaration',
+            type: 'Identifier',
           },
-          type: 'Property',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'getinitialState',
-            expected: 'getInitialState',
+          {
+            messageId: 'typoPropDeclaration',
+            type: 'Identifier',
           },
-          type: 'Property',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'getChildcontext',
-            expected: 'getChildContext',
+          {
+            messageId: 'typoPropDeclaration',
+            type: 'Identifier',
           },
-          type: 'Property',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentWillMount',
-            expected: 'componentWillMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'getdefaultProps',
+              expected: 'getDefaultProps',
+            },
+            type: 'Property',
           },
-          type: 'Property',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentDidMount',
-            expected: 'componentDidMount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'getinitialState',
+              expected: 'getInitialState',
+            },
+            type: 'Property',
           },
-          type: 'Property',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentWillReceiveProps',
-            expected: 'componentWillReceiveProps',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'getChildcontext',
+              expected: 'getChildContext',
+            },
+            type: 'Property',
           },
-          type: 'Property',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ShouldComponentUpdate',
-            expected: 'shouldComponentUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentWillMount',
+              expected: 'componentWillMount',
+            },
+            type: 'Property',
           },
-          type: 'Property',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentWillUpdate',
-            expected: 'componentWillUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentDidMount',
+              expected: 'componentDidMount',
+            },
+            type: 'Property',
           },
-          type: 'Property',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentDidUpdate',
-            expected: 'componentDidUpdate',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentWillReceiveProps',
+              expected: 'componentWillReceiveProps',
+            },
+            type: 'Property',
           },
-          type: 'Property',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'ComponentWillUnmount',
-            expected: 'componentWillUnmount',
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ShouldComponentUpdate',
+              expected: 'shouldComponentUpdate',
+            },
+            type: 'Property',
           },
-          type: 'Property',
-        },
-      ],
-    },
-    {
-      code: `
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentWillUpdate',
+              expected: 'componentWillUpdate',
+            },
+            type: 'Property',
+          },
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentDidUpdate',
+              expected: 'componentDidUpdate',
+            },
+            type: 'Property',
+          },
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'ComponentWillUnmount',
+              expected: 'componentWillUnmount',
+            },
+            type: 'Property',
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           getDerivedStateFromProps() { }
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'staticLifecycleMethod',
-          data: { method: 'getDerivedStateFromProps' },
-          type: 'MethodDefinition',
-        },
-      ],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: `
+        parserOptions,
+        errors: [
+          {
+            messageId: 'staticLifecycleMethod',
+            data: { method: 'getDerivedStateFromProps' },
+            type: 'MethodDefinition',
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           GetDerivedStateFromProps() { }
         }
       `,
-      parserOptions,
-      errors: [
-        {
-          messageId: 'staticLifecycleMethod',
-          data: { method: 'GetDerivedStateFromProps' },
-          type: 'MethodDefinition',
-        },
-        {
-          messageId: 'typoLifecycleMethod',
-          data: {
-            actual: 'GetDerivedStateFromProps',
-            expected: 'getDerivedStateFromProps',
+        parserOptions,
+        errors: [
+          {
+            messageId: 'staticLifecycleMethod',
+            data: { method: 'GetDerivedStateFromProps' },
+            type: 'MethodDefinition',
           },
-          type: 'MethodDefinition',
-        },
-      ],
-    },
-    semver.satisfies(version, '^5') ? {
-      // PropTypes declared on a component that is detected through JSDoc comments and is
-      // declared AFTER the PropTypes assignment
-      code: `
-        MyComponent.PROPTYPES = {}
-        /** @extends React.Component */
-        class MyComponent extends BaseComponent {}
-      `,
-      parserOptions,
-      errors: [
-        {
-          ruleId: 'no-typos',
-          messageId: 'typoStaticClassProp',
-        },
-      ],
-    } : [],
-    {
-      code: `
+          {
+            messageId: 'typoLifecycleMethod',
+            data: {
+              actual: 'GetDerivedStateFromProps',
+              expected: 'getDerivedStateFromProps',
+            },
+            type: 'MethodDefinition',
+          },
+        ],
+      },
+      [],
+      {
+        code: `
         import 'prop-types'
       `,
-      parserOptions,
-      errors: [{ messageId: 'noPropTypesBinding' }],
-    }
-  )),
+        parserOptions,
+        errors: [{ messageId: 'noPropTypesBinding' }],
+      },
+    ),
+  ),
 });

@@ -9,9 +9,6 @@
 // Requirements
 // ------------------------------------------------------------------------------
 
-const semver = require('semver');
-const eslintPkg = require('eslint/package.json').version;
-const babelEslintVersion = require('babel-eslint/package.json').version;
 const RuleTester = require('../../helpers/ruleTester');
 
 const rule = require('../../../lib/rules/prop-types');
@@ -38,9 +35,10 @@ const settings = {
 
 const ruleTester = new RuleTester({ parserOptions });
 ruleTester.run('prop-types', rule, {
-  valid: parsers.all([].concat(
-    {
-      code: `
+  valid: parsers.all(
+    [].concat(
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             name: PropTypes.string.isRequired
@@ -50,9 +48,9 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             name: PropTypes.object.isRequired
@@ -62,28 +60,28 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             return <div>Hello World</div>;
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             return <div>Hello World {this.props.children}</div>;
           }
         });
       `,
-      options: [{ ignore: ['children'] }],
-    },
-    {
-      code: `
+        options: [{ ignore: ['children'] }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             var props = this.props;
@@ -91,9 +89,9 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             var propName = "foo";
@@ -101,9 +99,9 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: externalPropTypes,
           render: function() {
@@ -111,9 +109,9 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: externalPropTypes.mySharedPropTypes,
           render: function() {
@@ -121,18 +119,18 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello World</div>;
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello {this.props.firstname} {this.props.lastname}</div>;
@@ -143,9 +141,9 @@ ruleTester.run('prop-types', rule, {
         };
         Hello.propTypes.lastname = PropTypes.string;
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             name: PropTypes.object.isRequired
@@ -158,26 +156,26 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello {
           render() {
             return 'Hello' + this.props.name;
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello {
           method;
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static get propTypes() {
             return {
@@ -189,9 +187,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var { firstname, ...other } = this.props;
@@ -202,9 +200,9 @@ ruleTester.run('prop-types', rule, {
           firstname: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var {firstname, lastname} = this.state, something = this.props;
@@ -212,9 +210,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static propTypes = {
             name: PropTypes.string
@@ -224,10 +222,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello {this.props.firstname}</div>;
@@ -237,9 +235,9 @@ ruleTester.run('prop-types', rule, {
           'firstname': PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             if (Object.prototype.hasOwnProperty.call(this.props, 'firstname')) {
@@ -252,9 +250,9 @@ ruleTester.run('prop-types', rule, {
           'firstname': PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.b
@@ -266,9 +264,9 @@ ruleTester.run('prop-types', rule, {
           b: PropTypes.string
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.b.c;
@@ -283,9 +281,9 @@ ruleTester.run('prop-types', rule, {
         };
         Hello.propTypes.a.b.c = PropTypes.number;
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.b.c;
@@ -304,9 +302,9 @@ ruleTester.run('prop-types', rule, {
           )
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var i = 3;
@@ -327,9 +325,9 @@ ruleTester.run('prop-types', rule, {
           )
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.length;
@@ -343,9 +341,9 @@ ruleTester.run('prop-types', rule, {
           ])
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.c;
@@ -367,9 +365,9 @@ ruleTester.run('prop-types', rule, {
           ])
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Component extends React.Component {
           render() {
             return <div>{this.props.foo.baz}</div>;
@@ -386,9 +384,9 @@ ruleTester.run('prop-types', rule, {
           ])
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Component extends React.Component {
           render() {
             return <div>{this.props.foo.baz}</div>;
@@ -403,9 +401,9 @@ ruleTester.run('prop-types', rule, {
           ])
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Component extends React.Component {
           render() {
             return <div>{this.props.foo.baz}</div>;
@@ -415,9 +413,9 @@ ruleTester.run('prop-types', rule, {
           foo: PropTypes.oneOf(['bar', 'baz'])
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.render;
@@ -429,9 +427,9 @@ ruleTester.run('prop-types', rule, {
           a: PropTypes.instanceOf(Hello)
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.arr;
@@ -457,9 +455,9 @@ ruleTester.run('prop-types', rule, {
           stri: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var {
@@ -474,9 +472,9 @@ ruleTester.run('prop-types', rule, {
           "aria-controls": PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props["some.value"];
@@ -487,9 +485,9 @@ ruleTester.run('prop-types', rule, {
           "some.value": PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props["arr"][1];
@@ -500,9 +498,9 @@ ruleTester.run('prop-types', rule, {
           "arr": PropTypes.array
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props["arr"][1]["some.value"];
@@ -515,9 +513,9 @@ ruleTester.run('prop-types', rule, {
           )
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class ArrayLengthTest extends React.Component {
           render() {
             use(this.props.arr.length)
@@ -530,9 +528,9 @@ ruleTester.run('prop-types', rule, {
           arr: PropTypes.array,
           arr2: PropTypes.arrayOf(PropTypes.number),
         }`,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var TestComp1 = createReactClass({
           propTypes: {
             size: PropTypes.string
@@ -546,19 +544,19 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>{this.props.name.firstname}</div>;
           }
         }
       `,
-      options: [{ ignore: ['name'] }],
-    },
-    {
-      code: `
+        options: [{ ignore: ['name'] }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             const {firstname, lastname} = this.props.name;
@@ -572,9 +570,9 @@ ruleTester.run('prop-types', rule, {
           })
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const foo = {};
         class Hello extends React.Component {
           render() {
@@ -586,9 +584,9 @@ ruleTester.run('prop-types', rule, {
           name: PropTypes.shape(foo)
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             let {firstname} = this;
@@ -596,9 +594,9 @@ ruleTester.run('prop-types', rule, {
           }
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             router: PropTypes.func
@@ -609,9 +607,9 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             firstname: CustomValidator.string
@@ -621,10 +619,10 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      options: [{ customValidators: ['CustomValidator'] }],
-    },
-    {
-      code: `
+        options: [{ customValidators: ['CustomValidator'] }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             outer: CustomValidator.shape({
@@ -636,10 +634,10 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      options: [{ customValidators: ['CustomValidator'] }],
-    },
-    {
-      code: `
+        options: [{ customValidators: ['CustomValidator'] }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             outer: PropTypes.shape({
@@ -651,10 +649,10 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      options: [{ customValidators: ['CustomValidator'] }],
-    },
-    {
-      code: `
+        options: [{ customValidators: ['CustomValidator'] }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             outer: CustomValidator.shape({
@@ -666,10 +664,10 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      options: [{ customValidators: ['CustomValidator'] }],
-    },
-    {
-      code: `
+        options: [{ customValidators: ['CustomValidator'] }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             name: PropTypes.string
@@ -679,10 +677,10 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      options: [{ customValidators: ['CustomValidator'] }],
-    },
-    {
-      code: `
+        options: [{ customValidators: ['CustomValidator'] }],
+      },
+      {
+        code: `
         class Comp1 extends Component {
           render() {
             return <span />;
@@ -700,9 +698,9 @@ ruleTester.run('prop-types', rule, {
           prop2: PropTypes.arrayOf(Comp1.propTypes.prop1)
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Comp1 extends Component {
           render() {
             return <span />;
@@ -720,10 +718,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         class Comp1 extends Component {
           render() {
             return <span />;
@@ -741,16 +739,16 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const SomeComponent = createReactClass({
           propTypes: SomeOtherComponent.propTypes
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             let { a, ...b } = obj;
@@ -759,9 +757,9 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static get propTypes() {}
           render() {
@@ -769,9 +767,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static get propTypes() {}
           render() {
@@ -783,9 +781,9 @@ ruleTester.run('prop-types', rule, {
           users: PropTypes.arrayOf(PropTypes.object)
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             const {} = this.props;
@@ -793,9 +791,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var foo = 'fullname';
@@ -804,9 +802,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           constructor(props, context) {
             super(props, context)
@@ -817,10 +815,10 @@ ruleTester.run('prop-types', rule, {
           };
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           constructor(props, context) {
             super(props, context)
@@ -831,20 +829,20 @@ ruleTester.run('prop-types', rule, {
           };
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      // Should not be detected as a component
-      code: `
+        features: ['class fields'],
+      },
+      {
+        // Should not be detected as a component
+        code: `
         HelloJohn.prototype.render = function() {
           return React.createElement(Hello, {
             name: this.props.firstname
           });
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         function HelloComponent() {
           class Hello extends React.Component {
             render() {
@@ -856,9 +854,9 @@ ruleTester.run('prop-types', rule, {
         }
         module.exports = HelloComponent();
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         function HelloComponent() {
           var Hello = createReactClass({
             propTypes: { name: PropTypes.string },
@@ -870,9 +868,9 @@ ruleTester.run('prop-types', rule, {
         }
         module.exports = HelloComponent();
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class DynamicHello extends Component {
           render() {
             const {firstname} = this.props;
@@ -893,9 +891,9 @@ ruleTester.run('prop-types', rule, {
           firstname: PropTypes.string,
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Hello = (props) => {
           let team = props.names.map((name) => {
               return <li>{name}, {props.company}</li>;
@@ -907,9 +905,9 @@ ruleTester.run('prop-types', rule, {
           company: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         export default {
           renderHello() {
             let {name} = this.props;
@@ -917,9 +915,9 @@ ruleTester.run('prop-types', rule, {
           }
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         export default function FooBar(props) {
           const bar = props.bar;
           return (<div bar={bar}><div {...props}/></div>);
@@ -930,9 +928,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             var {...other} = this.props;
@@ -942,9 +940,9 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const statelessComponent = (props) => {
           const subRender = () => {
             return <span>{props.someProp}</span>;
@@ -955,9 +953,9 @@ ruleTester.run('prop-types', rule, {
           someProp: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const statelessComponent = ({ someProp }) => {
           const subRender = () => {
             return <span>{someProp}</span>;
@@ -968,9 +966,9 @@ ruleTester.run('prop-types', rule, {
           someProp: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const statelessComponent = function({ someProp }) {
           const subRender = () => {
             return <span>{someProp}</span>;
@@ -981,9 +979,9 @@ ruleTester.run('prop-types', rule, {
           someProp: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         function statelessComponent({ someProp }) {
           const subRender = () => {
             return <span>{someProp}</span>;
@@ -994,39 +992,39 @@ ruleTester.run('prop-types', rule, {
           someProp: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         function notAComponent({ something }) {
           return something + 1;
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const notAComponent = function({ something }) {
           return something + 1;
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const notAComponent = ({ something }) => {
           return something + 1;
         };
       `,
-    },
-    {
-      // Validation is ignored on reassigned props object
-      code: `
+      },
+      {
+        // Validation is ignored on reassigned props object
+        code: `
         const statelessComponent = (props) => {
           let newProps = props;
           return <span>{newProps.someProp}</span>;
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: {
             name: string;
@@ -1036,10 +1034,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: {
             name: Object;
@@ -1049,10 +1047,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {name: Object;};
         class Hello extends React.Component {
           props: Props;
@@ -1061,19 +1059,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type Props = {'data-action': string};
         function Button({ 'data-action': dataAction }: Props) {
           return <div data-action={dataAction} />;
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         import type Props from "fake";
         class Hello extends React.Component {
           props: Props;
@@ -1082,10 +1080,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: {
             name: {
@@ -1097,10 +1095,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {name: {firstname: string;};};
         class Hello extends React.Component {
           props: Props;
@@ -1109,10 +1107,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {name: {firstname: string; lastname: string;};};
         class Hello extends React.Component {
           props: Props;
@@ -1121,10 +1119,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {name: {firstname: string;}};
         class Hello extends React.Component {
           props: {people: Person[];};
@@ -1138,10 +1136,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {name: {firstname: string;}};
         type Props = {people: Person[];};
         class Hello extends React.Component {
@@ -1156,10 +1154,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {name: {firstname: string;}};
         type Props = {people: Person[]|Person;};
         class Hello extends React.Component {
@@ -1178,10 +1176,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {ok: string | boolean;};
         class Hello extends React.Component {
           props: Props;
@@ -1190,10 +1188,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type Props = {result: {ok: string | boolean;}|{ok: number | Array}};
         class Hello extends React.Component {
           props: Props;
@@ -1202,10 +1200,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type Props = {result?: {ok?: ?string | boolean;}|{ok?: ?number | Array}};
         class Hello extends React.Component {
           props: Props;
@@ -1214,10 +1212,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props = {a: 123};
           render () {
@@ -1225,11 +1223,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      // Ignore component validation if propTypes are composed using spread
-      code: `
+        features: ['class fields'],
+      },
+      {
+        // Ignore component validation if propTypes are composed using spread
+        code: `
         class Hello extends React.Component {
             render() {
                 return  <div>Hello {this.props.firstName} {this.props.lastName}</div>;
@@ -1243,20 +1241,20 @@ ruleTester.run('prop-types', rule, {
             firstName: PropTypes.string
         };
       `,
-    },
-    {
-      // Ignore destructured function arguments
-      code: `
+      },
+      {
+        // Ignore destructured function arguments
+        code: `
         class Hello extends React.Component {
           render () {
             return ["string"].map(({length}) => <div>{length}</div>);
           }
         }
       `,
-    },
-    {
-      // Flow annotations on stateless components
-      code: `
+      },
+      {
+        // Flow annotations on stateless components
+        code: `
         type Props = {
           firstname: string;
           lastname: string;
@@ -1266,10 +1264,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {firstname} {lastname}</div>
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type Props = {
           firstname: string;
           lastname: string;
@@ -1279,10 +1277,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {firstname} {lastname}</div>
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type Props = {
           firstname: string;
           lastname: string;
@@ -1292,10 +1290,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {firstname} {lastname}</div>
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type Props = {
           'completed?': boolean,
         };
@@ -1303,10 +1301,10 @@ ruleTester.run('prop-types', rule, {
           return <div>{props['completed?']}</div>;
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {
           name: string,
         };
@@ -1318,10 +1316,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type PropsUnionA = {
           a: string,
           b?: void,
@@ -1341,10 +1339,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         import type { FieldProps } from "redux-form"
 
         type Props = {
@@ -1353,11 +1351,11 @@ ruleTester.run('prop-types', rule, {
           options: Array<SelectOption>
         } & FieldProps
       `,
-      features: ['types'],
-    },
-    {
-      // Impossible intersection type
-      code: `
+        features: ['types'],
+      },
+      {
+        // Impossible intersection type
+        code: `
         import React from 'react';
         type Props = string & {
           fullname: string
@@ -1368,10 +1366,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         Card.propTypes = {
           title: PropTypes.string.isRequired,
           children: PropTypes.element.isRequired,
@@ -1383,9 +1381,9 @@ ruleTester.run('prop-types', rule, {
           )
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         function JobList(props) {
           props
           .jobs
@@ -1396,9 +1394,9 @@ ruleTester.run('prop-types', rule, {
           jobs: PropTypes.array
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         type Props = {
           firstname: ?string,
         };
@@ -1406,52 +1404,52 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {firstname}</div>;
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         function Greetings() {
           return <div>{({name}) => <Hello name={name} />}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         function Greetings() {
           return <div>{function({name}) { return <Hello name={name} />; }}</div>
         }
       `,
-    },
-    {
-      // Should stop at the class when searching for a parent component
-      code: `
+      },
+      {
+        // Should stop at the class when searching for a parent component
+        code: `
         export default (ComposedComponent) => class Something extends SomeOtherComponent {
           someMethod = ({width}) => {}
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      // Should stop at the decorator when searching for a parent component
-      code: `
+        features: ['class fields'],
+      },
+      {
+        // Should stop at the decorator when searching for a parent component
+        code: `
         @asyncConnect([{
           promise: ({dispatch}) => {}
         }])
         class Something extends Component {}
       `,
-      features: ['decorators'],
-    },
-    {
-      // Should not find any used props
-      code: `
+        features: ['decorators'],
+      },
+      {
+        // Should not find any used props
+        code: `
         function Hello(props) {
           const {...rest} = props;
           return <div>Hello</div>;
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         let Greetings = class extends React.Component {
           render () {
             return <div>Hello {this.props.name}</div>;
@@ -1461,9 +1459,9 @@ ruleTester.run('prop-types', rule, {
           name: PropTypes.string
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         let Greetings = {
           Hello: class extends React.Component {
             render () {
@@ -1475,9 +1473,9 @@ ruleTester.run('prop-types', rule, {
           name: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         let Greetings = {};
         Greetings.Hello = class extends React.Component {
           render () {
@@ -1488,18 +1486,18 @@ ruleTester.run('prop-types', rule, {
           name: PropTypes.string
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         function Hello({names}) {
           return names.map((name) => {
             return <div>{name}</div>;
           });
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         type Target = { target: EventTarget }
         class MyComponent extends Component {
           static propTypes = {
@@ -1511,10 +1509,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields', 'types'],
-    },
-    {
-      code: `
+        features: ['class fields', 'types'],
+      },
+      {
+        code: `
         class Hello extends Component {}
         Hello.Foo = ({foo}) => (
           <div>Hello {foo}</div>
@@ -1523,29 +1521,29 @@ ruleTester.run('prop-types', rule, {
           foo: PropTypes.node
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             return <div>{this.props.name}</div>;
           }
         });
       `,
-      options: [{ skipUndeclared: true }],
-    },
-    {
-      code: `
+        options: [{ skipUndeclared: true }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>{this.props.name}</div>;
           }
         }
       `,
-      options: [{ skipUndeclared: true }],
-    },
-    {
-      code: `
+        options: [{ skipUndeclared: true }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             name: PropTypes.object.isRequired
@@ -1555,10 +1553,10 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      options: [{ skipUndeclared: true }],
-    },
-    {
-      code: `
+        options: [{ skipUndeclared: true }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             name: PropTypes.object.isRequired
@@ -1568,29 +1566,29 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      options: [{ skipUndeclared: false }],
-    },
-    {
-      // Async generator functions can't be components.
-      code: `
+        options: [{ skipUndeclared: false }],
+      },
+      {
+        // Async generator functions can't be components.
+        code: `
         var Hello = async function* (props) {
           yield null;
           return <div>Hello {props.name}</div>;
         }
       `,
-    },
-    {
-      // Async generator functions can't be components.
-      code: `
+      },
+      {
+        // Async generator functions can't be components.
+        code: `
         async function* Hello(props) {
           yield null;
           return <div>Hello {props.name}</div>;
         }
       `,
-    },
-    {
-      // Flow annotations with variance
-      code: `
+      },
+      {
+        // Flow annotations with variance
+        code: `
         type Props = {
           +firstname: string;
           -lastname: string;
@@ -1600,10 +1598,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {firstname} {lastname}</div>
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           async onSelect({ name }) {
             return null;
@@ -1613,9 +1611,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         export class Example extends Component {
           static propTypes = {
             onDelete: PropTypes.func.isRequired
@@ -1626,10 +1624,10 @@ ruleTester.run('prop-types', rule, {
           handleSubmit = async ({ certificate, key }) => {};
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         type Person = {
           ...data,
           lastname: string
@@ -1641,10 +1639,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {|
           ...data,
           lastname: string
@@ -1656,10 +1654,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           ...$Exact<data>,
           lastname: string
@@ -1671,10 +1669,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         import type { Data } from './Data'
         type Person = {
           ...Data,
@@ -1687,10 +1685,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         import type { Data } from 'some-libdef-like-flow-typed-provides'
         type Person = {
           ...Data,
@@ -1703,10 +1701,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         import type { BasePerson } from './types'
         type Props = {
           person: {
@@ -1721,10 +1719,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type OtherProps = {
           firstname: string,
         };
@@ -1739,10 +1737,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type FooProps = {
           ...any,
           ...42,
@@ -1751,10 +1749,10 @@ ruleTester.run('prop-types', rule, {
           return <p />;
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -1764,10 +1762,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -1777,11 +1775,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -1792,10 +1790,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -1806,11 +1804,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = { name: { firstname: string; }; };
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -1818,10 +1816,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = { name: { firstname: string; }; };
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -1829,11 +1827,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        features: ['flow'],
+      },
+      {
+        code: `
         type Note = { text: string, children?: Note[] };
         type Props = {
           notes: Note[];
@@ -1844,11 +1842,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        features: ['flow'],
+      },
+      {
+        code: `
         import type Props from "fake";
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -1856,10 +1854,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         import type Props from "fake";
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -1867,11 +1865,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -1881,10 +1879,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -1894,11 +1892,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = { result?: { ok?: ?string | boolean; } | { ok?: ?number | Array } };
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -1906,10 +1904,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = { result?: { ok?: ?string | boolean;} | { ok?: ?number | Array } };
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -1917,11 +1915,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {
           foo: string,
         };
@@ -1932,10 +1930,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type Props = {
           foo: string,
         };
@@ -1946,11 +1944,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {
           foo: string,
         };
@@ -1961,11 +1959,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.53' } },
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.53' } },
+        features: ['flow'],
+      },
+      {
+        code: `
         type FancyProps = {
           foo: string,
         };
@@ -1976,10 +1974,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type FancyProps = {
           foo: string,
         };
@@ -1990,11 +1988,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.53' } },
-      features: ['types'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.53' } },
+        features: ['types'],
+      },
+      {
+        code: `
         type PropsA = { foo: string };
         type PropsB = { bar: string };
         type Props = PropsA & PropsB;
@@ -2007,10 +2005,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type PropsA = { foo: string };
         type PropsB = { bar: string };
         type PropsC = { zap: string };
@@ -2024,10 +2022,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         import type { PropsA } from "./myPropsA";
         type PropsB = { bar: string };
         type PropsC = { zap: string };
@@ -2041,10 +2039,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         type PropsA = { bar: string };
         type PropsB = { zap: string };
         type Props = PropsA & {
@@ -2059,10 +2057,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type PropsA = { bar: string };
         type PropsB = { zap: string };
         type Props =  {
@@ -2077,10 +2075,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = { foo: string }
         function higherOrderComponent<Props>() {
           return class extends React.Component<Props> {
@@ -2090,10 +2088,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         function higherOrderComponent<P: { foo: string }>() {
           return class extends React.Component<P> {
             render() {
@@ -2102,10 +2100,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         const withOverlayState = <P: { foo: string }>(WrappedComponent: ComponentType<P>): ComponentType<P> => (
           class extends React.Component<P> {
             constructor(props) {
@@ -2118,23 +2116,23 @@ ruleTester.run('prop-types', rule, {
           }
         )
       `,
-      features: ['flow'],
-    },
+        features: ['flow'],
+      },
 
-    // issue #1288
-    `function Foo() {
+      // issue #1288
+      `function Foo() {
       const props = {};
       props.bar = 'bar';
       return <div {...props} />;
     }`,
-    // issue #1288
-    `function Foo(props) {
+      // issue #1288
+      `function Foo(props) {
       props.bar = 'bar';
       return <div {...props} />;
     }`,
-    {
-      // issue #106
-      code: `
+      {
+        // issue #106
+        code: `
       import React from 'react';
       import SharedPropTypes from './SharedPropTypes';
 
@@ -2156,10 +2154,10 @@ ruleTester.run('prop-types', rule, {
         ...SharedPropTypes // eslint-disable-line object-shorthand
       };
     `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
       // @flow
       import * as React from 'react';
 
@@ -2175,28 +2173,28 @@ ruleTester.run('prop-types', rule, {
         }
       };
     `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         const Slider = props => (
           <RcSlider {...props} />
         );
 
         Slider.propTypes = RcSlider.propTypes;
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Slider = props => (
           <RcSlider foo={props.bar} />
         );
 
         Slider.propTypes = RcSlider.propTypes;
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Foo extends React.Component {
           bar() {
             this.setState((state, props) => ({ current: props.current }));
@@ -2210,9 +2208,9 @@ ruleTester.run('prop-types', rule, {
           current: PropTypes.number.isRequired,
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Foo extends React.Component {
           bar() {
             this.setState((state, props) => {
@@ -2221,9 +2219,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Foo extends React.Component {
           static getDerivedStateFromProps(props) {
             const { foo } = props;
@@ -2242,10 +2240,10 @@ ruleTester.run('prop-types', rule, {
           foo: PropTypes.func.isRequired,
         };
       `,
-      settings: { react: { version: '16.3.0' } },
-    },
-    {
-      code: `
+        settings: { react: { version: '16.3.0' } },
+      },
+      {
+        code: `
         const HeaderBalance = React.memo(({ cryptoCurrency }) => (
           <div className="header-balance">
             <div className="header-balance__balance">
@@ -2258,9 +2256,9 @@ ruleTester.run('prop-types', rule, {
           cryptoCurrency: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import React, { memo } from 'react';
         const HeaderBalance = memo(({ cryptoCurrency }) => (
           <div className="header-balance">
@@ -2274,9 +2272,9 @@ ruleTester.run('prop-types', rule, {
           cryptoCurrency: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import Foo, { memo } from 'foo';
         const HeaderBalance = memo(({ cryptoCurrency }) => (
           <div className="header-balance">
@@ -2290,14 +2288,14 @@ ruleTester.run('prop-types', rule, {
           cryptoCurrency: PropTypes.string
         };
       `,
-      settings: {
-        react: {
-          pragma: 'Foo',
+        settings: {
+          react: {
+            pragma: 'Foo',
+          },
         },
       },
-    },
-    {
-      code: `
+      {
+        code: `
         const Label = React.forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         });
@@ -2305,9 +2303,9 @@ ruleTester.run('prop-types', rule, {
           text: PropTypes.string,
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Label = Foo.forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         });
@@ -2315,14 +2313,14 @@ ruleTester.run('prop-types', rule, {
           text: PropTypes.string,
         };
       `,
-      settings: {
-        react: {
-          pragma: 'Foo',
+        settings: {
+          react: {
+            pragma: 'Foo',
+          },
         },
       },
-    },
-    {
-      code: `
+      {
+        code: `
         import React, { forwardRef } from 'react';
         const Label = forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
@@ -2331,9 +2329,9 @@ ruleTester.run('prop-types', rule, {
           text: PropTypes.string,
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import Foo, { forwardRef } from 'foo';
         const Label = forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
@@ -2342,14 +2340,14 @@ ruleTester.run('prop-types', rule, {
           text: PropTypes.string,
         };
       `,
-      settings: {
-        react: {
-          pragma: 'Foo',
+        settings: {
+          react: {
+            pragma: 'Foo',
+          },
         },
       },
-    },
-    {
-      code: `
+      {
+        code: `
       class Foo extends React.Component {
         propTypes = {
           actions: PropTypes.object.isRequired,
@@ -2367,10 +2365,10 @@ ruleTester.run('prop-types', rule, {
         }
       }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         class Foo extends React.Component {
           componentDidUpdate() { this.inputRef.focus(); }
           render() {
@@ -2382,9 +2380,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Foo extends React.Component {
           componentDidUpdate(nextProps, nextState) {
             const {
@@ -2398,9 +2396,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
       class Foo extends React.Component {
         shouldComponentUpdate(nextProps) {
           if (this.props.search !== nextProps.search) {
@@ -2424,9 +2422,9 @@ ruleTester.run('prop-types', rule, {
         query: PropTypes.string,
       };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         export default class LazyLoader extends Component {
           static propTypes = {
             children: PropTypes.node,
@@ -2453,10 +2451,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         import React from 'react';
         import PropTypes from 'prop-types';
         import { connect } from 'react-redux';
@@ -2474,18 +2472,18 @@ ruleTester.run('prop-types', rule, {
         export const Unconnected = Foo;
         export default connect(Foo);
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const a = {};
         function fn1() {}
         const b = a::fn1();
       `,
-      features: ['bind operator'],
-    },
-    {
-      // issue #2138
-      code: `
+        features: ['bind operator'],
+      },
+      {
+        // issue #2138
+        code: `
         type UsedProps = {|
           usedProp: number,
         |};
@@ -2500,18 +2498,18 @@ ruleTester.run('prop-types', rule, {
           return <div>{usedProp}</div>;
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          message: "'notOne' is missing in props validation",
-          line: 8,
-          column: 34,
-        },
-      ],
-    },
-    {
-      // issue #1259
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            message: "'notOne' is missing in props validation",
+            line: 8,
+            column: 34,
+          },
+        ],
+      },
+      {
+        // issue #1259
+        code: `
         const Hello = props => {
           const { notInProp } = dict[props.foo];
           return <div />
@@ -2521,10 +2519,10 @@ ruleTester.run('prop-types', rule, {
           foo: PropTypes.number,
         }
       `,
-    },
-    {
-      // issue #2298
-      code: `
+      },
+      {
+        // issue #2298
+        code: `
       type Props = {|
         firstname?: string
       |};
@@ -2533,17 +2531,17 @@ ruleTester.run('prop-types', rule, {
         return <div>Hello {firstname}</div>
       }
       `,
-      features: ['flow'],
-    },
-    {
-      // issue #2326
-      code: `
+        features: ['flow'],
+      },
+      {
+        // issue #2326
+        code: `
         for (const { result } of results) {}
       `,
-    },
-    {
-      // issue #2330
-      code: `
+      },
+      {
+        // issue #2330
+        code: `
         type Props = {
           user: {
             [string]: string
@@ -2559,10 +2557,10 @@ ruleTester.run('prop-types', rule, {
           );
         }
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         const Label = React.memo(React.forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         }));
@@ -2570,9 +2568,9 @@ ruleTester.run('prop-types', rule, {
           text: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import React, { memo, forwardRef } from 'react';
         const Label = memo(forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
@@ -2581,9 +2579,9 @@ ruleTester.run('prop-types', rule, {
           text: PropTypes.string
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import Foo, { memo, forwardRef } from 'foo';
         const Label = memo(forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
@@ -2592,14 +2590,14 @@ ruleTester.run('prop-types', rule, {
           text: PropTypes.string
         };
       `,
-      settings: {
-        react: {
-          pragma: 'Foo',
+        settings: {
+          react: {
+            pragma: 'Foo',
+          },
         },
       },
-    },
-    {
-      code: `
+      {
+        code: `
         const Foo = ({ length, ordering }) => (
           length > 0 && (
             <Paginator items={ordering} pageSize={10} />
@@ -2610,21 +2608,21 @@ ruleTester.run('prop-types', rule, {
           ordering: PropTypes.array
         };
       `,
-    },
-    // shouldn't trigger this rule since functions stating with a lowercase
-    // letter are not considered components
-    `
+      },
+      // shouldn't trigger this rule since functions stating with a lowercase
+      // letter are not considered components
+      `
       function noAComponent(props) {
         return <div>{props.text}</div>
       }
     `,
-    {
-      code: `
+      {
+        code: `
       export default function() {}
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         function Component(props) {
           return 0,
           <div>
@@ -2636,9 +2634,9 @@ ruleTester.run('prop-types', rule, {
           name: PropTypes.string.isRequired
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
       const SideMenu = styled(
         ({ componentId }) => (
           <S.Container>
@@ -2653,12 +2651,12 @@ ruleTester.run('prop-types', rule, {
         componentId: PropTypes.string.isRequired
       }
       `,
-      settings: {
-        componentWrapperFunctions: [{ property: 'styled' }],
+        settings: {
+          componentWrapperFunctions: [{ property: 'styled' }],
+        },
       },
-    },
-    {
-      code: `
+      {
+        code: `
         interface Props {
           'aria-label': string // 'undefined' PropType is defined but prop is never used eslint(react/no-unused-prop-types)
           // 'undefined' PropType is defined but prop is never used eslint(react-redux/no-unused-prop-types)
@@ -2670,10 +2668,10 @@ ruleTester.run('prop-types', rule, {
           return <div aria-label={ariaLabel} />
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface Props {
           value?: string;
         }
@@ -2687,10 +2685,10 @@ ruleTester.run('prop-types', rule, {
           return <div>{value}</div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface Props {
           value?: string;
         }
@@ -2704,10 +2702,10 @@ ruleTester.run('prop-types', rule, {
           return null;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface Props {
           value?: string;
         }
@@ -2718,12 +2716,12 @@ ruleTester.run('prop-types', rule, {
           return null;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    // shouldn't trigger this rule for 'render' since functions stating with a lowercase
-    // letter are not considered components
-    {
-      code: `
+        features: ['ts'],
+      },
+      // shouldn't trigger this rule for 'render' since functions stating with a lowercase
+      // letter are not considered components
+      {
+        code: `
       const MyComponent = (props) => {
         const render = () => {
           return <test>{props.hello}</test>;
@@ -2734,10 +2732,10 @@ ruleTester.run('prop-types', rule, {
         hello: PropTypes.string.isRequired,
       };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface Props {
           value?: string;
         }
@@ -2750,10 +2748,10 @@ ruleTester.run('prop-types', rule, {
           return <div>{value}</div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from 'react';
 
         interface Props {
@@ -2772,10 +2770,10 @@ ruleTester.run('prop-types', rule, {
           return <>{createElement(props.text)}</>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         const mapStateToProps = state => ({
           books: state.books
         });
@@ -2788,10 +2786,10 @@ ruleTester.run('prop-types', rule, {
           return <div></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         const mapStateToProps = state => ({
           books: state.books
         });
@@ -2805,10 +2803,10 @@ ruleTester.run('prop-types', rule, {
           return <div><span>{props.username}</span></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface infoLibTable {
           removeCollection(): Array<string>;
         }
@@ -2821,10 +2819,10 @@ ruleTester.run('prop-types', rule, {
           return <div></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface addTable {
           createCollection: () => Array<string>
         }
@@ -2842,10 +2840,10 @@ ruleTester.run('prop-types', rule, {
           return <div></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface InfoLibTableProps extends ReturnType<(dispatch: storeDispatch) => {
           removeCollection:  () => Array<string>,
         }> {
@@ -2856,10 +2854,10 @@ ruleTester.run('prop-types', rule, {
           return <div></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface addTable {
           createCollection: () => Array<string>;
         }
@@ -2878,10 +2876,10 @@ ruleTester.run('prop-types', rule, {
           return <div></div>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface addTable {
           createCollection: () => Array<string>;
         }
@@ -2898,10 +2896,10 @@ ruleTester.run('prop-types', rule, {
           return <div></div>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface InfoLibTableProps extends ReturnType<(dispatch: storeDispatch) => ({
           removeCollection:  () => Array<string>,
         })> {
@@ -2912,10 +2910,10 @@ ruleTester.run('prop-types', rule, {
           return <div></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface ThingProps extends React.HTMLAttributes<HTMLDivElement> {
           thing?: number
         }
@@ -2924,10 +2922,10 @@ ruleTester.run('prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface ThingProps {
           thing?: number
         }
@@ -2936,10 +2934,10 @@ ruleTester.run('prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         type User = {
           user: string;
         }
@@ -2956,10 +2954,10 @@ ruleTester.run('prop-types', rule, {
           return null;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         type User = {
         }
 
@@ -2975,10 +2973,10 @@ ruleTester.run('prop-types', rule, {
           return null;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface GenericProps {
           onClose: () => void
         }
@@ -2994,10 +2992,10 @@ ruleTester.run('prop-types', rule, {
           }: ImplementationProps
         ) => (<div />)
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         interface Props extends V2SocialLoginProps {
           autoLoad: boolean;
         }
@@ -3061,19 +3059,19 @@ ruleTester.run('prop-types', rule, {
           );
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         function Foo({ bar = "" }: { bar: string }): JSX.Element {
           return <div>{bar}</div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    // Issue: #2795
-    {
-      code: `
+        features: ['ts'],
+      },
+      // Issue: #2795
+      {
+        code: `
       type ConnectedProps = DispatchProps &
         StateProps
 
@@ -3097,11 +3095,11 @@ ruleTester.run('prop-types', rule, {
 
       type StateProps = ReturnType<typeof mapStateToProps>
       type DispatchProps = ReturnType<typeof mapDispatchToProps>`,
-      features: ['ts', 'no-babel'],
-    },
-    // Issue: #2795
-    {
-      code: `
+        features: ['ts'],
+      },
+      // Issue: #2795
+      {
+        code: `
       type ConnectedProps = DispatchProps &
         StateProps
 
@@ -3125,11 +3123,11 @@ ruleTester.run('prop-types', rule, {
 
       type StateProps = ReturnType<typeof mapStateToProps>
       type DispatchProps = ReturnType<typeof mapDispatchToProps>`,
-      features: ['ts', 'no-babel'],
-    },
-    // Issue: #2795
-    {
-      code: `
+        features: ['ts'],
+      },
+      // Issue: #2795
+      {
+        code: `
       type ConnectedProps = DispatchProps &
         StateProps
 
@@ -3152,10 +3150,10 @@ ruleTester.run('prop-types', rule, {
 
       type StateProps = ReturnType<typeof mapStateToProps>
       type DispatchProps = ReturnType<typeof mapDispatchToProps>`,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
       import React from 'react'
 
       interface Meta {
@@ -3186,10 +3184,10 @@ ruleTester.run('prop-types', rule, {
         )
       }
       export default InputField`,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
 
         type ComponentProps = {
@@ -3204,10 +3202,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
 
         interface PersonProps {
@@ -3217,20 +3215,20 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
 
         const Person: React.FunctionComponent<PersonProps> = (props): React.ReactElement => (
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
 
         interface PersonProps {
@@ -3240,10 +3238,10 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
 
         export interface PersonProps {
@@ -3253,19 +3251,19 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
         const Person: React.FunctionComponent<{ username: string }> = (props): React.ReactElement => (
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
         type PersonProps = {
             username: string;
@@ -3274,10 +3272,10 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { FunctionComponent } from 'react';
 
         type PersonProps = {
@@ -3287,10 +3285,10 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { FC } from 'react';
         type PersonProps = {
             username: string;
@@ -3299,10 +3297,10 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import type { FC } from 'react';
         type PersonProps = {
             username: string;
@@ -3311,10 +3309,10 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { FC as X } from 'react';
         interface PersonProps {
             username: string;
@@ -3323,10 +3321,10 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as X from 'react';
         interface PersonProps {
             username: string;
@@ -3335,11 +3333,11 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      // issue: https://github.com/jsx-eslint/eslint-plugin-react/issues/2786
-      code: `
+        features: ['ts'],
+      },
+      {
+        // issue: https://github.com/jsx-eslint/eslint-plugin-react/issues/2786
+        code: `
         import React from 'react';
 
         interface Props {
@@ -3350,10 +3348,10 @@ ruleTester.run('prop-types', rule, {
           return item ? <></> : <></>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         const returnTypeProp = (someProp: any) => ({ someProp });
@@ -3364,10 +3362,10 @@ ruleTester.run('prop-types', rule, {
           return <div>{someProp}</div>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         export const EuiSuperSelectControl: <T extends string>(
           props: EuiSuperSelectControlProps<T>
         ) => ReturnType<FunctionComponent<EuiSuperSelectControlProps<T>>> = ({
@@ -3376,10 +3374,10 @@ ruleTester.run('prop-types', rule, {
           return null;
         }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
 
         const MyComponent = (props: React.PropsWithChildren<{ username: string }>): React.ReactElement => {
@@ -3387,10 +3385,10 @@ ruleTester.run('prop-types', rule, {
         };
 
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         type Props<ValueType> = {
           value: ValueType;
           onClick: (value: ValueType) => void;
@@ -3400,10 +3398,10 @@ ruleTester.run('prop-types', rule, {
           return <button type="button" onClick={() => onClick(value)}>BUTTON</button>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
           import React, { VoidFunctionComponent } from 'react'
 
           interface Props {
@@ -3415,10 +3413,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {age}</div>;
           }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
           import React from 'react'
 
           interface Props {
@@ -3430,10 +3428,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {age}</div>;
           }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
           import React from 'react'
 
           export interface Props {
@@ -3445,10 +3443,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {age}</div>;
           }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
           import React, { VFC } from 'react'
 
           interface Props {
@@ -3460,10 +3458,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {age}</div>;
           }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
           import React from 'react'
 
           interface Props {
@@ -3475,10 +3473,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {age}</div>;
           }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
           import React from 'react'
 
           export interface Props {
@@ -3490,10 +3488,10 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {age}</div>;
           }
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ForwardRefRenderFunction  as X } from 'react'
 
         type IfooProps = { e: string };
@@ -3502,10 +3500,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ForwardRefRenderFunction  as X } from 'react'
 
         export type IfooProps = { e: string };
@@ -3514,10 +3512,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ForwardRefRenderFunction } from 'react'
 
         type IfooProps = { e: string };
@@ -3526,10 +3524,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ForwardRefRenderFunction } from 'react'
 
         type IfooProps = { e: string };
@@ -3538,10 +3536,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
 
         type IfooProps = { e: string };
@@ -3550,10 +3548,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         });
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from 'react'
 
         type IfooProps = { e: string };
@@ -3562,10 +3560,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         });
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
         type IfooProps = { e: string };
         const Foo= React.forwardRef<HTMLDivElement, IfooProps>(function Foo(props, ref) {
@@ -3573,10 +3571,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         });
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
         interface IfooProps { e: string }
         const Foo= React.forwardRef<HTMLDivElement, IfooProps>(function Foo(props, ref) {
@@ -3584,10 +3582,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         });
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from 'react'
         interface IfooProps { e: string }
         const Foo= forwardRef<HTMLDivElement, IfooProps>(function Foo(props, ref) {
@@ -3595,10 +3593,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         });
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef as X } from 'react'
 
         type IfooProps = { e: string };
@@ -3607,10 +3605,10 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         });
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
 
         class Factory {
@@ -3621,9 +3619,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class Test extends React.Component {
           static propTypes = {
             value: PropTypes.string
@@ -3634,12 +3632,12 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
+        features: ['class fields'],
+      },
 
-    // #2944
-    {
-      code: `
+      // #2944
+      {
+        code: `
         const styles = { width: 0 };
 
         function Foo(props) {
@@ -3657,9 +3655,9 @@ ruleTester.run('prop-types', rule, {
           }),
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import React, { forwardRef } from "react";
 
         export type Props = { children: React.ReactNode; type: "submit" | "button" };
@@ -3670,10 +3668,10 @@ ruleTester.run('prop-types', rule, {
           </button>
         ));
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from "react";
 
         export type X = { num: number };
@@ -3685,10 +3683,10 @@ ruleTester.run('prop-types', rule, {
           </button>
         ));
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from "react";
 
         export interface IProps {
@@ -3702,10 +3700,10 @@ ruleTester.run('prop-types', rule, {
           </button>
         ));
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from "react";
 
         export interface X {
@@ -3722,10 +3720,10 @@ ruleTester.run('prop-types', rule, {
           </button>
         ));
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         type ButtonProps = ({
             children: React.Node,
         } | {
@@ -3739,10 +3737,10 @@ ruleTester.run('prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         import React, { PropTypes } from 'react'
 
         function Foo({ bar }) {
@@ -3756,10 +3754,10 @@ ruleTester.run('prop-types', rule, {
 
         Foo.baz = 'hi';
       `,
-    },
+      },
 
-    {
-      code: `
+      {
+        code: `
         type Props = {
           'data-hover': string
         }
@@ -3770,10 +3768,10 @@ ruleTester.run('prop-types', rule, {
           return <span data-hover={dataHover} />
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         import React, { PropTypes } from 'react';
 
         function MyComponent({ name }) {
@@ -3799,9 +3797,9 @@ ruleTester.run('prop-types', rule, {
 
         export default MyComponent;
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         type Field = {
             value: string,
             error: string,
@@ -3827,10 +3825,10 @@ ruleTester.run('prop-types', rule, {
                         onChange={newVal => props.onBankDetailsUpdate({ accountName: newVal })}
                     />
       `,
-      features: ['flow'],
-    },
-    {
-      code: `
+        features: ['flow'],
+      },
+      {
+        code: `
         class App extends React.Component {
           render() {
             return (
@@ -3844,14 +3842,12 @@ ruleTester.run('prop-types', rule, {
           foo: PropTypes.object,
         });
       `,
-      settings: {
-        propWrapperFunctions: [
-          { object: 'PropTypes', property: 'exact', exact: true },
-        ],
+        settings: {
+          propWrapperFunctions: [{ object: 'PropTypes', property: 'exact', exact: true }],
+        },
       },
-    },
-    {
-      code: `
+      {
+        code: `
         class Test extends React.Component {
           componentDidUpdate() {
               const { bar } = this.state;
@@ -3863,9 +3859,9 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const DisplayName = (props) => {
             const getNameDiv = () => {
                 return <div>{props.name}</div>;
@@ -3878,9 +3874,9 @@ ruleTester.run('prop-types', rule, {
             name: PropTypes.string.isRequired,
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const SomeComponent = (props) => {
           function renderComponent() {
             return <div>{props.name}</div>
@@ -3893,9 +3889,9 @@ ruleTester.run('prop-types', rule, {
           name: PropTypes.string
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import React from 'react';
         import { MyType } from './types';
 
@@ -3923,10 +3919,10 @@ ruleTester.run('prop-types', rule, {
 
         export default Component;
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         export default React.memo(function AppIcon({
           icon,
           className,
@@ -3963,10 +3959,10 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         import PropTypes from 'prop-types';
         import React from 'react';
 
@@ -3992,10 +3988,10 @@ ruleTester.run('prop-types', rule, {
 
         export default LinkWrapper;
       `,
-      features: ['fragment'],
-    },
-    {
-      code: `
+        features: ['fragment'],
+      },
+      {
+        code: `
         const projectType = PropTypes.shape({
           id: PropTypes.string.isRequired,
           name: PropTypes.string.isRequired,
@@ -4019,9 +4015,9 @@ ruleTester.run('prop-types', rule, {
           activeProject: projectType,
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import React from 'react';
 
         interface SomeType<ContextType = any> {
@@ -4038,10 +4034,10 @@ ruleTester.run('prop-types', rule, {
           renderValue: ({ title }) => <div>{title}</div>,
         };
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         <MyComponent
           options={{
             tabBarIcon: ({ color, size }) => (
@@ -4050,9 +4046,9 @@ ruleTester.run('prop-types', rule, {
           }}
         />
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         import React, { forwardRef } from 'react';
         import { ControlProps, NamedProps } from './ext';
 
@@ -4082,10 +4078,10 @@ ruleTester.run('prop-types', rule, {
           return <span>{width}</span>;
         });
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from 'react';
         import { ControlProps, NamedProps } from './ext';
 
@@ -4115,10 +4111,10 @@ ruleTester.run('prop-types', rule, {
           return <span>{width}</span>;
         });
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentPropsWithoutRef, forwardRef } from 'react';
 
         export const FancyButton = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<"button">>(
@@ -4129,10 +4125,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentPropsWithRef, forwardRef } from "react";
 
         export const FancyButton = forwardRef<HTMLButtonElement, ComponentPropsWithRef<"button">>(
@@ -4143,10 +4139,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentProps, forwardRef } from "react";
 
         export const FancyButton = forwardRef<HTMLButtonElement, ComponentProps<"button">>(
@@ -4157,10 +4153,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
 
         const BaseButton = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<"button">>(
@@ -4179,10 +4175,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentPropsWithRef, ElementRef, forwardRef } from "react";
 
         const BaseButton = forwardRef<HTMLButtonElement, ComponentPropsWithRef<"button">>(
@@ -4201,10 +4197,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentProps, ElementRef, forwardRef } from "react";
 
         const BaseButton = forwardRef<HTMLButtonElement, ComponentProps<"button">>(
@@ -4223,10 +4219,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentProps, ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
 
         const BaseButton = forwardRef<HTMLButtonElement, ComponentProps<"button">>(
@@ -4245,10 +4241,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentProps, ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
 
         const BaseButton = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<"button">>(
@@ -4267,10 +4263,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentProps, ComponentPropsWithRef, ElementRef, forwardRef } from "react";
 
         const BaseButton = forwardRef<HTMLButtonElement, ComponentProps<"button">>(
@@ -4289,10 +4285,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import { ComponentProps, ComponentPropsWithRef, ElementRef, forwardRef } from 'react';
 
         const BaseButton = forwardRef<HTMLButtonElement, ComponentPropsWithRef<"button">>(
@@ -4311,10 +4307,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         export const FancyButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
@@ -4325,10 +4321,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         export const FancyButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithRef<"button">>(
@@ -4339,10 +4335,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         export const FancyButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<"button">>(
@@ -4353,10 +4349,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
@@ -4375,10 +4371,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithRef<"button">>(
@@ -4397,10 +4393,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<"button">>(
@@ -4419,10 +4415,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
@@ -4441,10 +4437,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithRef<"button">>(
@@ -4463,10 +4459,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
@@ -4485,10 +4481,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<"button">>(
@@ -4507,10 +4503,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         export const FancyButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
@@ -4521,10 +4517,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         export const FancyButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithRef<"button">>(
@@ -4535,10 +4531,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         export const FancyButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<"button">>(
@@ -4549,10 +4545,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
@@ -4571,10 +4567,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithRef<"button">>(
@@ -4593,10 +4589,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<"button">>(
@@ -4615,10 +4611,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
@@ -4637,10 +4633,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<"button">>(
@@ -4659,10 +4655,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button">>(
@@ -4681,10 +4677,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import * as React from "react";
 
         const BaseButton = React.forwardRef<HTMLButtonElement, React.ComponentPropsWithRef<"button">>(
@@ -4703,10 +4699,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, {ComponentPropsWithoutRef } from 'react';
 
         export const FancyButton = React.forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<"button">>(
@@ -4717,10 +4713,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ComponentPropsWithRef } from 'react';
 
         export const FancyButton = React.forwardRef<HTMLButtonElement, ComponentPropsWithRef<"button">>(
@@ -4731,10 +4727,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ComponentProps } from 'react';
 
         export const FancyButton = React.forwardRef<HTMLButtonElement, ComponentProps<"button">>(
@@ -4745,10 +4741,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ComponentPropsWithoutRef, ElementRef } from 'react';
 
         const BaseButton = React.forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<"button">>(
@@ -4767,10 +4763,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ComponentPropsWithRef, ElementRef } from 'react';
 
         const BaseButton = React.forwardRef<HTMLButtonElement, ComponentPropsWithRef<"button">>(
@@ -4789,10 +4785,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ComponentProps, ElementRef } from 'react';
 
         const BaseButton = React.forwardRef<HTMLButtonElement, ComponentProps<"button">>(
@@ -4811,10 +4807,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ComponentProps, ComponentPropsWithoutRef, ElementRef } from 'react';
 
         const BaseButton = React.forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<"button">>(
@@ -4833,10 +4829,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ComponentProps, ComponentPropsWithoutRef, ElementRef } from 'react';
 
         const BaseButton = React.forwardRef<HTMLButtonElement, ComponentProps<"button">>(
@@ -4855,10 +4851,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ComponentProps, ComponentPropsWithRef, ElementRef } from 'react';
 
         const BaseButton = React.forwardRef<HTMLButtonElement, ComponentPropsWithRef<"button">>(
@@ -4877,10 +4873,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ComponentProps, ComponentPropsWithRef, ElementRef } from 'react';
 
         const BaseButton = React.forwardRef<HTMLButtonElement, ComponentProps<"button">>(
@@ -4899,10 +4895,10 @@ ruleTester.run('prop-types', rule, {
           ),
         );
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from 'react';
         import { IExt1 } from './ext';
 
@@ -4929,10 +4925,10 @@ ruleTester.run('prop-types', rule, {
           return <span>{width}</span>;
         };
       `,
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { memo } from 'react';
         interface Props1 {
             age: number;
@@ -4942,10 +4938,10 @@ ruleTester.run('prop-types', rule, {
         });
         export const Hello = HelloTemp
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         import React, { forwardRef, memo } from 'react';
         interface Props1 {
             age: number;
@@ -4955,10 +4951,10 @@ ruleTester.run('prop-types', rule, {
         });
         export const Hello = memo(HelloTemp);
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         import React, { forwardRef, memo } from 'react';
         interface Props1 {
             age: number;
@@ -4969,20 +4965,20 @@ ruleTester.run('prop-types', rule, {
             }),
         );
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         import React from "react"
 
         export function Heading({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
           return <div className={cn("font-semibold text-lg", className)} {...props} />
         }
       `,
-      features: ['types'],
-    },
-    {
-      code: `
+        features: ['types'],
+      },
+      {
+        code: `
         import React from 'react';
         type TDelIconProps = React.HTMLProps<HTMLDivElement>;
 
@@ -4992,13 +4988,15 @@ ruleTester.run('prop-types', rule, {
             </div>
         );
       `,
-      features: ['types'],
-    }
-  )),
+        features: ['types'],
+      },
+    ),
+  ),
 
-  invalid: parsers.all([].concat(
-    {
-      code: `
+  invalid: parsers.all(
+    [].concat(
+      {
+        code: `
         type Props = {
           name: string,
         };
@@ -5009,73 +5007,73 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-          line: 8,
-          column: 31,
-          type: 'Identifier',
-        },
-      ],
-      features: ['types'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+            line: 8,
+            column: 31,
+            type: 'Identifier',
+          },
+        ],
+        features: ['types'],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             return React.createElement("div", {}, this.props.name);
           }
         });
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-          line: 4,
-          column: 62,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+            line: 4,
+            column: 62,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             return <div>Hello {this.props.name}</div>;
           }
         });
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-          line: 4,
-          column: 43,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+            line: 4,
+            column: 43,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello {this.props.name}</div>;
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-          line: 4,
-          column: 43,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+            line: 4,
+            column: 43,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             const { foo: { bar } } = this.props;
@@ -5083,13 +5081,13 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        { message: "'foo' is missing in props validation" },
-        { message: "'foo.bar' is missing in props validation" },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          { message: "'foo' is missing in props validation" },
+          { message: "'foo.bar' is missing in props validation" },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             const { foo: { bar } } = this.props;
@@ -5103,23 +5101,21 @@ ruleTester.run('prop-types', rule, {
           })
         }
       `,
-      errors: [
-        { message: "'foo.bar' is missing in props validation" },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'foo.bar' is missing in props validation" }],
+      },
+      {
+        code: `
         function Foo({ foo: { bar } }) {
           return <p>{bar}</p>
         }
       `,
-      errors: [
-        { message: "'foo' is missing in props validation" },
-        { message: "'foo.bar' is missing in props validation" },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          { message: "'foo' is missing in props validation" },
+          { message: "'foo.bar' is missing in props validation" },
+        ],
+      },
+      {
+        code: `
         function Foo({ a }) {
           return <p>{ a.nope }</p>
         }
@@ -5130,12 +5126,10 @@ ruleTester.run('prop-types', rule, {
           })
         }
       `,
-      errors: [
-        { message: "'a.nope' is missing in props validation" },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'a.nope' is missing in props validation" }],
+      },
+      {
+        code: `
         function Foo({ a }) {
           const { b } = a
           return <p>{ b.nope }</p>
@@ -5149,12 +5143,10 @@ ruleTester.run('prop-types', rule, {
           })
         }
       `,
-      errors: [
-        { message: "'a.b.nope' is missing in props validation" },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'a.b.nope' is missing in props validation" }],
+      },
+      {
+        code: `
         function Foo(props) {
           const { a } = props
           return <p>{ a.nope }</p>
@@ -5166,12 +5158,10 @@ ruleTester.run('prop-types', rule, {
           })
         }
       `,
-      errors: [
-        { message: "'a.nope' is missing in props validation" },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'a.nope' is missing in props validation" }],
+      },
+      {
+        code: `
         function Foo(props) {
           const a = props.a
           return <p>{ a.nope }</p>
@@ -5183,12 +5173,10 @@ ruleTester.run('prop-types', rule, {
           })
         }
       `,
-      errors: [
-        { message: "'a.nope' is missing in props validation" },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'a.nope' is missing in props validation" }],
+      },
+      {
+        code: `
         class Foo extends Component {
           render() {
             const props = this.props
@@ -5196,12 +5184,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        { message: "'cat' is missing in props validation" },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'cat' is missing in props validation" }],
+      },
+      {
+        code: `
         class Foo extends Component {
           render() {
             const { props } = this;
@@ -5209,12 +5195,10 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        { message: "'cat' is missing in props validation" },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'cat' is missing in props validation" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             const { name, ...rest } = this.props
@@ -5222,18 +5206,18 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-          line: 4,
-          column: 21,
-          type: 'Property',
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+            line: 4,
+            column: 21,
+            type: 'Property',
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             const { name, title, ...rest } = this.props
@@ -5244,18 +5228,18 @@ ruleTester.run('prop-types', rule, {
           name: PropTypes.string
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'title' },
-          line: 4,
-          column: 27,
-          type: 'Property',
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'title' },
+            line: 4,
+            column: 27,
+            type: 'Property',
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
            renderStuff() {
             const { name, ...rest } = this.props
@@ -5267,18 +5251,18 @@ ruleTester.run('prop-types', rule, {
         }
         Hello.propTypes = {};
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-          line: 4,
-          column: 21,
-          type: 'Property',
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+            line: 4,
+            column: 21,
+            type: 'Property',
+          },
+        ],
+      },
+      {
+        code: `
         /** @extends React.Component */
         class Hello extends ChildComponent {
           render() {
@@ -5286,18 +5270,18 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-          line: 5,
-          column: 43,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+            line: 5,
+            column: 43,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello {this.props.firstname} {this.props.lastname}</div>;
@@ -5307,15 +5291,15 @@ ruleTester.run('prop-types', rule, {
           firstname: PropTypes.string
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello {this.props.name}</div>;
@@ -5330,15 +5314,15 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             name: PropTypes.string.isRequired
@@ -5353,19 +5337,19 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'propWithoutTypeDefinition' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'propWithoutTypeDefinition' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var { firstname, lastname } = this.props;
@@ -5376,34 +5360,16 @@ ruleTester.run('prop-types', rule, {
           firstname: PropTypes.string
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    semver.satisfies(babelEslintVersion, '< 9') ? {
-      code: `
-        class Hello extends React.Component {
-          static propTypes: {
-            firstname: PropTypes.string
-          };
-          render() {
-            return <div>Hello {this.props.firstname}</div>;
-          }
-        }
-      `,
-      parser: parsers.BABEL_ESLINT,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-        },
-      ],
-    } : [],
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      [],
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.b
@@ -5415,15 +5381,15 @@ ruleTester.run('prop-types', rule, {
           })
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.b' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.b' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.b.c;
@@ -5437,15 +5403,15 @@ ruleTester.run('prop-types', rule, {
           })
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.b.c' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.b.c' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.b.c;
@@ -5457,15 +5423,15 @@ ruleTester.run('prop-types', rule, {
         };
         Hello.propTypes.a.b = PropTypes.shape({});
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.b.c' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.b.c' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.b.c;
@@ -5481,27 +5447,27 @@ ruleTester.run('prop-types', rule, {
           )
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.b.c' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.__.d' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.__.d.length' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.anything.e' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.b.c' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.__.d' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.__.d.length' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.anything.e' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var i = 3;
@@ -5519,27 +5485,27 @@ ruleTester.run('prop-types', rule, {
           )
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a[].c' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a[].d' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a[].d.length' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a[].e' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a[].c' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a[].d' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a[].d.length' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a[].e' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.length;
@@ -5560,19 +5526,19 @@ ruleTester.run('prop-types', rule, {
           ])
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.length' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.b' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.length' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.b' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var {
@@ -5586,15 +5552,15 @@ ruleTester.run('prop-types', rule, {
           "aria-controls": PropTypes.string
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'propX' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'propX' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props["some.value"];
@@ -5604,15 +5570,15 @@ ruleTester.run('prop-types', rule, {
         Hello.propTypes = {
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'some.value' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'some.value' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props["arr"][1];
@@ -5622,15 +5588,15 @@ ruleTester.run('prop-types', rule, {
         Hello.propTypes = {
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'arr' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'arr' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props["arr"][1]["some.value"];
@@ -5643,15 +5609,15 @@ ruleTester.run('prop-types', rule, {
           )
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'arr[].some.value' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'arr[].some.value' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var text;
@@ -5661,15 +5627,15 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var { 'props': { firstname } } = this;
@@ -5677,15 +5643,15 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             if (true) {
@@ -5699,133 +5665,107 @@ ruleTester.run('prop-types', rule, {
           lastname: PropTypes.string
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = function(props) {
           return <div>Hello {props.name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         function Hello(props) {
           return <div>Hello {props.name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = (props) => {
           return <div>Hello {props.name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = (props) => {
           const { name } = props;
           return <div>Hello {name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         function Hello({ name }) {
           return <div>Hello {name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         const Hello = function({ name }) {
           return <div>Hello {name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         const Hello = ({ name }) => {
           return <div>Hello {name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      features: ['no-default', 'no-ts', 'no-babel'], // TODO: remove this entire line, and fix the failures
-      code: `
-        class Test extends Foo.Component {
-          render() {
-            return (
-              <div>{this.props.firstname} {this.props.lastname}</div>
-            );
-          }
-        };
-        const propTypes = forbidExtraProps({
-          firstname: PropTypes.string
-        });
-        Test.propTypes = propTypes;
-      `,
-      settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
       },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-          line: 5,
-        },
-      ],
-    },
-    {
-      code: `
+      {
+        code: `
         class Test extends Foo.Component {
           render() {
             return (
@@ -5837,17 +5777,17 @@ ruleTester.run('prop-types', rule, {
           firstname: PropTypes.string
         };
       `,
-      settings,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-          line: 5,
-        },
-      ],
-    },
-    {
-      code: `
+        settings,
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+            line: 5,
+          },
+        ],
+      },
+      {
+        code: `
         type MyComponentProps = {
           a: number,
         };
@@ -5855,18 +5795,18 @@ ruleTester.run('prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['types'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'b' },
-          line: 5,
-          column: 35,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'b' },
+            line: 5,
+            column: 35,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var props = { firstname: 'John' };
@@ -5874,15 +5814,15 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           constructor(props, context) {
             super(props, context)
@@ -5890,15 +5830,15 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'source' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'source' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           constructor(props, context) {
             super(props, context)
@@ -5906,19 +5846,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'source' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'source.uri' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'source' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'source.uri' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           constructor(props, context) {
             super(props, context)
@@ -5926,15 +5866,15 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'source' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'source' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           constructor(props, context) {
             super(props, context)
@@ -5942,19 +5882,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'source' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'source.uri' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'source' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'source.uri' },
+          },
+        ],
+      },
+      {
+        code: `
         function HelloComponent() {
           class Hello extends React.Component {
             render() {
@@ -5965,15 +5905,15 @@ ruleTester.run('prop-types', rule, {
         }
         module.exports = HelloComponent();
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         function HelloComponent() {
           var Hello = createReactClass({
             render: function() {
@@ -5984,15 +5924,15 @@ ruleTester.run('prop-types', rule, {
         }
         module.exports = HelloComponent();
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         class DynamicHello extends Component {
           render() {
             const { firstname } = this.props;
@@ -6007,19 +5947,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         const Hello = (props) => {
           let team = props.names.map((name) => {
               return <li>{name}, {props.company}</li>;
@@ -6027,38 +5967,38 @@ ruleTester.run('prop-types', rule, {
           return <ul>{team}</ul>;
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'names' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'names.map' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'company' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'names' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'names.map' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'company' },
+          },
+        ],
+      },
+      {
+        code: `
         const Annotation = props => (
           <div>
             {props.text}
           </div>
         )
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'text' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'text' },
+          },
+        ],
+      },
+      {
+        code: `
         for (var key in foo) {
           var Hello = createReactClass({
             render: function() {
@@ -6067,15 +6007,15 @@ ruleTester.run('prop-types', rule, {
           });
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         var propTypes = {
           firstname: PropTypes.string
         };
@@ -6088,28 +6028,28 @@ ruleTester.run('prop-types', rule, {
         }
         Test.propTypes = propTypes;
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         var thePropsTypes = {a: PropTypes.string.isRequired};
         var Foo = function (props) { return <div>{props.a}{props.b}</div>; };
         Foo.propTypes = thePropsTypes;
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'b' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'b' },
+          },
+        ],
+      },
+      {
+        code: `
         class Test extends Foo.Component {
           render() {
             return (
@@ -6121,18 +6061,18 @@ ruleTester.run('prop-types', rule, {
           firstname: PropTypes.string
         });
       `,
-      settings: Object.assign({}, settings, {
-        propWrapperFunctions: ['forbidExtraProps'],
-      }),
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        settings: Object.assign({}, settings, {
+          propWrapperFunctions: ['forbidExtraProps'],
+        }),
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Test extends Foo.Component {
           render() {
             return (
@@ -6144,18 +6084,18 @@ ruleTester.run('prop-types', rule, {
           firstname: PropTypes.string
         });
       `,
-      settings: Object.assign({}, settings, {
-        propWrapperFunctions: ['Object.freeze'],
-      }),
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        settings: Object.assign({}, settings, {
+          propWrapperFunctions: ['Object.freeze'],
+        }),
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         /** @jsx Foo */
         class Test extends Foo.Component {
           render() {
@@ -6168,15 +6108,15 @@ ruleTester.run('prop-types', rule, {
           firstname: PropTypes.string
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: {};
           render () {
@@ -6184,16 +6124,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: {
             name: Object;
@@ -6203,16 +6143,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+          },
+        ],
+      },
+      {
+        code: `
         type Props = { name: Object; };
         class Hello extends React.Component {
           props: Props;
@@ -6221,16 +6161,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: {
             name: {
@@ -6242,16 +6182,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name.lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name.lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         type Props = { name: { firstname: string; }; };
         class Hello extends React.Component {
           props: Props;
@@ -6260,16 +6200,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name.lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name.lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: { person: { name: { firstname: string; }; }; };
           render () {
@@ -6277,16 +6217,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'person.name.lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'person.name.lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         type Props = { person: { name: { firstname: string; }; }; };
         class Hello extends React.Component {
           props: Props;
@@ -6295,16 +6235,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'person.name.lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'person.name.lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         type Person = { name: { firstname: string; } };
         class Hello extends React.Component {
           props: { people: Person[]; };
@@ -6318,16 +6258,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'people[].name.lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'people[].name.lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         type Person = { name: { firstname: string } };
         type Props = { people: Person[] };
         class Hello extends React.Component {
@@ -6342,16 +6282,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'people[].name.lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'people[].name.lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         type Props = { result?: { ok: string | boolean; } | { ok: number | Array } };
         class Hello extends React.Component {
           props: Props;
@@ -6360,16 +6300,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'result.notok' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'result.notok' },
+          },
+        ],
+      },
+      {
+        code: `
         let Greetings = class extends React.Component {
           render () {
             return <div>Hello {this.props.name}</div>;
@@ -6377,15 +6317,15 @@ ruleTester.run('prop-types', rule, {
         }
         Greetings.propTypes = {};
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         let Greetings = {
           Hello: class extends React.Component {
             render () {
@@ -6395,15 +6335,15 @@ ruleTester.run('prop-types', rule, {
         }
         Greetings.Hello.propTypes = {};
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         let Greetings = {};
         Greetings.Hello = class extends React.Component {
           render () {
@@ -6412,72 +6352,72 @@ ruleTester.run('prop-types', rule, {
         }
         Greetings.Hello.propTypes = {};
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         function Greetings({ names }) {
           names = names.map(({ firstname, lastname }) => <div>{firstname} {lastname}</div>);
           return <Hello>{names}</Hello>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'names' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'names.map' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'names' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'names.map' },
+          },
+        ],
+      },
+      {
+        code: `
         const MyComponent = props => (
           <div onClick={() => props.toggle()}></div>
         )
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'toggle' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'toggle' },
+          },
+        ],
+      },
+      {
+        code: `
         const MyComponent = props => props.test ? <div /> : <span />
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'test' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'test' },
+          },
+        ],
+      },
+      {
+        code: `
         const TestComponent = props =>
           <div onClick={() => props.test()} />
         const mapStateToProps = (_, props) => ({
           otherProp: props.otherProp,
         })
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'test' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'test' },
+          },
+        ],
+      },
+      {
+        code: `
         type Props = {
           firstname: ?string,
         };
@@ -6485,16 +6425,16 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {firstname} {lastname}</div>;
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           constructor(props, context) {
             super(props, context)
@@ -6507,19 +6447,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      {
+        code: `
         function Hello(props) {
           return <div>{props.name.constructor.firstname}</div>
         }
@@ -6529,92 +6469,92 @@ ruleTester.run('prop-types', rule, {
           })
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name.constructor.firstname' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name.constructor.firstname' },
+          },
+        ],
+      },
+      {
+        code: `
       function Hello({ foo = '' }) {
         return <p>{foo}</p>
       }
     `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         function SomeComponent({bar}) {
           function f({foo}) {}
           return <div className={f()}>{bar}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+          },
+        ],
+      },
+      {
+        code: `
         function SomeComponent({bar} = baz) {
           function f({foo}) {}
           return <div className={f()}>{bar}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.PureComponent {
           render() {
             return <div>Hello {this.props.name}</div>;
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-          line: 4,
-          column: 43,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+            line: 4,
+            column: 43,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends PureComponent {
           render() {
             return <div>Hello {this.props.name}</div>;
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-          line: 4,
-          column: 43,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+            line: 4,
+            column: 43,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         type MyComponentProps = {
           a: number,
         };
@@ -6622,19 +6562,19 @@ ruleTester.run('prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['types'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'b' },
-          line: 5,
-          column: 35,
-          type: 'Property',
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'b' },
+            line: 5,
+            column: 35,
+            type: 'Property',
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {},
           render: function() {
@@ -6642,35 +6582,35 @@ ruleTester.run('prop-types', rule, {
           }
         });
       `,
-      options: [{ skipUndeclared: true }],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-          line: 5,
-          column: 37,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipUndeclared: true }],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+            line: 5,
+            column: 37,
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = function(props) {
           return <div>{props.firstname}</div>;
         };
         Hello.propTypes = {}
       `,
-      options: [{ skipUndeclared: true }],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-          line: 3,
-          column: 30,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipUndeclared: true }],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+            line: 3,
+            column: 30,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static get propTypes() {
             return {};
@@ -6680,18 +6620,18 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      options: [{ skipUndeclared: true }],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-          line: 7,
-          column: 37,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipUndeclared: true }],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+            line: 7,
+            column: 37,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>{this.props.firstname}</div>;
@@ -6699,36 +6639,36 @@ ruleTester.run('prop-types', rule, {
         }
         Hello.propTypes = {};
       `,
-      options: [{ skipUndeclared: true }],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-          line: 4,
-          column: 37,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipUndeclared: true }],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+            line: 4,
+            column: 37,
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             return <div>{this.props.firstname}</div>;
           }
         });
       `,
-      options: [{ skipUndeclared: false }],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-          line: 4,
-          column: 37,
-        },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipUndeclared: false }],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+            line: 4,
+            column: 37,
+          },
+        ],
+      },
+      {
+        code: `
         type MyComponentProps = {
           +a: number,
         };
@@ -6736,19 +6676,19 @@ ruleTester.run('prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'b' },
-          line: 5,
-          column: 35,
-          type: 'Property',
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'b' },
+            line: 5,
+            column: 35,
+            type: 'Property',
+          },
+        ],
+      },
+      {
+        code: `
         type MyComponentProps = {
           -a: number,
         };
@@ -6756,19 +6696,19 @@ ruleTester.run('prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'b' },
-          line: 5,
-          column: 35,
-          type: 'Property',
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'b' },
+            line: 5,
+            column: 35,
+            type: 'Property',
+          },
+        ],
+      },
+      {
+        code: `
         type Props = {+name: Object;};
         class Hello extends React.Component {
           props: Props;
@@ -6777,16 +6717,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'firstname' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'firstname' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           onSelect = async ({ name }) => {
             return this.props.foo;
@@ -6796,16 +6736,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = forbidExtraProps({
             bar: PropTypes.func
@@ -6820,19 +6760,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      settings: Object.assign({}, settings, {
-        propWrapperFunctions: ['forbidExtraProps'],
-      }),
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        settings: Object.assign({}, settings, {
+          propWrapperFunctions: ['forbidExtraProps'],
+        }),
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             bar: PropTypes.func
@@ -6847,16 +6787,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             bar: PropTypes.func
@@ -6872,16 +6812,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             bar: PropTypes.func
@@ -6896,16 +6836,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           componentWillReceiveProps({foo}) {
             if (foo) {
@@ -6920,15 +6860,15 @@ ruleTester.run('prop-types', rule, {
             bar: PropTypes.func
           }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = forbidExtraProps({
             bar: PropTypes.func
@@ -6943,19 +6883,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      settings: Object.assign({}, settings, {
-        propWrapperFunctions: ['forbidExtraProps'],
-      }),
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        settings: Object.assign({}, settings, {
+          propWrapperFunctions: ['forbidExtraProps'],
+        }),
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           shouldComponentUpdate({foo}) {
             if (foo) {
@@ -6970,15 +6910,15 @@ ruleTester.run('prop-types', rule, {
             bar: PropTypes.func
           }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static propTypes() {
             return {
@@ -6990,15 +6930,15 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -7008,19 +6948,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-          line: 7,
-          column: 43,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+            line: 7,
+            column: 43,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -7030,20 +6970,20 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-          line: 7,
-          column: 43,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+            line: 7,
+            column: 43,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -7056,19 +6996,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-          line: 8,
-          column: 15,
-          type: 'Property',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+            line: 8,
+            column: 15,
+            type: 'Property',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -7081,20 +7021,20 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-          line: 8,
-          column: 15,
-          type: 'Property',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+            line: 8,
+            column: 15,
+            type: 'Property',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {name: {firstname: string;};};
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -7102,19 +7042,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name.lastname' },
-          line: 5,
-          column: 48,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name.lastname' },
+            line: 5,
+            column: 48,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {name: {firstname: string;};};
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -7122,20 +7062,20 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name.lastname' },
-          line: 5,
-          column: 48,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name.lastname' },
+            line: 5,
+            column: 48,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {result?: {ok: string | boolean;}|{ok: number | Array}};
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -7143,19 +7083,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'result.notok' },
-          line: 5,
-          column: 50,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'result.notok' },
+            line: 5,
+            column: 50,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {result?: {ok: string | boolean;}|{ok: number | Array}};
         class Hello extends React.Component<void, Props, void> {
           render () {
@@ -7163,20 +7103,20 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'result.notok' },
-          line: 5,
-          column: 50,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'result.notok' },
+            line: 5,
+            column: 50,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -7186,19 +7126,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'person.lastname' },
-          line: 7,
-          column: 50,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'person.lastname' },
+            line: 7,
+            column: 50,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -7208,20 +7148,20 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'person.lastname' },
-          line: 7,
-          column: 50,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'person.lastname' },
+            line: 7,
+            column: 50,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = {
           foo: string,
         };
@@ -7232,19 +7172,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-          line: 8,
-          column: 37,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+            line: 8,
+            column: 37,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         type Props = {
           foo: string,
         };
@@ -7255,20 +7195,20 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      settings: { react: { flowVersion: '0.53' } },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-          line: 8,
-          column: 37,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        settings: { react: { flowVersion: '0.53' } },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+            line: 8,
+            column: 37,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         type FancyProps = {
           foo: string,
         };
@@ -7279,19 +7219,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-          line: 8,
-          column: 37,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+            line: 8,
+            column: 37,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         type FancyProps = {
           foo: string,
         };
@@ -7302,20 +7242,20 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      settings: { react: { flowVersion: '0.53' } },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-          line: 8,
-          column: 37,
-          type: 'Identifier',
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        settings: { react: { flowVersion: '0.53' } },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+            line: 8,
+            column: 37,
+            type: 'Identifier',
+          },
+        ],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -7325,19 +7265,19 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'person.lastname' },
-          line: 7,
-          column: 50,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'person.lastname' },
+            line: 7,
+            column: 50,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
         };
@@ -7347,20 +7287,20 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.53' } },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'person.lastname' },
-          line: 7,
-          column: 50,
-          type: 'Identifier',
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.53' } },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'person.lastname' },
+            line: 7,
+            column: 50,
+            type: 'Identifier',
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type Props = { foo: string }
         function higherOrderComponent<Props>() {
           return class extends React.Component<Props> {
@@ -7370,25 +7310,6 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-        },
-      ],
-      features: ['flow'],
-    },
-    (semver.satisfies(eslintPkg.version, '> 3') ? [
-      {
-        code: `
-          function higherOrderComponent<P: { foo: string }>() {
-            return class extends React.Component<P> {
-              render() {
-                return <div>{this.props.foo} - {this.props.bar}</div>
-              }
-            }
-          }
-        `,
         errors: [
           {
             messageId: 'missingPropType',
@@ -7397,8 +7318,27 @@ ruleTester.run('prop-types', rule, {
         ],
         features: ['flow'],
       },
-      {
-        code: `
+      [
+        {
+          code: `
+          function higherOrderComponent<P: { foo: string }>() {
+            return class extends React.Component<P> {
+              render() {
+                return <div>{this.props.foo} - {this.props.bar}</div>
+              }
+            }
+          }
+        `,
+          errors: [
+            {
+              messageId: 'missingPropType',
+              data: { name: 'bar' },
+            },
+          ],
+          features: ['flow'],
+        },
+        {
+          code: `
           const withOverlayState = <P: {foo: string}>(WrappedComponent: ComponentType<P>): ComponentType<P> => (
             class extends React.Component<P> {
               constructor(props) {
@@ -7411,17 +7351,17 @@ ruleTester.run('prop-types', rule, {
             }
           )
         `,
-        errors: [
-          {
-            messageId: 'missingPropType',
-            data: { name: 'bar' },
-          },
-        ],
-        features: ['flow'],
-      },
-    ] : []),
-    {
-      code: `
+          errors: [
+            {
+              messageId: 'missingPropType',
+              data: { name: 'bar' },
+            },
+          ],
+          features: ['flow'],
+        },
+      ],
+      {
+        code: `
         type PropsA = {foo: string };
         type PropsB = { bar: string };
         type Props = PropsA & PropsB;
@@ -7434,16 +7374,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'fooBar' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'fooBar' },
+          },
+        ],
+      },
+      {
+        code: `
         type PropsA = { foo: string };
         type PropsB = { bar: string };
         type PropsC = { zap: string };
@@ -7457,16 +7397,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'fooBar' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'fooBar' },
+          },
+        ],
+      },
+      {
+        code: `
         type PropsB = { bar: string };
         type PropsC = { zap: string };
         type Props = PropsB & {
@@ -7481,16 +7421,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'fooBar' },
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'fooBar' },
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         type PropsB = { bar: string };
         type PropsC = { zap: string };
         type Props = {
@@ -7505,16 +7445,16 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'fooBar' },
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'fooBar' },
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
       type ReduxState = {bar: number};
 
       const mapStateToProps = (state: ReduxState) => ({
@@ -7540,16 +7480,16 @@ ruleTester.run('prop-types', rule, {
         </div>
       );
     `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bad' },
-        },
-      ],
-      features: ['flow'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bad' },
+          },
+        ],
+        features: ['flow'],
+      },
+      {
+        code: `
         class Component extends React.Component {
           render() {
             return <div>{this.props.foo.baz}</div>;
@@ -7563,15 +7503,15 @@ ruleTester.run('prop-types', rule, {
           ])
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo.baz' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo.baz' },
+          },
+        ],
+      },
+      {
+        code: `
         class Foo extends React.Component {
           bar() {
             this.setState((state, props) => ({ current: props.current, bar: props.bar }));
@@ -7585,15 +7525,15 @@ ruleTester.run('prop-types', rule, {
           current: PropTypes.number.isRequired,
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+          },
+        ],
+      },
+      {
+        code: `
         class Foo extends React.Component {
           setZoo() {
             this.setState((state, {zoo}) => ({ zoo }));
@@ -7603,15 +7543,15 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'zoo' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'zoo' },
+          },
+        ],
+      },
+      {
+        code: `
         class Foo extends React.Component {
           static getDerivedStateFromProps(props) {
             const { foo, bar } = props;
@@ -7630,16 +7570,16 @@ ruleTester.run('prop-types', rule, {
           foo: PropTypes.func.isRequired,
         };
       `,
-      settings: { react: { version: '16.3.0' } },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-        },
-      ],
-    },
-    {
-      code: `
+        settings: { react: { version: '16.3.0' } },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+          },
+        ],
+      },
+      {
+        code: `
         const ForAttendees = ({ page }) => (
           <>
             <section>{page}</section>
@@ -7648,16 +7588,16 @@ ruleTester.run('prop-types', rule, {
 
         export default ForAttendees;
       `,
-      features: ['fragment'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'page' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['fragment'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'page' },
+          },
+        ],
+      },
+      {
+        code: `
         const HeaderBalance = React.memo(({ cryptoCurrency }) => (
           <div className="header-balance">
             <div className="header-balance__balance">
@@ -7667,15 +7607,15 @@ ruleTester.run('prop-types', rule, {
           </div>
         ));
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'cryptoCurrency' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'cryptoCurrency' },
+          },
+        ],
+      },
+      {
+        code: `
         import React, { memo } from 'react';
         const HeaderBalance = memo(({ cryptoCurrency }) => (
           <div className="header-balance">
@@ -7686,15 +7626,15 @@ ruleTester.run('prop-types', rule, {
           </div>
         ));
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'cryptoCurrency' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'cryptoCurrency' },
+          },
+        ],
+      },
+      {
+        code: `
         const HeaderBalance = Foo.memo(({ cryptoCurrency }) => (
           <div className="header-balance">
             <div className="header-balance__balance">
@@ -7704,20 +7644,20 @@ ruleTester.run('prop-types', rule, {
           </div>
         ));
       `,
-      settings: {
-        react: {
-          pragma: 'Foo',
+        settings: {
+          react: {
+            pragma: 'Foo',
+          },
         },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'cryptoCurrency' },
+          },
+        ],
       },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'cryptoCurrency' },
-        },
-      ],
-    },
-    {
-      code: `
+      {
+        code: `
         import Foo, { memo } from 'foo';
         const HeaderBalance = memo(({ cryptoCurrency }) => (
           <div className="header-balance">
@@ -7728,84 +7668,84 @@ ruleTester.run('prop-types', rule, {
           </div>
         ));
       `,
-      settings: {
-        react: {
-          pragma: 'Foo',
+        settings: {
+          react: {
+            pragma: 'Foo',
+          },
         },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'cryptoCurrency' },
+          },
+        ],
       },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'cryptoCurrency' },
-        },
-      ],
-    },
-    {
-      code: `
+      {
+        code: `
         const Label = React.forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         });
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'text' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'text' },
+          },
+        ],
+      },
+      {
+        code: `
         import React, { forwardRef } from 'react';
         const Label = forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         });
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'text' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'text' },
+          },
+        ],
+      },
+      {
+        code: `
         const Label = Foo.forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         });
       `,
-      settings: {
-        react: {
-          pragma: 'Foo',
+        settings: {
+          react: {
+            pragma: 'Foo',
+          },
         },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'text' },
+          },
+        ],
       },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'text' },
-        },
-      ],
-    },
-    {
-      code: `
+      {
+        code: `
         import Foo, { forwardRef } from 'foo';
         const Label = forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         });
       `,
-      settings: {
-        react: {
-          pragma: 'Foo',
+        settings: {
+          react: {
+            pragma: 'Foo',
+          },
         },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'text' },
+          },
+        ],
       },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'text' },
-        },
-      ],
-    },
-    {
-      code: `
+      {
+        code: `
         import PropTypes from 'prop-types';
         import React from 'react';
 
@@ -7820,15 +7760,15 @@ ruleTester.run('prop-types', rule, {
 
         export default MyComponent;
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'usedProp' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'usedProp' },
+          },
+        ],
+      },
+      {
+        code: `
         export default class Controller extends React.Component {
           handleAdd = id => {
             this.setState((state, { name }) => {
@@ -7837,16 +7777,16 @@ ruleTester.run('prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
         export default class extends React.Component {
           onSubmit = () => {
             this.setState((state, { a }) => {
@@ -7860,24 +7800,24 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.b' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'a.b.c' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.b' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'a.b.c' },
+          },
+        ],
+      },
+      {
+        code: `
         class Foo extends React.Component {
           constructor(props) {
             super(props);
@@ -7899,17 +7839,17 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'initialValues' },
-        },
-      ],
-    },
-    {
-      // issue #2138
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'initialValues' },
+          },
+        ],
+      },
+      {
+        // issue #2138
+        code: `
         type UsedProps = {|
           usedProp: number,
         |};
@@ -7924,18 +7864,18 @@ ruleTester.run('prop-types', rule, {
           return <div>{usedProp}</div>;
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          message: "'notOne' is missing in props validation",
-          line: 12,
-          column: 42,
-        },
-      ],
-    },
-    {
-      // issue #2298
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            message: "'notOne' is missing in props validation",
+            line: 12,
+            column: 42,
+          },
+        ],
+      },
+      {
+        // issue #2298
+        code: `
         type Props = {|
           firstname?: string
         |};
@@ -7944,17 +7884,17 @@ ruleTester.run('prop-types', rule, {
           return <div>Hello {firstname} {lastname}</div>
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'lastname' },
-        },
-      ],
-    },
-    {
-      // issue #2330
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'lastname' },
+          },
+        ],
+      },
+      {
+        // issue #2330
+        code: `
         type Props = {
           user: {
             name: {
@@ -7975,62 +7915,62 @@ ruleTester.run('prop-types', rule, {
           );
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'user.age' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'user.age' },
+          },
+        ],
+      },
+      {
+        code: `
         const Label = React.memo(React.forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         }));
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'text' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'text' },
+          },
+        ],
+      },
+      {
+        code: `
         import React, { memo, forwardRef } from 'react';
         const Label = memo(forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         }));
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'text' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'text' },
+          },
+        ],
+      },
+      {
+        code: `
         import Foo, { memo, forwardRef } from 'foo';
         const Label = memo(forwardRef(({ text }, ref) => {
           return <div ref={ref}>{text}</div>;
         }));
       `,
-      settings: {
-        react: {
-          pragma: 'Foo',
+        settings: {
+          react: {
+            pragma: 'Foo',
+          },
         },
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'text' },
+          },
+        ],
       },
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'text' },
-        },
-      ],
-    },
-    {
-      code: `
+      {
+        code: `
         function Foo({
           foo: {
             bar: foo,
@@ -8046,34 +7986,34 @@ ruleTester.run('prop-types', rule, {
           }).isRequired,
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo.baz' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo.baz' },
+          },
+        ],
+      },
+      {
+        code: `
         const Foo = ({length, ordering}) => (
           length > 0 && (
             <Paginator items={ordering} pageSize={10} />
           )
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'length' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'ordering' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'length' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'ordering' },
+          },
+        ],
+      },
+      {
+        code: `
         const firstType = PropTypes.shape({
           id: PropTypes.number,
         });
@@ -8090,11 +8030,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ message: "'first.name' is missing in props validation" }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [{ message: "'first.name' is missing in props validation" }],
+      },
+      {
+        code: `
         const firstType = PropTypes.shape({
           id: PropTypes.number,
         }).isRequired;
@@ -8111,11 +8051,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ message: "'first.name' is missing in props validation" }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [{ message: "'first.name' is missing in props validation" }],
+      },
+      {
+        code: `
         const firstType = PropTypes.shape({
           id: PropTypes.number,
         });
@@ -8132,11 +8072,11 @@ ruleTester.run('prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ message: "'first.name' is missing in props validation" }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [{ message: "'first.name' is missing in props validation" }],
+      },
+      {
+        code: `
         function Foo({
           foo: {
             bar: foo,
@@ -8152,15 +8092,15 @@ ruleTester.run('prop-types', rule, {
           foo: fooType,
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo.baz' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo.baz' },
+          },
+        ],
+      },
+      {
+        code: `
         function Foo({
           foo: {
             bar: foo,
@@ -8176,15 +8116,15 @@ ruleTester.run('prop-types', rule, {
           foo: fooType.isRequired,
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo.baz' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo.baz' },
+          },
+        ],
+      },
+      {
+        code: `
         function Foo({
           foo: {
             bar: foo,
@@ -8200,15 +8140,15 @@ ruleTester.run('prop-types', rule, {
           foo: fooType,
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo.baz' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo.baz' },
+          },
+        ],
+      },
+      {
+        code: `
         function Component(props) {
           return 0,
           <div>
@@ -8216,15 +8156,15 @@ ruleTester.run('prop-types', rule, {
           </div>
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+      },
+      {
+        code: `
       const SideMenu = observer(
         ({ componentId }) => (
           <S.Container>
@@ -8235,13 +8175,13 @@ ruleTester.run('prop-types', rule, {
           </S.Container>
         ),
       );`,
-      settings: {
-        componentWrapperFunctions: ['observer'],
+        settings: {
+          componentWrapperFunctions: ['observer'],
+        },
+        errors: [{ message: "'componentId' is missing in props validation" }],
       },
-      errors: [{ message: '\'componentId\' is missing in props validation' }],
-    },
-    {
-      code: `
+      {
+        code: `
       const SideMenu = Mobx.observer(
         ({ id }) => (
           <S.Container>
@@ -8253,13 +8193,13 @@ ruleTester.run('prop-types', rule, {
         ),
       );
       `,
-      settings: {
-        componentWrapperFunctions: [{ property: 'observer', object: 'Mobx' }],
+        settings: {
+          componentWrapperFunctions: [{ property: 'observer', object: 'Mobx' }],
+        },
+        errors: [{ message: "'id' is missing in props validation" }],
       },
-      errors: [{ message: '\'id\' is missing in props validation' }],
-    },
-    {
-      code: `
+      {
+        code: `
         interface Props {
         }
         const Hello = (props: Props) => {
@@ -8269,16 +8209,16 @@ ruleTester.run('prop-types', rule, {
           return null;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'value' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'value' },
+          },
+        ],
+      },
+      {
+        code: `
         type User = {
           user: string;
         }
@@ -8296,16 +8236,16 @@ ruleTester.run('prop-types', rule, {
           return null;
         };
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'userId' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'userId' },
+          },
+        ],
+      },
+      {
+        code: `
         type User = {
         }
 
@@ -8323,16 +8263,16 @@ ruleTester.run('prop-types', rule, {
           return null;
         };
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'user' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'user' },
+          },
+        ],
+      },
+      {
+        code: `
         type User = {
           user: string;
         }
@@ -8351,16 +8291,16 @@ ruleTester.run('prop-types', rule, {
           return null;
         };
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'userId' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'userId' },
+          },
+        ],
+      },
+      {
+        code: `
         interface GenericProps {
           onClose: () => void
         }
@@ -8375,16 +8315,16 @@ ruleTester.run('prop-types', rule, {
           }: ImplementationProps
         ) => (<div />)
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'onClick' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'onClick' },
+          },
+        ],
+      },
+      {
+        code: `
         const mapStateToProps = state => ({
         });
 
@@ -8397,16 +8337,16 @@ ruleTester.run('prop-types', rule, {
           return <div><span>{props.username}</span></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'books' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'books' },
+          },
+        ],
+      },
+      {
+        code: `
         const mapStateToProps = state => ({
           books: state.books,
         });
@@ -8419,16 +8359,16 @@ ruleTester.run('prop-types', rule, {
           return <div><span>{props.username}</span></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'username' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'username' },
+          },
+        ],
+      },
+      {
+        code: `
         type Event = {
             name: string;
             type: string;
@@ -8444,16 +8384,16 @@ ruleTester.run('prop-types', rule, {
           return <div><span>{props.dateCreated}</span></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'dateCreated' },
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'dateCreated' },
+          },
+        ],
+      },
+      {
+        code: `
         function Zoo(props) {
           return (
             <>
@@ -8469,11 +8409,11 @@ ruleTester.run('prop-types', rule, {
           }),
         };
       `,
-      features: ['fragment'],
-      errors: [{ message: "'foo.c' is missing in props validation" }],
-    },
-    {
-      code: `
+        features: ['fragment'],
+        errors: [{ message: "'foo.c' is missing in props validation" }],
+      },
+      {
+        code: `
         function Zoo(props) {
           return (
             <>
@@ -8489,11 +8429,11 @@ ruleTester.run('prop-types', rule, {
           }),
         };
       `,
-      features: ['fragment'],
-      errors: [{ message: "'foo.c' is missing in props validation" }],
-    },
-    {
-      code: `
+        features: ['fragment'],
+        errors: [{ message: "'foo.c' is missing in props validation" }],
+      },
+      {
+        code: `
         function Zoo(props) {
           return (
             <>
@@ -8509,33 +8449,33 @@ ruleTester.run('prop-types', rule, {
           }),
         };
       `,
-      settings,
-      features: ['fragment'],
-      errors: [{ message: "'foo.c' is missing in props validation" }],
-    },
-    {
-      code: `
+        settings,
+        features: ['fragment'],
+        errors: [{ message: "'foo.c' is missing in props validation" }],
+      },
+      {
+        code: `
         const Foo: JSX.Element = ({ bar }) => {
           return <div>{bar}</div>;
         }
       `,
-      settings,
-      features: ['ts', 'no-babel'],
-      errors: [{ message: "'bar' is missing in props validation" }],
-    },
-    {
-      code: `
+        settings,
+        features: ['ts'],
+        errors: [{ message: "'bar' is missing in props validation" }],
+      },
+      {
+        code: `
         const Foo: JSX.Element = function foo ({ bar }) {
           return <div>{bar}</div>;
         }
       `,
-      settings,
-      features: ['ts', 'no-babel'],
-      errors: [{ message: "'bar' is missing in props validation" }],
-    },
-    // fix #2804
-    {
-      code: `
+        settings,
+        features: ['ts'],
+        errors: [{ message: "'bar' is missing in props validation" }],
+      },
+      // fix #2804
+      {
+        code: `
         import React from 'react'
 
         const InputField = ({ type, ...restProps }) => {
@@ -8550,66 +8490,66 @@ ruleTester.run('prop-types', rule, {
 
         export default InputField;
       `,
-      errors: [{ message: "'type' is missing in props validation" }],
-    },
-    {
-      code: `
+        errors: [{ message: "'type' is missing in props validation" }],
+      },
+      {
+        code: `
         const Foo: JSX.Element = ({ bar = "" }) => {
           return <div>{bar}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         function Foo({ foo = "" }): JSX.Element {
           return <div>{foo}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
       const Foo: JSX.Element = function foo ({ bar = "" }) {
         return <div>{bar}</div>;
       }
     `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
       function Foo({ bar = "" as string }): JSX.Element {
         return <div>{bar}</div>;
       }
     `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'bar' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'bar' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
         interface PersonProps {
             test: string;
@@ -8618,16 +8558,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'username' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'username' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
         interface PersonProps {
             username: string;
@@ -8636,16 +8576,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.test}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'test' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'test' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from "react";
 
         const returnTypeProp = (someProp: any) => ({ someProp });
@@ -8656,16 +8596,16 @@ ruleTester.run('prop-types', rule, {
           return <div>{someProp}</div>;
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'someIncorrectProp' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'someIncorrectProp' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
         interface PersonProps {
             username: string;
@@ -8674,16 +8614,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.test}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'test' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'test' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         interface PersonProps {
             username: string;
         }
@@ -8691,16 +8631,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'username' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'username' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         interface PersonProps {
             username: string;
         }
@@ -8708,16 +8648,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'username' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'username' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         type PersonProps<T> = {
             x: T;
         }
@@ -8725,16 +8665,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.username}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'username' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'username' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { VoidFunctionComponent } from 'react'
 
         interface Props {
@@ -8746,16 +8686,16 @@ ruleTester.run('prop-types', rule, {
         return <div>Hello {name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'test' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'test' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { VFC } from 'react'
 
         interface Props {
@@ -8767,16 +8707,16 @@ ruleTester.run('prop-types', rule, {
         return <div>Hello {name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'test' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'test' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
 
         interface Props {
@@ -8788,16 +8728,16 @@ ruleTester.run('prop-types', rule, {
         return <div>Hello {name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'test' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'test' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
 
         interface Props {
@@ -8809,16 +8749,16 @@ ruleTester.run('prop-types', rule, {
         return <div>Hello {name}</div>;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'test' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'test' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
 
         type IfooProps = { e: string };
@@ -8827,32 +8767,32 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>{name}</div>;
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'name' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'name' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
         type IfooProps = { k: string, a: number }
         const Foo= React.forwardRef<HTMLDivElement, IfooProps>((props, ref) => {
           return  <div ref={ref}>{props.l}</div>;
         });
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'l' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'l' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react'
 
         type IfooProps = { e: string };
@@ -8861,16 +8801,16 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         });
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'l' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'l' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from 'react'
 
         type IfooProps = { e: string };
@@ -8879,16 +8819,16 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         });
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'l' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'l' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from "react";
 
         export type Props = { children: React.ReactNode; type: "submit" | "button" };
@@ -8899,16 +8839,16 @@ ruleTester.run('prop-types', rule, {
           </button>
         ));
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'nonExistent' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'nonExistent' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { forwardRef } from "react";
 
         export interface IProps { children: React.ReactNode; type: "submit" | "button" };
@@ -8919,16 +8859,16 @@ ruleTester.run('prop-types', rule, {
           </button>
         ));
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'nonExistent' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'nonExistent' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
 
         export interface PersonProps {
@@ -8938,16 +8878,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.nonExistent}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'nonExistent' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'nonExistent' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { FC } from 'react';
 
         export interface PersonProps {
@@ -8957,16 +8897,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.nonExistent}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'nonExistent' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'nonExistent' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { FC as X } from 'react';
 
         export interface PersonProps {
@@ -8976,16 +8916,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.nonExistent}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'nonExistent' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'nonExistent' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React, { ForwardRefRenderFunction  as X } from 'react'
 
         export type IfooProps = { e: string };
@@ -8994,16 +8934,16 @@ ruleTester.run('prop-types', rule, {
           return  <div ref={ref}>hello</div>;
         };
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'nonExistent' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'nonExistent' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
 
         export interface PersonProps {
@@ -9013,16 +8953,16 @@ ruleTester.run('prop-types', rule, {
             <div>{props.nonExistent}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'nonExistent' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'nonExistent' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         import React from 'react';
 
         export interface PersonProps {
@@ -9032,43 +8972,43 @@ ruleTester.run('prop-types', rule, {
             <div>{props.nonExistent}</div>
         );
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'nonExistent' },
-        },
-      ],
-      features: ['ts', 'no-babel'],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'nonExistent' },
+          },
+        ],
+        features: ['ts'],
+      },
+      {
+        code: `
         const Foo = ({ foo }) => {
           return <SomeJSX />;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         const Foo = ({ foo }) => {
           const returnValue = <SomeJSX />;
           return returnValue;
         }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'foo' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'foo' },
+          },
+        ],
+      },
+      {
+        code: `
         function _EventsList({ prop_ }) {
             return (
                 <div>
@@ -9089,32 +9029,33 @@ ruleTester.run('prop-types', rule, {
           );
       }
       `,
-      errors: [
-        {
-          messageId: 'missingPropType',
-          data: { name: 'prop_' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'prop_.events' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'prop_.events.map' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'prop$' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'prop$.events' },
-        },
-        {
-          messageId: 'missingPropType',
-          data: { name: 'prop$.events.map' },
-        },
-      ],
-    }
-  )),
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'prop_' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'prop_.events' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'prop_.events.map' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'prop$' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'prop$.events' },
+          },
+          {
+            messageId: 'missingPropType',
+            data: { name: 'prop$.events.map' },
+          },
+        ],
+      },
+    ),
+  ),
 });

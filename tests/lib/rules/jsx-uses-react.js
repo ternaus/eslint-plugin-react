@@ -58,84 +58,110 @@ ruleTester.run('no-unused-vars', rule, {
     },
     {
       code: '/*eslint react/jsx-uses-react:1*/ var React; <></>;',
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: fix for typescript-eslint
-    },
-  ].map(parsers.disableNewTS)),
-  invalid: parsers.all([
-    {
-      code: '/*eslint react/jsx-uses-react:1*/ var React; <div />;',
-      settings: { react: { version: '19.0.0' } },
-      errors: [{
-        message: '\'React\' is defined but never used.',
-        suggestions: [{
-          messageId: 'removeVar',
-          output: '/*eslint react/jsx-uses-react:1*/  <div />;',
-        }],
-      }],
-    },
-    {
-      code: '/*eslint react/jsx-uses-react:1*/ var React;',
-      errors: [{
-        message: '\'React\' is defined but never used.',
-        suggestions: [{
-          messageId: 'removeVar',
-          output: '/*eslint react/jsx-uses-react:1*/ ',
-        }],
-      }],
-    },
-    {
-      code: '/*eslint react/jsx-uses-react:1*/ /** @jsx Foo */ var React; <div />;',
-      errors: [{
-        message: '\'React\' is defined but never used.',
-        suggestions: [{
-          messageId: 'removeVar',
-          output: '/*eslint react/jsx-uses-react:1*/ /** @jsx Foo */  <div />;',
-        }],
-      }],
-    },
-    {
-      code: '/*eslint react/jsx-uses-react:1*/ var React; <div />;',
-      errors: [{
-        message: '\'React\' is defined but never used.',
-        suggestions: [{
-          messageId: 'removeVar',
-          output: '/*eslint react/jsx-uses-react:1*/  <div />;',
-        }],
-      }],
-      settings,
-    },
-    {
-      code: '/*eslint react/jsx-uses-react:1*/ var Frag; <></>;',
-      errors: [{
-        message: '\'Frag\' is defined but never used.',
-        suggestions: [{
-          messageId: 'removeVar',
-          output: '/*eslint react/jsx-uses-react:1*/  <></>;',
-        }],
-      }],
       features: ['fragment'],
-      settings: { react: { fragment: 'Fragment', version: '18' } },
     },
-    {
-      code: '/*eslint react/jsx-uses-react:1*/ var React; <></>;',
-      features: ['fragment'],
-      errors: [{
-        message: '\'React\' is defined but never used.',
-        suggestions: [{
-          messageId: 'removeVar',
-          output: '/*eslint react/jsx-uses-react:1*/  <></>;',
-        }],
-      }],
-      settings,
-    },
-  ].map(parsers.disableNewTS).map((test) => {
-    if (!rule.meta.hasSuggestions) {
-      test.errors = test.errors.map((error) => {
-        // https://github.com/eslint/eslint/pull/18352 added suggestions to no-unused-vars in eslint v9.17.0
-        delete error.suggestions;
-        return error;
-      });
-    }
-    return test;
-  })),
+  ]),
+  invalid: parsers.all(
+    [
+      {
+        code: '/*eslint react/jsx-uses-react:1*/ var React; <div />;',
+        settings: { react: { version: '19.0.0' } },
+        errors: [
+          {
+            message: "'React' is defined but never used.",
+            suggestions: [
+              {
+                messageId: 'removeVar',
+                output: '/*eslint react/jsx-uses-react:1*/  <div />;',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        code: '/*eslint react/jsx-uses-react:1*/ var React;',
+        errors: [
+          {
+            message: "'React' is defined but never used.",
+            suggestions: [
+              {
+                messageId: 'removeVar',
+                output: '/*eslint react/jsx-uses-react:1*/ ',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        code: '/*eslint react/jsx-uses-react:1*/ /** @jsx Foo */ var React; <div />;',
+        errors: [
+          {
+            message: "'React' is defined but never used.",
+            suggestions: [
+              {
+                messageId: 'removeVar',
+                output: '/*eslint react/jsx-uses-react:1*/ /** @jsx Foo */  <div />;',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        code: '/*eslint react/jsx-uses-react:1*/ var React; <div />;',
+        errors: [
+          {
+            message: "'React' is defined but never used.",
+            suggestions: [
+              {
+                messageId: 'removeVar',
+                output: '/*eslint react/jsx-uses-react:1*/  <div />;',
+              },
+            ],
+          },
+        ],
+        settings,
+      },
+      {
+        code: '/*eslint react/jsx-uses-react:1*/ var Frag; <></>;',
+        errors: [
+          {
+            message: "'Frag' is defined but never used.",
+            suggestions: [
+              {
+                messageId: 'removeVar',
+                output: '/*eslint react/jsx-uses-react:1*/  <></>;',
+              },
+            ],
+          },
+        ],
+        features: ['fragment'],
+        settings: { react: { fragment: 'Fragment', version: '18' } },
+      },
+      {
+        code: '/*eslint react/jsx-uses-react:1*/ var React; <></>;',
+        features: ['fragment'],
+        errors: [
+          {
+            message: "'React' is defined but never used.",
+            suggestions: [
+              {
+                messageId: 'removeVar',
+                output: '/*eslint react/jsx-uses-react:1*/  <></>;',
+              },
+            ],
+          },
+        ],
+        settings,
+      },
+    ].map((test) => {
+      if (!rule.meta.hasSuggestions) {
+        test.errors = test.errors.map((error) => {
+          // https://github.com/eslint/eslint/pull/18352 added suggestions to no-unused-vars in eslint v9.17.0
+          delete error.suggestions;
+          return error;
+        });
+      }
+      return test;
+    }),
+  ),
 });

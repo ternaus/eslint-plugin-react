@@ -71,7 +71,7 @@ const invalid = [
         }
       }
     `,
-    features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+    features: ['class fields'],
 
     errors: [
       {
@@ -230,25 +230,26 @@ const invalid = [
 
 const ruleTester = new RuleTester({ parserOptions });
 ruleTester.run('no-did-update-set-state', rule, {
-  valid: parsers.all([].concat(
-    {
-      code: `
+  valid: parsers.all(
+    [].concat(
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             return <div>Hello {this.props.name}</div>;
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           componentDidUpdate: function() {}
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           componentDidUpdate: function() {
             someNonMemberFunction(arg);
@@ -256,9 +257,9 @@ ruleTester.run('no-did-update-set-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           componentDidUpdate: function() {
             someClass.onSomeEvent(function(data) {
@@ -269,9 +270,9 @@ ruleTester.run('no-did-update-set-state', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var Hello = createReactClass({
           componentDidUpdate: function() {
             function handleEvent(data) {
@@ -283,19 +284,20 @@ ruleTester.run('no-did-update-set-state', rule, {
           }
         });
       `,
-    },
-    invalid.map((test) => {
-      const newTest = Object.assign({}, test, {
-        settings: Object.assign({}, test.settings, {
-          react: {
-            version: '16.3.0',
-          },
-        }),
-      });
-      delete newTest.errors;
-      return newTest;
-    })
-  )),
+      },
+      invalid.map((test) => {
+        const newTest = Object.assign({}, test, {
+          settings: Object.assign({}, test.settings, {
+            react: {
+              version: '16.3.0',
+            },
+          }),
+        });
+        delete newTest.errors;
+        return newTest;
+      }),
+    ),
+  ),
 
   invalid: parsers.all(invalid),
 });

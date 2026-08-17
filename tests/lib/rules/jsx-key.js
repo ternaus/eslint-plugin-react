@@ -182,7 +182,7 @@ ruleTester.run('jsx-key', rule, {
 
         export const clusterFrameMap = observable.map<string, ClusterFrameInfo>();
       `,
-      features: ['types', 'no-babel-old'],
+      features: ['types'],
     },
     { code: 'React.Children.toArray([1, 2 ,3].map(x => <App />));' },
     {
@@ -192,7 +192,6 @@ ruleTester.run('jsx-key', rule, {
       `,
     },
     {
-      // TODO: uncomment the commented lines below
       code: `
         import Act from 'react';
         import { Children as ReactChildren } from 'react';
@@ -221,30 +220,21 @@ ruleTester.run('jsx-key', rule, {
         [1, 2, 3].map((item) => {
           return item === 'bar' ? <div>{item}</div> : <span>{item}</span>;
         })`,
-      errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-      ],
+      errors: [{ messageId: 'missingIterKey' }, { messageId: 'missingIterKey' }],
     },
     {
       code: `
         [1, 2, 3].map(function(item) {
           return item === 'bar' ? <div>{item}</div> : <span>{item}</span>;
         })`,
-      errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-      ],
+      errors: [{ messageId: 'missingIterKey' }, { messageId: 'missingIterKey' }],
     },
     {
       code: `
         Array.from([1, 2, 3], (item) => {
           return item === 'bar' ? <div>{item}</div> : <span>{item}</span>;
         })`,
-      errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-      ],
+      errors: [{ messageId: 'missingIterKey' }, { messageId: 'missingIterKey' }],
     },
     {
       code: `
@@ -262,10 +252,7 @@ ruleTester.run('jsx-key', rule, {
           );
         }
       `,
-      errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-      ],
+      errors: [{ messageId: 'missingIterKey' }, { messageId: 'missingIterKey' }],
     },
     {
       code: '[<App />];',
@@ -317,7 +304,7 @@ ruleTester.run('jsx-key', rule, {
     },
     {
       code: '[1, 2, 3]?.map(x => <BabelEslintApp />)',
-      features: ['no-default'],
+      features: ['no-espree'],
       errors: [{ messageId: 'missingIterKey' }],
     },
     {
@@ -413,10 +400,7 @@ ruleTester.run('jsx-key', rule, {
           );
         };
       `,
-      errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-      ],
+      errors: [{ messageId: 'missingIterKey' }, { messageId: 'missingIterKey' }],
     },
     {
       code: `
@@ -463,11 +447,7 @@ ruleTester.run('jsx-key', rule, {
           );
         };
       `,
-      errors: [
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-        { messageId: 'missingIterKey' },
-      ],
+      errors: [{ messageId: 'missingIterKey' }, { messageId: 'missingIterKey' }, { messageId: 'missingIterKey' }],
     },
     {
       code: `

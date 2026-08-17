@@ -2,7 +2,9 @@
 
 const reactPlugin = require('../../../..');
 
-module.exports = [{
-  files: ['**/*.jsx'],
-  ...reactPlugin.configs.flat.recommended
-}];
+module.exports = [
+  {
+    files: ['**/*.jsx'],
+    ...reactPlugin.configs.flat.recommended,
+  },
+];

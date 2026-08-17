@@ -1,0 +1,146 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": ["**", "!!.yarn", "!!coverage", "!!node_modules", "!yarn.lock"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "linter": {
+    "enabled": true,
+    "domains": {
+      "react": "all",
+      "test": "all"
+    },
+    "rules": {
+      "preset": "all",
+      "a11y": {
+        "useSemanticElements": "off"
+      },
+      "complexity": {
+        "noArguments": "off",
+        "noDivRegex": "off",
+        "noExcessiveCognitiveComplexity": "off",
+        "noExcessiveLinesPerFunction": "off",
+        "noForEach": "off",
+        "noImplicitCoercions": "off",
+        "noRedundantDefaultExport": "off",
+        "noUselessCatchBinding": "off",
+        "noUselessEmptyExport": "off",
+        "noUselessSwitchCase": "off",
+        "noUselessUndefined": "off",
+        "useLiteralKeys": "off",
+        "useMaxParams": "off",
+        "useOptionalChain": "off",
+        "useSimplifiedLogicExpression": "off"
+      },
+      "correctness": {
+        "noNodejsModules": "off",
+        "noProcessGlobal": "off",
+        "noUndeclaredDependencies": "off",
+        "useImportExtensions": "off",
+        "useJsonImportAttributes": "off",
+        "useParseIntRadix": "off",
+        "useQwikValidLexicalScope": "off",
+        "noUnresolvedImports": "off"
+      },
+      "performance": {
+        "noAccumulatingSpread": "off",
+        "noAwaitInLoops": "off",
+        "noBarrelFile": "off",
+        "noDelete": "off",
+        "noNamespaceImport": "off",
+        "useTopLevelRegex": "off"
+      },
+      "security": {
+        "noSecrets": "off"
+      },
+      "style": {
+        "noCommonJs": "off",
+        "noContinue": "off",
+        "noDefaultExport": "off",
+        "noExcessiveClassesPerFile": "off",
+        "noExcessiveLinesPerFile": "off",
+        "noIncrementDecrement": "off",
+        "noMagicNumbers": "off",
+        "noNegationElse": "off",
+        "noNestedTernary": "off",
+        "noParameterAssign": "off",
+        "noParameterProperties": "off",
+        "noRestrictedGlobals": "off",
+        "noTernary": "off",
+        "noUnusedTemplateLiteral": "off",
+        "noUselessElse": "off",
+        "useAtIndex": "off",
+        "useBlockStatements": "off",
+        "useCollapsedElseIf": "off",
+        "useCollapsedIf": "off",
+        "useConsistentArrayType": "off",
+        "useConsistentArrowReturn": "off",
+        "useConsistentBuiltinInstantiation": "off",
+        "useConsistentMethodSignatures": "off",
+        "useConsistentTypeDefinitions": "off",
+        "useExplicitLengthCheck": "off",
+        "useExportsLast": "off",
+        "useForOf": "off",
+        "useExportType": "off",
+        "useFilenamingConvention": "off",
+        "noJsxLiterals": "off",
+        "useNamingConvention": "off",
+        "useNodejsImportProtocol": "off",
+        "useNumberNamespace": "off",
+        "useObjectSpread": "off",
+        "useSelfClosingElements": "off",
+        "useSingleVarDeclarator": "off",
+        "useThrowNewError": "off",
+        "useThrowOnlyError": "off",
+        "useDestructuring": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noBitwiseOperators": "off",
+        "noConsole": "off",
+        "noControlCharactersInRegex": "off",
+        "noEmptyBlockStatements": "off",
+        "noEqualsToNull": "off",
+        "noExplicitAny": "off",
+        "noImportCycles": "off",
+        "noRedundantUseStrict": "off",
+        "noThenProperty": "off",
+        "noTemplateCurlyInString": "off",
+        "noUnknownAttribute": "off",
+        "noUnnecessaryConditions": "off",
+        "noUnusedExpressions": "off",
+        "useIterableCallbackReturn": "off",
+        "noMisplacedAssertion": "off",
+        "noShadow": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "always",
+      "bracketSpacing": true,
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}

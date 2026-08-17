@@ -2,7 +2,7 @@
 
 📝 Disallow React to be incorrectly marked as unused.
 
-💼🚫 This rule is enabled in the ☑️ `recommended` [config](https://github.com/jsx-eslint/eslint-plugin-react/#shareable-configs). This rule is _disabled_ in the 🏃 `jsx-runtime` [config](https://github.com/jsx-eslint/eslint-plugin-react/#shareable-configs).
+💼🚫 This rule is enabled in the ☑️ `recommended` [config](https://github.com/ternaus/eslint-plugin-react#configs). This rule is _disabled_ in the 🏃 `jsx-runtime` [config](https://github.com/ternaus/eslint-plugin-react#configs).
 
 <!-- end auto-generated rule header -->
 
@@ -51,6 +51,6 @@ var Hello = <div>Hello {this.props.name}</div>;
 
 If you are not using JSX, if React is declared as global variable, or if you do not use the `no-unused-vars` rule.
 
-If you are using the [new JSX transform from React 17](https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#removing-unused-react-imports), you should disable this rule by extending [`react/jsx-runtime`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/index.js#L163-L176) in your eslint config (add `"plugin:react/jsx-runtime"` to `"extends"`).
+If you use the [automatic JSX runtime](https://react.dev/learn/writing-markup-with-jsx#the-jsx-compiler), add `react.configs.flat['jsx-runtime']` after the recommended config in `eslint.config.js`.
 
 **Note**: When React >= 19.0.0 is detected, this rule is automatically disabled, since the automatic JSX transform is mandatory in React 19.

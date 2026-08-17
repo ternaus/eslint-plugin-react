@@ -80,10 +80,15 @@ describe('PropWrapperFunctions', () => {
           propWrapperFunctions,
         },
       };
-      assert.deepStrictEqual(propWrapperUtil.getExactPropWrapperFunctions(context), new Set([{
-        property: 'forbidExtraProps',
-        exact: true,
-      }]));
+      assert.deepStrictEqual(
+        propWrapperUtil.getExactPropWrapperFunctions(context),
+        new Set([
+          {
+            property: 'forbidExtraProps',
+            exact: true,
+          },
+        ]),
+      );
     });
 
     it('returns empty set if no exact prop wrappers', () => {
@@ -167,7 +172,7 @@ describe('PropWrapperFunctions', () => {
           object: 'foo',
         },
       ]);
-      assert.equal(propWrapperUtil.formatPropWrapperFunctions(propWrappers), '\'Object.freeze\', \'exact\', \'foo.bar\'');
+      assert.equal(propWrapperUtil.formatPropWrapperFunctions(propWrappers), "'Object.freeze', 'exact', 'foo.bar'");
     });
   });
 });

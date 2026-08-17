@@ -4,8 +4,6 @@
 
 'use strict';
 
-const semver = require('semver');
-const eslintPkg = require('eslint/package.json');
 const RuleTester = require('../../helpers/ruleTester');
 const rule = require('../../../lib/rules/destructuring-assignment');
 
@@ -447,89 +445,86 @@ ruleTester.run('destructuring-assignment', rule, {
     },
   ]),
 
-  invalid: parsers.all([].concat(
-    {
-      code: `
+  invalid: parsers.all(
+    [].concat(
+      {
+        code: `
         const MyComponent = (props) => {
           return (<div id={props.id} />)
         };
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         const MyComponent = ({ id, className }) => (
           <div id={id} className={className} />
         );
       `,
-      options: ['never'],
-      errors: [
-        { messageId: 'noDestructPropsInSFCArg' },
-      ],
-    },
-    {
-      code: `
+        options: ['never'],
+        errors: [{ messageId: 'noDestructPropsInSFCArg' }],
+      },
+      {
+        code: `
         const MyComponent = (props, { color }) => (
           <div id={props.id} className={props.className} />
         );
       `,
-      options: ['never'],
-      errors: [
-        { messageId: 'noDestructContextInSFCArg' },
-      ],
-    },
-    {
-      code: `
+        options: ['never'],
+        errors: [{ messageId: 'noDestructContextInSFCArg' }],
+      },
+      {
+        code: `
         const Foo = class extends React.PureComponent {
           render() {
             return <div>{this.props.foo}</div>;
           }
         };
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         const Foo = class extends React.PureComponent {
           render() {
             return <div>{this.state.foo}</div>;
           }
         };
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'state' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'state' },
+          },
+        ],
+      },
+      {
+        code: `
         const Foo = class extends React.PureComponent {
           render() {
             return <div>{this.context.foo}</div>;
           }
         };
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'context' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'context' },
+          },
+        ],
+      },
+      {
+        code: `
         class Foo extends React.Component {
           render() { return this.foo(); }
           foo() {
@@ -537,71 +532,71 @@ ruleTester.run('destructuring-assignment', rule, {
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             return <Text>{this.props.foo}</Text>;
           }
         });
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         module.exports = {
           Foo(props) {
             return <p>{props.a}</p>;
           }
         }
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         export default function Foo(props) {
           return <p>{props.a}</p>;
         }
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         function hof() {
           return (props) => <p>{props.a}</p>;
         }
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         const Foo = class extends React.PureComponent {
           render() {
             const foo = this.props.foo;
@@ -609,15 +604,15 @@ ruleTester.run('destructuring-assignment', rule, {
           }
         };
         `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         const Foo = class extends React.PureComponent {
           render() {
             const { foo } = this.props;
@@ -625,31 +620,31 @@ ruleTester.run('destructuring-assignment', rule, {
           }
         };
       `,
-      options: ['never'],
-      errors: [
-        {
-          messageId: 'noDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        options: ['never'],
+        errors: [
+          {
+            messageId: 'noDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         const MyComponent = (props) => {
           const { id, className } = props;
           return <div id={id} className={className} />
         };
       `,
-      options: ['never'],
-      errors: [
-        {
-          messageId: 'noDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        options: ['never'],
+        errors: [
+          {
+            messageId: 'noDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         const Foo = class extends React.PureComponent {
           render() {
             const { foo } = this.state;
@@ -657,16 +652,16 @@ ruleTester.run('destructuring-assignment', rule, {
           }
         };
       `,
-      options: ['never'],
-      errors: [
-        {
-          messageId: 'noDestructAssignment',
-          data: { type: 'state' },
-        },
-      ],
-    },
-    {
-      code: `
+        options: ['never'],
+        errors: [
+          {
+            messageId: 'noDestructAssignment',
+            data: { type: 'state' },
+          },
+        ],
+      },
+      {
+        code: `
         const columns = [
           {
             CustomComponentName: function(props) {
@@ -682,41 +677,41 @@ ruleTester.run('destructuring-assignment', rule, {
           },
         ];
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 5,
-        },
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 7,
-        },
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 8,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 5,
+          },
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 7,
+          },
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 8,
+          },
+        ],
+      },
+      {
+        code: `
         function Foo(props, context) {
           const d = context.describe();
           return <div>{d}</div>;
         }
       `,
-      options: ['always'],
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'context' },
-        },
-      ],
-    },
-    {
-      code: `
+        options: ['always'],
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'context' },
+          },
+        ],
+      },
+      {
+        code: `
         export default (props) => {
           const match = props.str.match(/some expression/);
           if (match) {
@@ -725,16 +720,16 @@ ruleTester.run('destructuring-assignment', rule, {
           return null;
         };
       `,
-      options: ['always'],
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        options: ['always'],
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         import React from 'react';
 
         const TestComp = (props) => {
@@ -753,26 +748,26 @@ ruleTester.run('destructuring-assignment', rule, {
           );
         };
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 5,
-        },
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 10,
-        },
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 11,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 5,
+          },
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 10,
+          },
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 11,
+          },
+        ],
+      },
+      {
+        code: `
         export const revisionStates2 = {
             [A.b]: props => {
               return props.editor !== null
@@ -781,21 +776,21 @@ ruleTester.run('destructuring-assignment', rule, {
             },
         };
       `,
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 4,
-        },
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 5,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 4,
+          },
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 5,
+          },
+        ],
+      },
+      {
+        code: `
         export function hof(namespace) {
           const initialState = {
             bounds: null,
@@ -809,95 +804,95 @@ ruleTester.run('destructuring-assignment', rule, {
           };
         }
       `,
-      errors: [
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 8,
+          },
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 9,
+          },
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+            line: 11,
+          },
+        ],
+      },
+      // Ignore for ESLint < 4 because ESLint < 4 does not support array fixer.
+      [
         {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 8,
-        },
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 9,
-        },
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-          line: 11,
-        },
-      ],
-    },
-    // Ignore for ESLint < 4 because ESLint < 4 does not support array fixer.
-    semver.satisfies(eslintPkg.version, '>= 4') ? [
-      {
-        code: `
+          code: `
           function Foo(props) {
             const {a} = props;
             return <p>{a}</p>;
           }
         `,
-        options: ['always', { destructureInSignature: 'always' }],
-        errors: [
-          {
-            messageId: 'destructureInSignature',
-            line: 3,
-          },
-        ],
-        output: `
+          options: ['always', { destructureInSignature: 'always' }],
+          errors: [
+            {
+              messageId: 'destructureInSignature',
+              line: 3,
+            },
+          ],
+          output: `
           function Foo({a}) {
 ${'            '}
             return <p>{a}</p>;
           }
         `,
-      },
-      {
-        code: `
+        },
+        {
+          code: `
           function Foo(props: FooProps) {
             const {a} = props;
             return <p>{a}</p>;
           }
         `,
-        options: ['always', { destructureInSignature: 'always' }],
-        errors: [
-          {
-            messageId: 'destructureInSignature',
-            line: 3,
-          },
-        ],
-        output: `
+          options: ['always', { destructureInSignature: 'always' }],
+          errors: [
+            {
+              messageId: 'destructureInSignature',
+              line: 3,
+            },
+          ],
+          output: `
           function Foo({a}: FooProps) {
 ${'            '}
             return <p>{a}</p>;
           }
         `,
-        features: ['ts', 'no-babel'],
-      },
-    ] : [],
-    {
-      code: `
+          features: ['ts'],
+        },
+      ],
+      {
+        code: `
         type Props = { text: string };
         export const MyComponent: React.FC<Props> = (props) => {
           type MyType = typeof props.text;
           return <div>{props.text as MyType}</div>;
         };
       `,
-      options: ['always', { destructureInSignature: 'always' }],
-      features: ['types', 'no-babel'],
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          type: 'TSQualifiedName',
-          data: { type: 'props' },
-        },
-        {
-          messageId: 'useDestructAssignment',
-          type: 'MemberExpression',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        options: ['always', { destructureInSignature: 'always' }],
+        features: ['types'],
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            type: 'TSQualifiedName',
+            data: { type: 'props' },
+          },
+          {
+            messageId: 'useDestructAssignment',
+            type: 'MemberExpression',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         type Props = { text: string };
         export const MyOtherComponent: React.FC<Props> = (props) => {
           const { text } = props;
@@ -905,36 +900,37 @@ ${'            '}
           return <div>{text as MyType}</div>;
         };
       `,
-      options: ['always', { destructureInSignature: 'always' }],
-      features: ['types', 'no-babel'],
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          type: 'TSQualifiedName',
-          data: { type: 'props' },
-        },
-      ],
-    },
-    {
-      code: `
+        options: ['always', { destructureInSignature: 'always' }],
+        features: ['types'],
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            type: 'TSQualifiedName',
+            data: { type: 'props' },
+          },
+        ],
+      },
+      {
+        code: `
         function C(props: Props) {
           void props.a
           typeof props.b
           return <div />
         }
       `,
-      options: ['always'],
-      features: ['types'],
-      errors: [
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-        {
-          messageId: 'useDestructAssignment',
-          data: { type: 'props' },
-        },
-      ],
-    }
-  )),
+        options: ['always'],
+        features: ['types'],
+        errors: [
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+          {
+            messageId: 'useDestructAssignment',
+            data: { type: 'props' },
+          },
+        ],
+      },
+    ),
+  ),
 });

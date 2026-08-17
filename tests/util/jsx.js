@@ -21,22 +21,21 @@ const parseCode = (code) => {
 };
 
 const mockContext = {
-  getSourceCode() { return { getScope: mockContext.getScope }; },
-  getScope() {
-    return {
-      type: 'global',
-      upper: null,
-      childScopes: [],
-      variables: [],
-    };
+  sourceCode: {
+    getScope() {
+      return {
+        type: 'global',
+        upper: null,
+        childScopes: [],
+        variables: [],
+      };
+    },
   },
 };
 
 describe('jsxUtil', () => {
   describe('isReturningJSX', () => {
-    const assertValid = (codeStr) => assert(
-      isReturningJSX(mockContext, parseCode(codeStr))
-    );
+    const assertValid = (codeStr) => assert(isReturningJSX(mockContext, parseCode(codeStr)));
 
     it('Works when returning JSX', () => {
       assertValid(`

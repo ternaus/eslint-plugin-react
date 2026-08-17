@@ -691,7 +691,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         function Hello(props: Props): React.Element { return <div /> }
       `,
       options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['types', 'no-ts-old'],
+      features: ['types'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -788,9 +788,7 @@ ruleTester.run('boolean-prop-naming', rule, {
       settings: {
         propWrapperFunctions: ['merge'],
       },
-      options: [
-        { rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' },
-      ],
+      options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -809,9 +807,7 @@ ruleTester.run('boolean-prop-naming', rule, {
       settings: {
         propWrapperFunctions: ['Object.assign'],
       },
-      options: [
-        { rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' },
-      ],
+      options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -830,9 +826,7 @@ ruleTester.run('boolean-prop-naming', rule, {
       settings: {
         propWrapperFunctions: ['_.assign'],
       },
-      options: [
-        { rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' },
-      ],
+      options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -851,9 +845,7 @@ ruleTester.run('boolean-prop-naming', rule, {
       settings: {
         propWrapperFunctions: ['forbidExtraProps'],
       },
-      options: [
-        { rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' },
-      ],
+      options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -874,9 +866,7 @@ ruleTester.run('boolean-prop-naming', rule, {
       settings: {
         propWrapperFunctions: ['forbidExtraProps'],
       },
-      options: [
-        { rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' },
-      ],
+      options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -898,9 +888,7 @@ ruleTester.run('boolean-prop-naming', rule, {
       settings: {
         propWrapperFunctions: ['forbidExtraProps'],
       },
-      options: [
-        { rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' },
-      ],
+      options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -919,12 +907,12 @@ ruleTester.run('boolean-prop-naming', rule, {
       options: [
         {
           rule: '^is[A-Z]([A-Za-z0-9]?)+',
-          message: 'Boolean prop names must begin with either \'is\' or \'has\'',
+          message: "Boolean prop names must begin with either 'is' or 'has'",
         },
       ],
       errors: [
         {
-          message: 'Boolean prop names must begin with either \'is\' or \'has\'',
+          message: "Boolean prop names must begin with either 'is' or 'has'",
         },
       ],
     },
@@ -1124,7 +1112,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const HelloNew = (props: TestConstType) => { return <div /> };
       `,
       options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['ts', 'no-ts-old'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1143,7 +1131,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const HelloNew = (props: TestFNType) => { return <div /> };
       `,
       options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['ts', 'no-ts-old'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1163,7 +1151,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const HelloNew = (props: Props) => { return <div /> };
       `,
       options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['types', 'no-ts-old'],
+      features: ['types'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1185,7 +1173,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const HelloNew = (props: Props) => { return <div /> };
       `,
       options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['types', 'no-ts-old'],
+      features: ['types'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1205,7 +1193,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const HelloNew: React.FC<Props> = (props) => { return <div /> };
       `,
       options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['types', 'no-ts-old'],
+      features: ['types'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1227,7 +1215,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const HelloNew: React.FC<Props> = (props) => { return <div /> };
       `,
       options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['types', 'no-ts-old'],
+      features: ['types'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1249,7 +1237,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const HelloNew = (props: Props) => { return <div /> };
       `,
       options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['types', 'no-ts-old'],
+      features: ['types'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1273,7 +1261,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const HelloNew = (props: Props) => { return <div /> };
       `,
       options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['types', 'no-ts-old'],
+      features: ['types'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1299,7 +1287,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const HelloNew = (props: TestFNType) => { return <div /> };
       `,
       options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['ts', 'no-babel'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1313,7 +1301,7 @@ ruleTester.run('boolean-prop-naming', rule, {
     {
       code: 'const Hello = (props: {enabled:boolean}) => <div />;',
       options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['ts', 'no-babel'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1336,7 +1324,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         const Hello = (props: Props & BaseProps) => <div />;
       `,
       options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['ts', 'no-babel', 'no-ts-old'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'patternMismatch',
@@ -1365,7 +1353,7 @@ ruleTester.run('boolean-prop-naming', rule, {
         }) => <div />;
       `,
       options: [{ rule: '^(is|has)[A-Z]([A-Za-z0-9]?)+' }],
-      features: ['ts', 'no-babel', 'no-ts-old'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'patternMismatch',

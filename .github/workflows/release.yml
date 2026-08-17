@@ -1,78 +1,30 @@
-name: Release
+name: Publish npm
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-npm
+  cancel-in-progress: false
 
 jobs:
-  release:
-    if: github.event.repository.fork == false
-
+  publish:
+    if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
     steps:
-      - uses: step-security/harden-runner@v2
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          allowed-endpoints:
-            api.github.com:443
-            github.com:443
-            raw.githubusercontent.com:443
-            nodejs.org:443
-            registry.npmjs.org:443
-
-      - name: Get version from tag
-        id: tag_name
-        run: echo "current_version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
-        shell: bash
-
-      - uses: actions/checkout@v4
-
-      - uses: ljharb/actions/node/install@main
+          ref: ${{ github.event.release.tag_name }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: node
-          skip-install: true
-          skip-ls-check: true
-
-      - uses: mindsers/changelog-reader-action@v2
-        id: changelog_reader
-        with:
-          version: ${{ steps.tag_name.outputs.current_version }}
-
-      - name: Get common links from changelog
-        id: changelog
-        run: |
-          # Parse the changelog for common links
-          _links="$(egrep '^\[.*]:.+' ${GITHUB_WORKSPACE:-.}/CHANGELOG.md | sort -u)"
-          _links="${_links//'%'/'%25'}"
-          # _links="${_links//$'\n'/'%0A'}"
-          _links="${_links//$'\r'/'%0D'}"
-          # Set output 'links' to $_links
-          DELIMITER=$(uuidgen)
-          echo "links<<${DELIMITER}" >> "${GITHUB_OUTPUT}"
-          echo "$_links" >> "${GITHUB_OUTPUT}"
-          echo "${DELIMITER}" >> "${GITHUB_OUTPUT}"
-
-      - name: 'concat data > tmp.md'
-        run: |
-          cat << 'EOF' > tmp.md
-          ${{ steps.changelog_reader.outputs.changes }}
-          ${{ steps.changelog.outputs.links }}
-          EOF
-
-      - run: cat tmp.md
-
-      - id: prune-footnotes
-        run: |
-          DELIMITER=$(uuidgen)
-          echo "body<<${DELIMITER}" >> "${GITHUB_OUTPUT}"
-          npx gfm-footnotes -i tmp.md >> "${GITHUB_OUTPUT}"
-          echo "${DELIMITER}" >> "${GITHUB_OUTPUT}"
-
-      - uses: softprops/action-gh-release@v2
-        with:
-          body: |
-            ${{ steps.prune-footnotes.outputs.body }}
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: node scripts/assert-release-tag.mjs '${{ github.event.release.tag_name }}'
+      - run: npm publish --provenance

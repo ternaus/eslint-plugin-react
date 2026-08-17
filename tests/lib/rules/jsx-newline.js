@@ -219,9 +219,11 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           <List />
         </div>
       `,
-      errors: [{
-        messageId: 'require',
-      }],
+      errors: [
+        {
+          messageId: 'require',
+        },
+      ],
     },
     {
       code: `
@@ -401,11 +403,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           </div>
         </div>
       `,
-      errors: [
-        { messageId: 'require' },
-        { messageId: 'require' },
-        { messageId: 'require' },
-      ],
+      errors: [{ messageId: 'require' }, { messageId: 'require' }, { messageId: 'require' }],
     },
     {
       output: `
@@ -511,11 +509,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           </div>
         </div>
       `,
-      errors: [
-        { messageId: 'prevent' },
-        { messageId: 'prevent' },
-        { messageId: 'prevent' },
-      ],
+      errors: [{ messageId: 'prevent' }, { messageId: 'prevent' }, { messageId: 'prevent' }],
       options: [{ prevent: true }],
     },
     {
@@ -583,10 +577,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
         </>
       `,
       features: ['fragment'],
-      errors: [
-        { messageId: 'allowMultilines' },
-        { messageId: 'allowMultilines' },
-      ],
+      errors: [{ messageId: 'allowMultilines' }, { messageId: 'allowMultilines' }],
       options: [{ prevent: true, allowMultilines: true }],
     },
     {
@@ -642,11 +633,7 @@ new RuleTester({ parserOptions }).run('jsx-newline', rule, {
           </div>
         </div>
       `,
-      errors: [
-        { messageId: 'prevent' },
-        { messageId: 'allowMultilines' },
-        { messageId: 'prevent' },
-      ],
+      errors: [{ messageId: 'prevent' }, { messageId: 'allowMultilines' }, { messageId: 'prevent' }],
       options: [{ prevent: true, allowMultilines: true }],
     },
     {

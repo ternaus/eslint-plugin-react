@@ -123,10 +123,7 @@ ruleTester.run('no-refs', rule, {
         });
       `,
       settings: { react: { version: '18.2.0' } },
-      errors: [
-        { messageId: 'thisRefsDeprecated' },
-        { messageId: 'stringInRefDeprecated' },
-      ],
+      errors: [{ messageId: 'thisRefsDeprecated' }, { messageId: 'stringInRefDeprecated' }],
     },
     {
       code: `
@@ -141,10 +138,7 @@ ruleTester.run('no-refs', rule, {
       `,
       options: [{ noTemplateLiterals: true }],
       settings: { react: { version: '18.2.0' } },
-      errors: [
-        { messageId: 'thisRefsDeprecated' },
-        { messageId: 'stringInRefDeprecated' },
-      ],
+      errors: [{ messageId: 'thisRefsDeprecated' }, { messageId: 'stringInRefDeprecated' }],
     },
     {
       code: `
@@ -159,10 +153,7 @@ ruleTester.run('no-refs', rule, {
       `,
       options: [{ noTemplateLiterals: true }],
       settings: { react: { version: '18.2.0' } },
-      errors: [
-        { messageId: 'thisRefsDeprecated' },
-        { messageId: 'stringInRefDeprecated' },
-      ],
+      errors: [{ messageId: 'thisRefsDeprecated' }, { messageId: 'stringInRefDeprecated' }],
     },
     {
       code: `
@@ -177,9 +168,7 @@ ruleTester.run('no-refs', rule, {
       `,
       options: [{ noTemplateLiterals: true }],
       settings: { react: { version: '18.3.0' } },
-      errors: [
-        { messageId: 'stringInRefDeprecated' },
-      ],
+      errors: [{ messageId: 'stringInRefDeprecated' }],
     },
   ]),
 });

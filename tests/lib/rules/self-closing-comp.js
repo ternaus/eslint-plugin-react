@@ -71,7 +71,7 @@ ruleTester.run('self-closing-comp', rule, {
       code: 'var HelloJohn = <div>&nbsp;</div>;',
     },
     {
-      code: 'var HelloJohn = <div>{\' \'}</div>;',
+      code: "var HelloJohn = <div>{' '}</div>;",
     },
     {
       code: 'var HelloJohn = <Hello name="John">&nbsp;</Hello>;',
@@ -124,7 +124,7 @@ ruleTester.run('self-closing-comp', rule, {
       options: [],
     },
     {
-      code: 'var HelloJohn = <div>{\' \'}</div>;',
+      code: "var HelloJohn = <div>{' '}</div>;",
       options: [],
     },
     {

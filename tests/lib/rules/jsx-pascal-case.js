@@ -30,8 +30,8 @@ const ruleTester = new RuleTester({ parserOptions });
 ruleTester.run('jsx-pascal-case', rule, {
   valid: parsers.all([
     {
-    // The rule must not warn on components that start with a lowercase
-    // because they are interpreted as HTML elements by React
+      // The rule must not warn on components that start with a lowercase
+      // because they are interpreted as HTML elements by React
       code: '<testcomponent />',
     },
     {

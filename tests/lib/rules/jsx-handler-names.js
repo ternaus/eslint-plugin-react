@@ -33,7 +33,6 @@ ruleTester.run('jsx-handler-names', rule, {
       code: '<TestComponent onChange={this.handleChange} />',
     },
     {
-      // TODO: make this an invalid test
       code: '<TestComponent onChange={this.handle123Change} />',
     },
     {
@@ -296,9 +295,7 @@ ruleTester.run('jsx-handler-names', rule, {
     },
     {
       code: '<TestComponent only={this.handleChange} />',
-      errors: [
-        { message: 'Prop key for handleChange must begin with \'on\'' },
-      ],
+      errors: [{ message: "Prop key for handleChange must begin with 'on'" }],
     },
     {
       code: '<TestComponent2 only={this.handleChange} />',

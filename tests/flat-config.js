@@ -1,17 +1,6 @@
-/* eslint-env mocha */
-
 'use strict';
 
-const semver = require('semver');
-const eslintPkg = require('eslint/package.json');
-
-if (!semver.satisfies(eslintPkg.version, '>= 8.23.0')) {
-  return;
-}
-
-const ESLint = semver.major(eslintPkg.version) < 9
-  ? require('eslint/use-at-your-own-risk').FlatESLint // eslint-disable-line import/no-unresolved -- false positive
-  : require('eslint').ESLint;
+const { ESLint } = require('eslint');
 
 const path = require('path');
 const assert = require('assert');
@@ -46,13 +35,16 @@ describe('eslint-plugin-react in flat config', () => {
       return eslint.lintFiles(['test.jsx']).then((results) => {
         const result = results[0];
 
-        assert.strictEqual(result.messages.length, 2);
+        assert.strictEqual(result.messages.length, 3);
         assert.strictEqual(result.messages[0].severity, 2);
         assert.strictEqual(result.messages[0].ruleId, 'react/no-unknown-property');
         assert.strictEqual(result.messages[0].messageId, 'unknownProp');
         assert.strictEqual(result.messages[1].severity, 2);
-        assert.strictEqual(result.messages[1].ruleId, 'react/jsx-no-literals');
-        assert.strictEqual(result.messages[1].messageId, 'literalNotInJSXExpression');
+        assert.strictEqual(result.messages[1].ruleId, 'react/jsx-one-expression-per-line');
+        assert.strictEqual(result.messages[1].messageId, 'moveToNewLine');
+        assert.strictEqual(result.messages[2].severity, 2);
+        assert.strictEqual(result.messages[2].ruleId, 'react/jsx-no-literals');
+        assert.strictEqual(result.messages[2].messageId, 'literalNotInJSXExpression');
       });
     });
 

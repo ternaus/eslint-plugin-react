@@ -159,7 +159,7 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts'], // TODO: FIXME: remove "no-ts" and fix
+      features: ['class fields', 'no-typescript'],
       errors: [
         {
           messageId: 'forbiddenPropType',
@@ -211,7 +211,7 @@ ruleTester.run('forbid-foreign-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts'], // TODO: FIXME: remove "no-ts" and fix
+      features: ['class fields', 'no-typescript'],
       options: [{ allowInPropTypes: false }],
       errors: [
         {

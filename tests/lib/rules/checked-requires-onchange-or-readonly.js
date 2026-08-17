@@ -85,10 +85,7 @@ ruleTester.run('checked-requires-onchange-or-readonly', rule, {
     },
     {
       code: '<input type="checkbox" checked defaultChecked />',
-      errors: [
-        { messageId: 'exclusiveCheckedAttribute' },
-        { messageId: 'missingProperty' },
-      ],
+      errors: [{ messageId: 'exclusiveCheckedAttribute' }, { messageId: 'missingProperty' }],
     },
     {
       code: 'React.createElement("input", { checked: false })',
@@ -96,10 +93,7 @@ ruleTester.run('checked-requires-onchange-or-readonly', rule, {
     },
     {
       code: 'React.createElement("input", { checked: true, defaultChecked: true })',
-      errors: [
-        { messageId: 'exclusiveCheckedAttribute' },
-        { messageId: 'missingProperty' },
-      ],
+      errors: [{ messageId: 'exclusiveCheckedAttribute' }, { messageId: 'missingProperty' }],
     },
     {
       code: '<input type="checkbox" checked defaultChecked />',
@@ -114,10 +108,7 @@ ruleTester.run('checked-requires-onchange-or-readonly', rule, {
     {
       code: '<input type="checkbox" checked defaultChecked />',
       options: [{ ignoreMissingProperties: false, ignoreExclusiveCheckedAttribute: false }],
-      errors: [
-        { messageId: 'exclusiveCheckedAttribute' },
-        { messageId: 'missingProperty' },
-      ],
+      errors: [{ messageId: 'exclusiveCheckedAttribute' }, { messageId: 'missingProperty' }],
     },
   ]),
 });

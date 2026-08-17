@@ -167,10 +167,7 @@ ruleTester.run('jsx-boolean-value', rule, {
     {
       code: '<App foo={true} bar={false} baz={false} bak={false} />;',
       output: '<App foo={true} bar={false}   />;',
-      options: [
-        'always',
-        { assumeUndefinedIsFalse: true, never: ['baz', 'bak'] },
-      ],
+      options: ['always', { assumeUndefinedIsFalse: true, never: ['baz', 'bak'] }],
       errors: [
         {
           messageId: 'omitPropAndBoolean',

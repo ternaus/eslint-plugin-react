@@ -47,7 +47,7 @@ ruleTester.run('jsx-fragments', rule, {
   valid: parsers.all([
     {
       code: '<><Foo /></>',
-      features: ['fragment', 'no-ts-old'],
+      features: ['fragment'],
       settings,
     },
     {
@@ -107,30 +107,24 @@ ruleTester.run('jsx-fragments', rule, {
   invalid: parsers.all([
     {
       code: '<><Foo /></>',
-      features: ['fragment', 'no-ts-old'],
+      features: ['fragment'],
       settings: settingsOld,
-      errors: [
-        { messageId: 'fragmentsNotSupported' },
-      ],
+      errors: [{ messageId: 'fragmentsNotSupported' }],
     },
     {
       code: '<Act.Frag><Foo /></Act.Frag>',
       settings: settingsOld,
-      errors: [
-        { messageId: 'fragmentsNotSupported' },
-      ],
+      errors: [{ messageId: 'fragmentsNotSupported' }],
     },
     {
       code: '<Act.Frag />',
       settings: settingsOld,
-      errors: [
-        { messageId: 'fragmentsNotSupported' },
-      ],
+      errors: [{ messageId: 'fragmentsNotSupported' }],
     },
     {
       code: '<><Foo /></>',
       output: '<Act.Frag><Foo /></Act.Frag>',
-      features: ['fragment', 'no-ts-old'],
+      features: ['fragment'],
       options: ['element'],
       settings,
       errors: [
@@ -142,8 +136,8 @@ ruleTester.run('jsx-fragments', rule, {
     },
     {
       code: '<><Foo /></>',
-      output: null, // should get '<Act.Frag><Foo /></Act.Frag>', but the old TS parser lacks opening/closing Fragment info
-      features: ['fragment', 'no-babel', 'ts', 'no-ts-new'],
+      output: '<Act.Frag><Foo /></Act.Frag>',
+      features: ['fragment', 'ts'],
       options: ['element'],
       settings,
       errors: [

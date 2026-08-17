@@ -22,8 +22,10 @@ const parserOptions = {
   },
 };
 
-const ERROR_MESSAGE = 'Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component “ParentComponent” and pass data as props.';
-const ERROR_MESSAGE_WITHOUT_NAME = 'Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component and pass data as props.';
+const ERROR_MESSAGE =
+  'Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component “ParentComponent” and pass data as props.';
+const ERROR_MESSAGE_WITHOUT_NAME =
+  'Do not define components during render. React will see a new component type on every render and destroy the entire subtree’s DOM nodes and state (https://reactjs.org/docs/reconciliation.html#elements-of-different-types). Instead, move this component definition out of the parent component and pass data as props.';
 const ERROR_MESSAGE_COMPONENT_AS_PROPS = `${ERROR_MESSAGE} If you want to allow component creation in props, set allowAsProps option to true.`;
 
 // ------------------------------------------------------------------------------
@@ -436,9 +438,11 @@ ruleTester.run('no-unstable-nested-components', rule, {
         )
       }
       `,
-      options: [{
-        allowAsProps: true,
-      }],
+      options: [
+        {
+          allowAsProps: true,
+        },
+      ],
     },
     {
       code: `
@@ -455,9 +459,11 @@ ruleTester.run('no-unstable-nested-components', rule, {
         )
       }
       `,
-      options: [{
-        allowAsProps: true,
-      }],
+      options: [
+        {
+          allowAsProps: true,
+        },
+      ],
     },
     {
       code: `
@@ -576,9 +582,11 @@ ruleTester.run('no-unstable-nested-components', rule, {
           return <Table rows={rows} />;
         }
       `,
-      options: [{
-        allowAsProps: true,
-      }],
+      options: [
+        {
+          allowAsProps: true,
+        },
+      ],
     },
     {
       code: `
@@ -588,33 +596,12 @@ ruleTester.run('no-unstable-nested-components', rule, {
           />
         }
       `,
-      options: [{
-        propNamePattern: '*Renderer',
-      }],
+      options: [
+        {
+          propNamePattern: '*Renderer',
+        },
+      ],
     },
-    /* TODO These minor cases are currently falsely marked due to component detection
-    {
-      code: `
-        function ParentComponent() {
-          const _renderHeader = () => <div />;
-          return <div>{_renderHeader()}</div>;
-        }
-      `
-    },
-    {
-      // https://github.com/emotion-js/emotion/blob/a89d4257b0246a1640a99f77838e5edad4ec4386/packages/jest/test/react-enzyme.test.js#L26-L28
-      code: `
-        const testCases = {
-          basic: {
-            render() {
-              const Component = () => <div />;
-              return <div />;
-            }
-          }
-        }
-        `
-    },
-    */
   ]),
 
   invalid: parsers.all([

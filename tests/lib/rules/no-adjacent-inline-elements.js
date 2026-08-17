@@ -47,7 +47,6 @@ ruleTester.run('no-adjacent-inline-elements', rule, {
     {
       code: '<div><a></a>&nbsp;<a></a></div>;',
       parserOptions,
-      features: ['no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
     },
     {
       code: '<div><a></a>&nbsp;some text &nbsp; <a></a></div>;',
@@ -74,7 +73,7 @@ ruleTester.run('no-adjacent-inline-elements', rule, {
       parserOptions,
     },
     {
-      code: ('React.createElement("div", undefined, [React.createElement("a"), " some text ", React.createElement("a")]);'),
+      code: 'React.createElement("div", undefined, [React.createElement("a"), " some text ", React.createElement("a")]);',
       parserOptions,
     },
     {

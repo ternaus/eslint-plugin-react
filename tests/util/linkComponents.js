@@ -7,9 +7,7 @@ describe('linkComponentsFunctions', () => {
   describe('getLinkComponents', () => {
     it('returns a default map of components', () => {
       const context = {};
-      assert.deepStrictEqual(linkComponentsUtil.getLinkComponents(context), new Map([
-        ['a', ['href']],
-      ]));
+      assert.deepStrictEqual(linkComponentsUtil.getLinkComponents(context), new Map([['a', ['href']]]));
     });
 
     it('returns a map of components', () => {
@@ -29,21 +27,22 @@ describe('linkComponentsFunctions', () => {
           linkComponents,
         },
       };
-      assert.deepStrictEqual(linkComponentsUtil.getLinkComponents(context), new Map([
-        ['a', ['href']],
-        ['Hyperlink', ['href']],
-        ['Link', ['to']],
-        ['Link2', ['to1', 'to2']],
-      ]));
+      assert.deepStrictEqual(
+        linkComponentsUtil.getLinkComponents(context),
+        new Map([
+          ['a', ['href']],
+          ['Hyperlink', ['href']],
+          ['Link', ['to']],
+          ['Link2', ['to1', 'to2']],
+        ]),
+      );
     });
   });
 
   describe('getFormComponents', () => {
     it('returns a default map of components', () => {
       const context = {};
-      assert.deepStrictEqual(linkComponentsUtil.getFormComponents(context), new Map([
-        ['form', ['action']],
-      ]));
+      assert.deepStrictEqual(linkComponentsUtil.getFormComponents(context), new Map([['form', ['action']]]));
     });
 
     it('returns a map of components', () => {
@@ -63,12 +62,15 @@ describe('linkComponentsFunctions', () => {
           formComponents,
         },
       };
-      assert.deepStrictEqual(linkComponentsUtil.getFormComponents(context), new Map([
-        ['form', ['action']],
-        ['Form', ['action']],
-        ['MyForm', ['endpoint']],
-        ['MyForm2', ['endpoint1', 'endpoint2']],
-      ]));
+      assert.deepStrictEqual(
+        linkComponentsUtil.getFormComponents(context),
+        new Map([
+          ['form', ['action']],
+          ['Form', ['action']],
+          ['MyForm', ['endpoint']],
+          ['MyForm2', ['endpoint1', 'endpoint2']],
+        ]),
+      );
     });
   });
 });

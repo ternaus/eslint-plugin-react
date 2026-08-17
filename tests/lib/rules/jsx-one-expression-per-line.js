@@ -189,7 +189,7 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
           <Foo />
         </>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['fragment'],
     },
     {
       code: `
@@ -198,7 +198,7 @@ ruleTester.run('jsx-one-expression-per-line', rule, {
           <Bar />
         </>
       `,
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['fragment'],
     },
     {
       code: '<App>Hello {name}</App>',
@@ -277,7 +277,7 @@ foo
       `,
       output: `
         <div>
-          foo${' '/* intentional trailing space */}
+          foo${' ' /* intentional trailing space */}
 {' '}
 {"bar"}
         </div>
@@ -379,7 +379,7 @@ foo
       `,
       output: `
         <div>
-          {"foo"}${' '/* intentional trailing space */}
+          {"foo"}${' ' /* intentional trailing space */}
 {' '}
 { I18n.t('baz') }
         </div>
@@ -387,7 +387,7 @@ foo
       errors: [
         {
           messageId: 'moveToNewLine',
-          data: { descriptor: '{ I18n.t(\'baz\') }' },
+          data: { descriptor: "{ I18n.t('baz') }" },
         },
       ],
       parserOptions,
@@ -398,9 +398,9 @@ foo
       `,
       output: `
         <Text style={styles.foo}>
-{ bar }${' '/* intentional trailing space */}
+{ bar }${' ' /* intentional trailing space */}
 {' '}
-<Text/>${' '/* intentional trailing space */}
+<Text/>${' ' /* intentional trailing space */}
 {' '}
 { I18n.t('baz') }
 </Text>
@@ -416,20 +416,19 @@ foo
         },
         {
           messageId: 'moveToNewLine',
-          data: { descriptor: '{ I18n.t(\'baz\') }' },
+          data: { descriptor: "{ I18n.t('baz') }" },
         },
       ],
       parserOptions,
-
     },
     {
       code: `
         <Text style={styles.foo}> <Bar/> <Baz/></Text>
       `,
       output: `
-        <Text style={styles.foo}>${' '/* intentional trailing space */}
+        <Text style={styles.foo}>${' ' /* intentional trailing space */}
 {' '}
-<Bar/>${' '/* intentional trailing space */}
+<Bar/>${' ' /* intentional trailing space */}
 {' '}
 <Baz/>
 </Text>
@@ -451,13 +450,13 @@ foo
         <Text style={styles.foo}> <Bar/> <Baz/> <Bunk/> <Bruno/> </Text>
       `,
       output: `
-        <Text style={styles.foo}>${' '/* intentional trailing space */}
+        <Text style={styles.foo}>${' ' /* intentional trailing space */}
 {' '}
-<Bar/>${' '/* intentional trailing space */}
+<Bar/>${' ' /* intentional trailing space */}
 {' '}
-<Baz/>${' '/* intentional trailing space */}
+<Baz/>${' ' /* intentional trailing space */}
 {' '}
-<Bunk/>${' '/* intentional trailing space */}
+<Bunk/>${' ' /* intentional trailing space */}
 {' '}
 <Bruno/>
 {' '}
@@ -488,7 +487,7 @@ foo
         <Text style={styles.foo}> <Bar /></Text>
       `,
       output: `
-        <Text style={styles.foo}>${' '/* intentional trailing space */}
+        <Text style={styles.foo}>${' ' /* intentional trailing space */}
 {' '}
 <Bar />
 </Text>
@@ -507,7 +506,7 @@ foo
         </Text>
       `,
       output: `
-        <Text style={styles.foo}>${' '/* intentional trailing space */}
+        <Text style={styles.foo}>${' ' /* intentional trailing space */}
 {' '}
 <Bar />
         </Text>
@@ -528,7 +527,7 @@ foo
       `,
       output: `
         <Text style={styles.foo}>
-          <Bar />${' '/* intentional trailing space */}
+          <Bar />${' ' /* intentional trailing space */}
 {' '}
 <Baz />
         </Text>
@@ -549,7 +548,7 @@ foo
       `,
       output: `
         <Text style={styles.foo}>
-          <Bar />${' '/* intentional trailing space */}
+          <Bar />${' ' /* intentional trailing space */}
 {' '}
 <Baz />
         </Text>
@@ -571,7 +570,7 @@ foo
       `,
       output: `
         <Text style={styles.foo}>
-          { bar }${' '/* intentional trailing space */}
+          { bar }${' ' /* intentional trailing space */}
 {' '}
 { I18n.t('baz') }
         </Text>
@@ -579,7 +578,7 @@ foo
       errors: [
         {
           messageId: 'moveToNewLine',
-          data: { descriptor: '{ I18n.t(\'baz\') }' },
+          data: { descriptor: "{ I18n.t('baz') }" },
         },
       ],
       parserOptions,
@@ -632,7 +631,7 @@ foo
       `,
       output: `
         <div>
-          foo${' '/* intentional trailing space */}
+          foo${' ' /* intentional trailing space */}
 {' '}
 <input />
         </div>
@@ -674,7 +673,7 @@ foo
       `,
       output: `
         <div>
-          <span />${' '/* intentional trailing space */}
+          <span />${' ' /* intentional trailing space */}
 {' '}
 <input />
         </div>
@@ -717,7 +716,7 @@ foo
       `,
       output: `
         <div>
-          {"foo"}${' '/* intentional trailing space */}
+          {"foo"}${' ' /* intentional trailing space */}
 {' '}
 <input />
         </div>
@@ -738,7 +737,7 @@ foo
       `,
       output: `
         <div>
-          <input />${' '/* intentional trailing space */}
+          <input />${' ' /* intentional trailing space */}
 {' '}
 {"foo"}
         </div>
@@ -1019,7 +1018,7 @@ baz
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
           foo {"bar"} baz
@@ -1027,7 +1026,7 @@ baz
       `,
       output: `
         <App>
-          foo${' '/* intentional trailing space */}
+          foo${' ' /* intentional trailing space */}
 {' '}
 {"bar"} baz
         </App>
@@ -1045,7 +1044,7 @@ baz
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
           foo {"bar"}
@@ -1053,7 +1052,7 @@ baz
       `,
       output: `
         <App>
-          foo${' '/* intentional trailing space */}
+          foo${' ' /* intentional trailing space */}
 {' '}
 {"bar"}
         </App>
@@ -1067,7 +1066,7 @@ baz
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
           foo
@@ -1093,7 +1092,7 @@ baz
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
 
@@ -1104,7 +1103,7 @@ baz
       output: `
         <App>
 
-          foo${' '/* intentional trailing space */}
+          foo${' ' /* intentional trailing space */}
 {' '}
 {"bar"} baz
 
@@ -1123,7 +1122,7 @@ baz
       parserOptions,
     },
     {
-    // Would be nice to handle in one pass, but multipass works fine.
+      // Would be nice to handle in one pass, but multipass works fine.
       code: `
         <App>
 
@@ -1180,7 +1179,7 @@ baz
         } </App>
       `,
       output: `
-        <App>${' '/* intentional trailing space */}
+        <App>${' ' /* intentional trailing space */}
 {' '}
 {
           foo
@@ -1382,7 +1381,7 @@ foo
           data: { descriptor: '{"foo"}' },
         },
       ],
-      features: ['fragment', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['fragment'],
       parserOptions,
     },
     {
@@ -1424,7 +1423,7 @@ foo
           data: { descriptor: 'Foo' },
         },
       ],
-      features: ['fragment', 'no-ts-old'],
+      features: ['fragment'],
       parserOptions,
     },
     {
@@ -1457,7 +1456,6 @@ a
       parserOptions,
     },
     {
-    // TODO: handle in a single pass
       code: `
         const IndexPage = () => (
           <h1>{"Hi people"}<button/></h1>
@@ -1504,7 +1502,6 @@ a
       ],
       parserOptions,
     },
-    // TODO: handle in a single pass (see above)
     {
       code: `
         <Layout>
@@ -1580,7 +1577,6 @@ Hi people
       ],
       parserOptions,
     },
-    // TODO: handle in a single pass
     {
       code: `
         <Layout>

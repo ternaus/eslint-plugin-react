@@ -61,7 +61,9 @@ ruleTester.run('no-unknown-property', rule, {
     { code: '<iframe scrolling="?" onLoad={a} onError={b} align="top" />' },
     { code: '<input key="bar" type="radio" />' },
     { code: '<button disabled>You cannot click me</button>;' },
-    { code: '<svg key="lock" viewBox="box" fill={10} d="d" stroke={1} strokeWidth={2} strokeLinecap={3} strokeLinejoin={4} transform="something" clipRule="else" x1={5} x2="6" y1="7" y2="8"></svg>' },
+    {
+      code: '<svg key="lock" viewBox="box" fill={10} d="d" stroke={1} strokeWidth={2} strokeLinecap={3} strokeLinejoin={4} transform="something" clipRule="else" x1={5} x2="6" y1="7" y2="8"></svg>',
+    },
     { code: '<g fill="#7B82A0" fillRule="evenodd"></g>' },
     { code: '<mask fill="#7B82A0"></mask>' },
     { code: '<symbol fill="#7B82A0"></symbol>' },
@@ -74,7 +76,9 @@ ruleTester.run('no-unknown-property', rule, {
     { code: '<script onLoad={bar} onError={foo} />' },
     { code: '<source onLoad={bar} onError={foo} />' },
     { code: '<link onLoad={bar} onError={foo} />' },
-    { code: '<link rel="preload" as="image" href="someHref" imageSrcSet="someImageSrcSet" imageSizes="someImageSizes" />' },
+    {
+      code: '<link rel="preload" as="image" href="someHref" imageSrcSet="someImageSrcSet" imageSizes="someImageSizes" />',
+    },
     { code: '<object onLoad={bar} />' },
     { code: '<body onLoad={bar} />' },
     { code: '<video allowFullScreen webkitAllowFullScreen mozAllowFullScreen />' },
@@ -92,7 +96,9 @@ ruleTester.run('no-unknown-property', rule, {
     // React related attributes
     { code: '<div onPointerDown={this.onDown} onPointerUp={this.onUp} />' },
     { code: '<input type="checkbox" defaultChecked={this.state.checkbox} />' },
-    { code: '<div onTouchStart={this.startAnimation} onTouchEnd={this.stopAnimation} onTouchCancel={this.cancel} onTouchMove={this.move} onMouseMoveCapture={this.capture} onTouchCancelCapture={this.log} />' },
+    {
+      code: '<div onTouchStart={this.startAnimation} onTouchEnd={this.stopAnimation} onTouchCancel={this.cancel} onTouchMove={this.move} onMouseMoveCapture={this.capture} onTouchCancelCapture={this.log} />',
+    },
     {
       code: '<link precedence="medium" href="https://foo.bar" rel="canonical" />',
       settings: {
@@ -139,19 +145,29 @@ ruleTester.run('no-unknown-property', rule, {
     { code: '<audio crossOrigin />' },
     { code: '<svg focusable><image crossOrigin /></svg>' },
     { code: '<details onToggle={this.onToggle}>Some details</details>' },
-    { code: '<path fill="pink" d="M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z"></path>' },
+    {
+      code: '<path fill="pink" d="M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z"></path>',
+    },
     { code: '<line fill="pink" x1="0" y1="80" x2="100" y2="20"></line>' },
     { code: '<link as="audio">Audio content</link>' },
-    { code: '<video controlsList="nodownload" controls={this.controls} loop={true} muted={false} src={this.videoSrc} playsInline={true} onResize={this.onResize}></video>' },
-    { code: '<audio controlsList="nodownload" controls={this.controls} crossOrigin="anonymous" disableRemotePlayback loop muted preload="none" src="something" onAbort={this.abort} onDurationChange={this.durationChange} onEmptied={this.emptied} onEnded={this.end} onError={this.error} onResize={this.onResize}></audio>' },
-    { code: '<marker id={markerId} viewBox="0 0 2 2" refX="1" refY="1" markerWidth="1" markerHeight="1" orient="auto" />' },
+    {
+      code: '<video controlsList="nodownload" controls={this.controls} loop={true} muted={false} src={this.videoSrc} playsInline={true} onResize={this.onResize}></video>',
+    },
+    {
+      code: '<audio controlsList="nodownload" controls={this.controls} crossOrigin="anonymous" disableRemotePlayback loop muted preload="none" src="something" onAbort={this.abort} onDurationChange={this.durationChange} onEmptied={this.emptied} onEnded={this.end} onError={this.error} onResize={this.onResize}></audio>',
+    },
+    {
+      code: '<marker id={markerId} viewBox="0 0 2 2" refX="1" refY="1" markerWidth="1" markerHeight="1" orient="auto" />',
+    },
     { code: '<pattern id="pattern" viewBox="0,0,10,10" width="10%" height="10%" />' },
     { code: '<symbol id="myDot" width="10" height="10" viewBox="0 0 2 2" />' },
     { code: '<view id="one" viewBox="0 0 100 100" />' },
     { code: '<hr align="top" />' },
     { code: '<applet align="top" />' },
     { code: '<marker fill="#000" />' },
-    { code: '<dialog closedby="something" onClose={handler} open id="dialog" returnValue="something" onCancel={handler2} />' },
+    {
+      code: '<dialog closedby="something" onClose={handler} open id="dialog" returnValue="something" onCancel={handler2} />',
+    },
     {
       code: `
         <table align="top">
@@ -525,7 +541,8 @@ ruleTester.run('no-unknown-property', rule, {
           data: {
             name: 'fill',
             tagName: 'div',
-            allowedTags: 'altGlyph, circle, ellipse, g, line, marker, mask, path, polygon, polyline, rect, svg, symbol, text, textPath, tref, tspan, use, animate, animateColor, animateMotion, animateTransform, set',
+            allowedTags:
+              'altGlyph, circle, ellipse, g, line, marker, mask, path, polygon, polyline, rect, svg, symbol, text, textPath, tref, tspan, use, animate, animateColor, animateMotion, animateTransform, set',
           },
         },
       ],
@@ -717,7 +734,7 @@ ruleTester.run('no-unknown-property', rule, {
           Hello, world!
         </div>
       `,
-      features: ['no-ts'],
+      features: ['no-typescript'],
       errors: [
         {
           messageId: 'unknownProp',

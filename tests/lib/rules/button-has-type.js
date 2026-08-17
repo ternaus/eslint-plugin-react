@@ -35,10 +35,10 @@ ruleTester.run('button-has-type', rule, {
     { code: '<button type="submit"/>' },
     { code: '<button type="reset"/>' },
     { code: '<button type={"button"}/>' },
-    { code: '<button type={\'button\'}/>' },
+    { code: "<button type={'button'}/>" },
     { code: '<button type={`button`}/>' },
     { code: '<button type={condition ? "button" : "submit"}/>' },
-    { code: '<button type={condition ? \'button\' : \'submit\'}/>' },
+    { code: "<button type={condition ? 'button' : 'submit'}/>" },
     { code: '<button type={condition ? `button` : `submit`}/>' },
     {
       code: '<button type="button"/>',
@@ -56,7 +56,7 @@ ruleTester.run('button-has-type', rule, {
     { code: 'React.createElement("button", {type: \'reset\'})' },
     { code: 'React.createElement("button", {type: `reset`})' },
     { code: 'React.createElement("button", {type: condition ? "button" : "submit"})' },
-    { code: 'React.createElement("button", {type: condition ? \'button\' : \'submit\'})' },
+    { code: "React.createElement(\"button\", {type: condition ? 'button' : 'submit'})" },
     { code: 'React.createElement("button", {type: condition ? `button` : `submit`})' },
     {
       code: 'React.createElement("button", {type: "button"})',
@@ -102,9 +102,7 @@ ruleTester.run('button-has-type', rule, {
   invalid: parsers.all([
     {
       code: '<button/>',
-      errors: [
-        { messageId: 'missingType' },
-      ],
+      errors: [{ messageId: 'missingType' }],
     },
     {
       code: '<button type="foo"/>',
@@ -117,9 +115,7 @@ ruleTester.run('button-has-type', rule, {
     },
     {
       code: '<button type={foo}/>',
-      errors: [
-        { messageId: 'complexType' },
-      ],
+      errors: [{ messageId: 'complexType' }],
     },
     {
       code: '<button type={"foo"}/>',
@@ -131,7 +127,7 @@ ruleTester.run('button-has-type', rule, {
       ],
     },
     {
-      code: '<button type={\'foo\'}/>',
+      code: "<button type={'foo'}/>",
       errors: [
         {
           messageId: 'invalidValue',
@@ -150,9 +146,7 @@ ruleTester.run('button-has-type', rule, {
     },
     {
       code: '<button type={`button${foo}`}/>',
-      errors: [
-        { messageId: 'complexType' },
-      ],
+      errors: [{ messageId: 'complexType' }],
     },
     {
       code: '<button type="reset"/>',
@@ -166,9 +160,7 @@ ruleTester.run('button-has-type', rule, {
     },
     {
       code: '<button type={condition ? "button" : foo}/>',
-      errors: [
-        { messageId: 'complexType' },
-      ],
+      errors: [{ messageId: 'complexType' }],
     },
     {
       code: '<button type={condition ? "button" : "foo"}/>',
@@ -191,9 +183,7 @@ ruleTester.run('button-has-type', rule, {
     },
     {
       code: '<button type={condition ? foo : "button"}/>',
-      errors: [
-        { messageId: 'complexType' },
-      ],
+      errors: [{ messageId: 'complexType' }],
     },
     {
       code: '<button type={condition ? "foo" : "button"}/>',
@@ -225,15 +215,11 @@ ruleTester.run('button-has-type', rule, {
     },
     {
       code: 'React.createElement("button")',
-      errors: [
-        { messageId: 'missingType' },
-      ],
+      errors: [{ messageId: 'missingType' }],
     },
     {
       code: 'React.createElement("button", {type: foo})',
-      errors: [
-        { messageId: 'complexType' },
-      ],
+      errors: [{ messageId: 'complexType' }],
     },
     {
       code: 'React.createElement("button", {type: "foo"})',
@@ -256,9 +242,7 @@ ruleTester.run('button-has-type', rule, {
     },
     {
       code: 'React.createElement("button", {type: condition ? "button" : foo})',
-      errors: [
-        { messageId: 'complexType' },
-      ],
+      errors: [{ messageId: 'complexType' }],
     },
     {
       code: 'React.createElement("button", {type: condition ? "button" : "foo"})',
@@ -281,9 +265,7 @@ ruleTester.run('button-has-type', rule, {
     },
     {
       code: 'React.createElement("button", {type: condition ? foo : "button"})',
-      errors: [
-        { messageId: 'complexType' },
-      ],
+      errors: [{ messageId: 'complexType' }],
     },
     {
       code: 'React.createElement("button", {type: condition ? "foo" : "button"})',
@@ -306,15 +288,11 @@ ruleTester.run('button-has-type', rule, {
     },
     {
       code: 'React.createElement("button", {...extraProps})',
-      errors: [
-        { messageId: 'missingType' },
-      ],
+      errors: [{ messageId: 'missingType' }],
     },
     {
       code: 'Foo.createElement("button")',
-      errors: [
-        { messageId: 'missingType' },
-      ],
+      errors: [{ messageId: 'missingType' }],
       settings: {
         react: {
           pragma: 'Foo',
@@ -323,9 +301,7 @@ ruleTester.run('button-has-type', rule, {
     },
     {
       code: 'function Button({ type, ...extraProps }) { const button = type; return <button type={button} {...extraProps} />; }',
-      errors: [
-        { messageId: 'complexType' },
-      ],
+      errors: [{ messageId: 'complexType' }],
     },
   ]),
 });

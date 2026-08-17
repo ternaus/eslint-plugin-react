@@ -86,76 +86,78 @@ ruleTester.run('jsx-equals-spacing', rule, {
     },
   ]),
 
-  invalid: parsers.all([].concat(
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: '<App foo = {bar} />',
-      output: '<App foo={bar} />',
-      errors: [
-        { messageId: 'noSpaceBefore', type: 'JSXAttribute' },
-        { messageId: 'noSpaceAfter', type: 'JSXAttribute' },
-      ],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: '<App foo = {bar} />',
-      output: '<App foo={bar} />',
-      options: ['never'],
-      errors: [
-        { messageId: 'noSpaceBefore', type: 'JSXAttribute' },
-        { messageId: 'noSpaceAfter', type: 'JSXAttribute' },
-      ],
-    },
-    {
-      code: '<App foo ={bar} />',
-      output: '<App foo={bar} />',
-      options: ['never'],
-      errors: [{ messageId: 'noSpaceBefore', type: 'JSXAttribute' }],
-    },
-    {
-      code: '<App foo= {bar} />',
-      output: '<App foo={bar} />',
-      options: ['never'],
-      errors: [{ messageId: 'noSpaceAfter', type: 'JSXAttribute' }],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: '<App foo= {bar} bar = {baz} />',
-      output: '<App foo={bar} bar={baz} />',
-      options: ['never'],
-      errors: [
-        { messageId: 'noSpaceAfter', type: 'JSXAttribute' },
-        { messageId: 'noSpaceBefore', type: 'JSXAttribute' },
-        { messageId: 'noSpaceAfter', type: 'JSXAttribute' },
-      ],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: '<App foo={bar} />',
-      output: '<App foo = {bar} />',
-      options: ['always'],
-      errors: [
-        { messageId: 'needSpaceBefore', type: 'JSXAttribute' },
-        { messageId: 'needSpaceAfter', type: 'JSXAttribute' },
-      ],
-    },
-    {
-      code: '<App foo ={bar} />',
-      output: '<App foo = {bar} />',
-      options: ['always'],
-      errors: [{ messageId: 'needSpaceAfter', type: 'JSXAttribute' }],
-    },
-    {
-      code: '<App foo= {bar} />',
-      output: '<App foo = {bar} />',
-      options: ['always'],
-      errors: [{ messageId: 'needSpaceBefore', type: 'JSXAttribute' }],
-    },
-    parsers.skipDueToMultiErrorSorting ? [] : {
-      code: '<App foo={bar} bar ={baz} />',
-      output: '<App foo = {bar} bar = {baz} />',
-      options: ['always'],
-      errors: [
-        { messageId: 'needSpaceBefore', type: 'JSXAttribute' },
-        { messageId: 'needSpaceAfter', type: 'JSXAttribute' },
-        { messageId: 'needSpaceAfter', type: 'JSXAttribute' },
-      ],
-    }
-  )),
+  invalid: parsers.all(
+    [].concat(
+      {
+        code: '<App foo = {bar} />',
+        output: '<App foo={bar} />',
+        errors: [
+          { messageId: 'noSpaceBefore', type: 'JSXAttribute' },
+          { messageId: 'noSpaceAfter', type: 'JSXAttribute' },
+        ],
+      },
+      {
+        code: '<App foo = {bar} />',
+        output: '<App foo={bar} />',
+        options: ['never'],
+        errors: [
+          { messageId: 'noSpaceBefore', type: 'JSXAttribute' },
+          { messageId: 'noSpaceAfter', type: 'JSXAttribute' },
+        ],
+      },
+      {
+        code: '<App foo ={bar} />',
+        output: '<App foo={bar} />',
+        options: ['never'],
+        errors: [{ messageId: 'noSpaceBefore', type: 'JSXAttribute' }],
+      },
+      {
+        code: '<App foo= {bar} />',
+        output: '<App foo={bar} />',
+        options: ['never'],
+        errors: [{ messageId: 'noSpaceAfter', type: 'JSXAttribute' }],
+      },
+      {
+        code: '<App foo= {bar} bar = {baz} />',
+        output: '<App foo={bar} bar={baz} />',
+        options: ['never'],
+        errors: [
+          { messageId: 'noSpaceAfter', type: 'JSXAttribute' },
+          { messageId: 'noSpaceBefore', type: 'JSXAttribute' },
+          { messageId: 'noSpaceAfter', type: 'JSXAttribute' },
+        ],
+      },
+      {
+        code: '<App foo={bar} />',
+        output: '<App foo = {bar} />',
+        options: ['always'],
+        errors: [
+          { messageId: 'needSpaceBefore', type: 'JSXAttribute' },
+          { messageId: 'needSpaceAfter', type: 'JSXAttribute' },
+        ],
+      },
+      {
+        code: '<App foo ={bar} />',
+        output: '<App foo = {bar} />',
+        options: ['always'],
+        errors: [{ messageId: 'needSpaceAfter', type: 'JSXAttribute' }],
+      },
+      {
+        code: '<App foo= {bar} />',
+        output: '<App foo = {bar} />',
+        options: ['always'],
+        errors: [{ messageId: 'needSpaceBefore', type: 'JSXAttribute' }],
+      },
+      {
+        code: '<App foo={bar} bar ={baz} />',
+        output: '<App foo = {bar} bar = {baz} />',
+        options: ['always'],
+        errors: [
+          { messageId: 'needSpaceBefore', type: 'JSXAttribute' },
+          { messageId: 'needSpaceAfter', type: 'JSXAttribute' },
+          { messageId: 'needSpaceAfter', type: 'JSXAttribute' },
+        ],
+      },
+    ),
+  ),
 });

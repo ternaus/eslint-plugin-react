@@ -8,8 +8,8 @@ module.exports = [
     files: ['**/*.jsx'],
     ...reactRecommended,
     languageOptions: {
-      ...reactRecommended.languageOptions
-    }
+      ...reactRecommended.languageOptions,
+    },
   },
-  reactJSXRuntime
+  reactJSXRuntime,
 ];

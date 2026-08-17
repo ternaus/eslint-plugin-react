@@ -6,13 +6,13 @@ const reactRecommended = require('../../../../configs/recommended');
 module.exports = [
   {
     files: ['**/*.jsx'],
-    plugins: { react }
+    plugins: { react },
   },
   {
     files: ['**/*.jsx'],
     ...reactRecommended,
     languageOptions: {
-      ...reactRecommended.languageOptions
-    }
-  }
+      ...reactRecommended.languageOptions,
+    },
+  },
 ];

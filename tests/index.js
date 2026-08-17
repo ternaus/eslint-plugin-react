@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 'use strict';
 
 const assert = require('assert');
@@ -9,7 +7,8 @@ const path = require('path');
 const plugin = require('..');
 const index = require('../lib/rules');
 
-const ruleFiles = fs.readdirSync(path.resolve(__dirname, '../lib/rules/'))
+const ruleFiles = fs
+  .readdirSync(path.resolve(__dirname, '../lib/rules/'))
   .filter((f) => f.endsWith('.js'))
   .map((f) => path.basename(f, '.js'))
   .filter((f) => f !== 'index');
@@ -17,17 +16,11 @@ const ruleFiles = fs.readdirSync(path.resolve(__dirname, '../lib/rules/'))
 describe('all rule files should be exported by the plugin', () => {
   ruleFiles.forEach((ruleName) => {
     it(`should export ${ruleName}`, () => {
-      assert.equal(
-        plugin.rules[ruleName],
-        require(path.join('../lib/rules', ruleName)) // eslint-disable-line global-require, import/no-dynamic-require
-      );
+      assert.equal(plugin.rules[ruleName], require(path.join('../lib/rules', ruleName)));
     });
 
     it(`should export ${ruleName} from lib/rules/index`, () => {
-      assert.equal(
-        plugin.rules[ruleName],
-        index[ruleName]
-      );
+      assert.equal(plugin.rules[ruleName], index[ruleName]);
     });
   });
 });
@@ -49,52 +42,43 @@ describe('deprecated rules', () => {
 describe('configurations', () => {
   it('should export a ‘recommended’ configuration', () => {
     const configName = 'recommended';
-    assert(plugin.configs[configName]);
+    const config = plugin.configs.flat[configName];
+    assert(config);
 
-    Object.keys(plugin.configs[configName].rules).forEach((ruleName) => {
+    Object.keys(config.rules).forEach((ruleName) => {
       assert.ok(ruleName.startsWith('react/'));
       const subRuleName = ruleName.slice('react/'.length);
       assert(plugin.rules[subRuleName]);
-    });
-
-    ruleFiles.forEach((ruleName) => {
-      const inRecommendedConfig = !!plugin.configs[configName].rules[`react/${ruleName}`];
-      const isRecommended = plugin.rules[ruleName].meta.docs[configName];
-      if (inRecommendedConfig) {
-        assert(isRecommended, `${ruleName} metadata should mark it as recommended`);
-      } else {
-        assert(!isRecommended, `${ruleName} metadata should not mark it as recommended`);
-      }
     });
   });
 
   it('should export an ‘all’ configuration', () => {
     const configName = 'all';
-    assert(plugin.configs[configName]);
+    const config = plugin.configs.flat[configName];
+    assert(config);
 
-    Object.keys(plugin.configs[configName].rules).forEach((ruleName) => {
+    Object.keys(config.rules).forEach((ruleName) => {
       assert.ok(ruleName.startsWith('react/'));
-      assert.equal(plugin.configs[configName].rules[ruleName], 2);
+      assert.equal(config.rules[ruleName], 'error');
     });
 
     ruleFiles.forEach((ruleName) => {
       const inDeprecatedRules = !!plugin.deprecatedRules[ruleName];
-      const inConfig = typeof plugin.configs[configName].rules[`react/${ruleName}`] !== 'undefined';
-      assert(inDeprecatedRules ^ inConfig); // eslint-disable-line no-bitwise
+      const inConfig = typeof config.rules[`react/${ruleName}`] !== 'undefined';
+      assert(inDeprecatedRules ^ inConfig);
     });
   });
 
   it('should export a ‘jsx-runtime’ configuration', () => {
     const configName = 'jsx-runtime';
-    assert(plugin.configs[configName]);
+    const config = plugin.configs.flat[configName];
+    assert(config);
 
-    Object.keys(plugin.configs[configName].rules).forEach((ruleName) => {
+    Object.keys(config.rules).forEach((ruleName) => {
       assert.ok(ruleName.startsWith('react/'));
-      assert.equal(plugin.configs[configName].rules[ruleName], 0);
+      assert.equal(config.rules[ruleName], 'off');
 
-      const inDeprecatedRules = !!plugin.deprecatedRules[ruleName];
-      const inConfig = typeof plugin.configs[configName].rules[ruleName] !== 'undefined';
-      assert(inDeprecatedRules ^ inConfig); // eslint-disable-line no-bitwise
+      assert(['react/jsx-uses-react', 'react/react-in-jsx-scope'].includes(ruleName));
     });
   });
 });

@@ -377,7 +377,7 @@ ruleTester.run('jsx-no-bind', rule, {
         };
       `,
       errors: [{ messageId: 'bindCall' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      features: ['class fields'],
     },
     {
       code: `
@@ -389,7 +389,7 @@ ruleTester.run('jsx-no-bind', rule, {
         };
       `,
       errors: [{ messageId: 'bindCall' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      features: ['class fields'],
     },
     {
       code: `
@@ -435,11 +435,8 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [
-        { messageId: 'bindCall' },
-        { messageId: 'arrowFunc' },
-      ],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      errors: [{ messageId: 'bindCall' }, { messageId: 'arrowFunc' }],
+      features: ['class fields'],
     },
     {
       code: `
@@ -513,7 +510,7 @@ ruleTester.run('jsx-no-bind', rule, {
         };
       `,
       errors: [{ messageId: 'arrowFunc' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      features: ['class fields'],
     },
     {
       code: `
@@ -525,7 +522,7 @@ ruleTester.run('jsx-no-bind', rule, {
         };
       `,
       errors: [{ messageId: 'arrowFunc' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      features: ['class fields'],
     },
     {
       code: `
@@ -537,7 +534,7 @@ ruleTester.run('jsx-no-bind', rule, {
         };
       `,
       errors: [{ messageId: 'arrowFunc' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      features: ['class fields'],
     },
     {
       code: `
@@ -594,10 +591,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [
-        { messageId: 'arrowFunc' },
-        { messageId: 'bindExpression' },
-      ],
+      errors: [{ messageId: 'arrowFunc' }, { messageId: 'bindExpression' }],
       features: ['bind operator'],
     },
 
@@ -628,7 +622,7 @@ ruleTester.run('jsx-no-bind', rule, {
         };
       `,
       errors: [{ messageId: 'func' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      features: ['class fields'],
     },
     {
       code: `
@@ -640,7 +634,7 @@ ruleTester.run('jsx-no-bind', rule, {
         };
       `,
       errors: [{ messageId: 'func' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      features: ['class fields'],
     },
     {
       code: `
@@ -652,7 +646,7 @@ ruleTester.run('jsx-no-bind', rule, {
         };
       `,
       errors: [{ messageId: 'func' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      features: ['class fields'],
     },
     {
       code: `
@@ -664,7 +658,7 @@ ruleTester.run('jsx-no-bind', rule, {
         };
       `,
       errors: [{ messageId: 'func' }],
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove "no-ts-old"
+      features: ['class fields'],
     },
     {
       code: `
@@ -742,10 +736,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [
-        { messageId: 'func' },
-        { messageId: 'bindExpression' },
-      ],
+      errors: [{ messageId: 'func' }, { messageId: 'bindExpression' }],
       features: ['bind operator'],
     },
 
@@ -828,9 +819,7 @@ ruleTester.run('jsx-no-bind', rule, {
           }
         };
       `,
-      errors: [
-        { messageId: 'func' },
-      ],
+      errors: [{ messageId: 'func' }],
     },
 
     // ignore DOM components

@@ -489,7 +489,8 @@ bor />
         {
           messageId: 'newLine',
           data: { prop: 'bor' },
-        }],
+        },
+      ],
     },
     {
       code: `
@@ -544,7 +545,7 @@ baz bor
           ]}
         />
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
       output: `
         <DataTable<Items> fullscreen
 keyField="id"
@@ -573,7 +574,7 @@ fullscreen keyField="id" items={items}
           ]}
         />
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
       output: `
         <DataTable<Items>
 fullscreen

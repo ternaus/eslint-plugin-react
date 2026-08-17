@@ -18,22 +18,19 @@ describe('Version', () => {
   });
 
   afterEach(() => {
-    const actualArgs = console.error.args; // eslint-disable-line no-console
-    console.error.restore(); // eslint-disable-line no-console
+    const actualArgs = console.error.args;
+    console.error.restore();
     assert.deepEqual(actualArgs, expectedErrorArgs);
   });
 
   describe('Detect version', () => {
-    const context = { settings: { react: { version: 'detect', flowVersion: 'detect' } }, getFilename: () => path.resolve(base, 'test.js') };
-
-    afterEach(() => {
-      if (context.getFilename.restore) {
-        context.getFilename.restore();
-      }
-    });
+    const context = {
+      settings: { react: { version: 'detect', flowVersion: 'detect' } },
+      filename: path.resolve(base, 'test.js'),
+    };
 
     it('matches detected version', () => {
-      sinon.stub(context, 'getFilename').callsFake(() => path.resolve(base, 'detect-version', 'test.js'));
+      context.filename = path.resolve(base, 'detect-version', 'test.js');
 
       assert.equal(versionUtil.testReactVersion(context, '>= 1.2.3'), true);
       assert.equal(versionUtil.testReactVersion(context, '>= 1.2.4'), false);
@@ -41,7 +38,7 @@ describe('Version', () => {
     });
 
     it('matches detected version in sibling project', () => {
-      sinon.stub(context, 'getFilename').callsFake(() => path.resolve(base, 'detect-version-sibling', 'test.js'));
+      context.filename = path.resolve(base, 'detect-version-sibling', 'test.js');
 
       assert.equal(versionUtil.testReactVersion(context, '>= 2.3.4'), true);
       assert.equal(versionUtil.testReactVersion(context, '>= 2.3.5'), false);
@@ -49,7 +46,7 @@ describe('Version', () => {
     });
 
     it('matches detected version in child project', () => {
-      sinon.stub(context, 'getFilename').callsFake(() => path.resolve(base, 'detect-version', 'detect-version-child', 'test.js'));
+      context.filename = path.resolve(base, 'detect-version', 'detect-version-child', 'test.js');
 
       assert.equal(versionUtil.testReactVersion(context, '>= 3.4.5'), true);
       assert.equal(versionUtil.testReactVersion(context, '>= 3.4.6'), false);
@@ -57,23 +54,27 @@ describe('Version', () => {
     });
 
     it('assumes latest version if react is not installed', () => {
-      sinon.stub(context, 'getFilename').callsFake(() => path.resolve(base, 'detect-version-missing', 'test.js'));
+      context.filename = path.resolve(base, 'detect-version-missing', 'test.js');
 
       assert.equal(versionUtil.testReactVersion(context, '999.999.999'), true);
 
       expectedErrorArgs = [
-        ['Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming latest React version for linting.'],
+        [
+          'Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming latest React version for linting.',
+        ],
       ];
     });
 
     it('uses default version from settings if provided and react is not installed', () => {
       context.settings.react.defaultVersion = '16.14.0';
-      sinon.stub(context, 'getFilename').callsFake(() => path.resolve(base, 'detect-version-missing', 'test.js'));
+      context.filename = path.resolve(base, 'detect-version-missing', 'test.js');
 
       assert.equal(versionUtil.testReactVersion(context, '16.14.0'), true);
 
       expectedErrorArgs = [
-        ['Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming default React version for linting: "16.14.0".'],
+        [
+          'Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming default React version for linting: "16.14.0".',
+        ],
       ];
 
       delete context.settings.react.defaultVersion;
@@ -81,26 +82,32 @@ describe('Version', () => {
 
     it('fails nicely with an invalid default version of react', () => {
       context.settings.react.defaultVersion = 'not semver';
-      sinon.stub(context, 'getFilename').callsFake(() => path.resolve(base, 'detect-version-missing', 'test.js'));
+      context.filename = path.resolve(base, 'detect-version-missing', 'test.js');
 
       assert.equal(versionUtil.testReactVersion(context, '999.999.999'), true);
 
       expectedErrorArgs = [
-        ['Warning: React version specified in eslint-plugin-react-settings must be a valid semver version, or "detect"; got “not semver”. Falling back to latest version as default.'],
-        ['Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming latest React version for linting.'],
+        [
+          'Warning: React version specified in eslint-plugin-react-settings must be a valid semver version, or "detect"; got “not semver”. Falling back to latest version as default.',
+        ],
+        [
+          'Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming latest React version for linting.',
+        ],
       ];
 
       delete context.settings.react.defaultVersion;
     });
 
     it('warns only once for failure to detect react ', () => {
-      sinon.stub(context, 'getFilename').callsFake(() => path.resolve(base, 'detect-version-missing', 'test.js'));
+      context.filename = path.resolve(base, 'detect-version-missing', 'test.js');
 
       assert.equal(versionUtil.testReactVersion(context, '999.999.999'), true);
       assert.equal(versionUtil.testReactVersion(context, '999.999.999'), true);
 
       expectedErrorArgs = [
-        ['Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming latest React version for linting.'],
+        [
+          'Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming latest React version for linting.',
+        ],
       ];
     });
 
@@ -108,12 +115,14 @@ describe('Version', () => {
       assert.equal(versionUtil.testFlowVersion(context, '999.999.999'), true);
 
       expectedErrorArgs = [
-        ['Warning: Flow version was set to "detect" in eslint-plugin-react settings, but the "flow-bin" package is not installed. Assuming latest Flow version for linting.'],
+        [
+          'Warning: Flow version was set to "detect" in eslint-plugin-react settings, but the "flow-bin" package is not installed. Assuming latest Flow version for linting.',
+        ],
       ];
     });
 
     it('works with virtual filename', () => {
-      sinon.stub(context, 'getFilename').callsFake(() => path.resolve(base, 'detect-version-sibling', 'test.js/0_fake.js'));
+      context.filename = path.resolve(base, 'detect-version-sibling', 'test.js/0_fake.js');
 
       assert.equal(versionUtil.testReactVersion(context, '>= 2.3.4'), true);
       assert.equal(versionUtil.testReactVersion(context, '>= 2.3.5'), false);
@@ -121,7 +130,7 @@ describe('Version', () => {
     });
 
     it('works with recursive virtual filename', () => {
-      sinon.stub(context, 'getFilename').callsFake(() => path.resolve(base, 'detect-version-sibling', 'test.js/0_fake.md/1_fake.js'));
+      context.filename = path.resolve(base, 'detect-version-sibling', 'test.js/0_fake.md/1_fake.js');
 
       assert.equal(versionUtil.testReactVersion(context, '>= 2.3.4'), true);
       assert.equal(versionUtil.testReactVersion(context, '>= 2.3.5'), false);
@@ -148,14 +157,18 @@ describe('Version', () => {
     it('fails nicely with an invalid react version', () => {
       assert.equal(versionUtil.testReactVersion(invalidContext, '>= 15.0'), true);
       expectedErrorArgs = [
-        ['Warning: React version specified in eslint-plugin-react-settings must be a valid semver version, or "detect"; got “latest”'],
+        [
+          'Warning: React version specified in eslint-plugin-react-settings must be a valid semver version, or "detect"; got “latest”',
+        ],
       ];
     });
 
     it('fails nicely with an invalid flow version', () => {
       assert.equal(versionUtil.testFlowVersion(invalidContext, '>= 1.0'), true);
       expectedErrorArgs = [
-        ['Warning: Flow version specified in eslint-plugin-react-settings must be a valid semver version, or "detect"; got “not semver”'],
+        [
+          'Warning: Flow version specified in eslint-plugin-react-settings must be a valid semver version, or "detect"; got “not semver”',
+        ],
       ];
     });
   });

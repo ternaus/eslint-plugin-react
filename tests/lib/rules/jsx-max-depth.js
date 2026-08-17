@@ -128,7 +128,7 @@ ruleTester.run('jsx-max-depth', rule, {
       `,
     },
     {
-    // Validates circular references don't get rule stuck
+      // Validates circular references don't get rule stuck
       code: `
         function Component() {
           let first = "";
@@ -139,7 +139,7 @@ ruleTester.run('jsx-max-depth', rule, {
       `,
     },
     {
-    // Validates circular references are checked at multiple levels
+      // Validates circular references are checked at multiple levels
       code: `
         function Component() {
           let first = "";

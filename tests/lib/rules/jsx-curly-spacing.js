@@ -1350,7 +1350,8 @@ ruleTester.run('jsx-curly-spacing', rule, {
         {
           messageId: 'spaceNeededBefore',
           data: { token: '}' },
-        }],
+        },
+      ],
     },
     {
       code: '<App foo={bar} />;',

@@ -25,8 +25,8 @@ const parserOptions = {
 };
 
 function errorMessage(oldMethod, version, newMethod, refs, extraProps) {
-  return (
-    Object.assign({
+  return Object.assign(
+    {
       messageId: 'deprecated',
       data: {
         oldMethod,
@@ -34,7 +34,8 @@ function errorMessage(oldMethod, version, newMethod, refs, extraProps) {
         newMethod: newMethod ? `, use ${newMethod} instead` : '',
         refs: refs ? `, see ${refs}` : '',
       },
-    }, extraProps)
+    },
+    extraProps,
   );
 }
 
@@ -46,7 +47,7 @@ const ruleTester = new RuleTester({ parserOptions });
 ruleTester.run('no-deprecated', rule, {
   valid: parsers.all([
     // Not deprecated
-    'var element = React.createElement(\'p\', {}, null);',
+    "var element = React.createElement('p', {}, null);",
     'var clone = React.cloneElement(element);',
     'ReactDOM.cloneElement(child, container);',
     'ReactDOM.findDOMNode(instance);',
@@ -225,34 +226,25 @@ ruleTester.run('no-deprecated', rule, {
       errors: [errorMessage('React.PropTypes', '15.5.0', 'the npm module prop-types')],
     },
     {
-      code: 'var {createClass} = require(\'react\');',
+      code: "var {createClass} = require('react');",
       errors: [errorMessage('React.createClass', '15.5.0', 'the npm module create-react-class')],
     },
     {
-      code: 'var {createClass, PropTypes} = require(\'react\');',
+      code: "var {createClass, PropTypes} = require('react');",
       errors: [
-        errorMessage(
-          'React.createClass',
-          '15.5.0',
-          'the npm module create-react-class',
-          null,
-          { type: 'Property', column: 6 }
-        ),
-        errorMessage(
-          'React.PropTypes',
-          '15.5.0',
-          'the npm module prop-types',
-          null,
-          { type: 'Property', column: 19 }
-        ),
+        errorMessage('React.createClass', '15.5.0', 'the npm module create-react-class', null, {
+          type: 'Property',
+          column: 6,
+        }),
+        errorMessage('React.PropTypes', '15.5.0', 'the npm module prop-types', null, { type: 'Property', column: 19 }),
       ],
     },
     {
-      code: 'import {createClass} from \'react\';',
+      code: "import {createClass} from 'react';",
       errors: [errorMessage('React.createClass', '15.5.0', 'the npm module create-react-class')],
     },
     {
-      code: 'import {createClass, PropTypes} from \'react\';',
+      code: "import {createClass, PropTypes} from 'react';",
       errors: [
         errorMessage('React.createClass', '15.5.0', 'the npm module create-react-class'),
         errorMessage('React.PropTypes', '15.5.0', 'the npm module prop-types'),
@@ -264,24 +256,20 @@ ruleTester.run('no-deprecated', rule, {
       const {createClass, PropTypes} = React;
     `,
       errors: [
-        errorMessage(
-          'React.createClass',
-          '15.5.0',
-          'the npm module create-react-class',
-          null,
-          { type: 'Property', line: 3, column: 14 }
-        ),
-        errorMessage(
-          'React.PropTypes',
-          '15.5.0',
-          'the npm module prop-types',
-          null,
-          { type: 'Property', line: 3, column: 27 }
-        ),
+        errorMessage('React.createClass', '15.5.0', 'the npm module create-react-class', null, {
+          type: 'Property',
+          line: 3,
+          column: 14,
+        }),
+        errorMessage('React.PropTypes', '15.5.0', 'the npm module prop-types', null, {
+          type: 'Property',
+          line: 3,
+          column: 27,
+        }),
       ],
     },
     {
-      code: 'import {printDOM} from \'react-addons-perf\';',
+      code: "import {printDOM} from 'react-addons-perf';",
       errors: [errorMessage('ReactPerf.printDOM', '15.0.0', 'ReactPerf.printOperations')],
     },
     {
@@ -309,21 +297,21 @@ ruleTester.run('no-deprecated', rule, {
           '16.9.0',
           'UNSAFE_componentWillMount',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillmount. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 3, column: 11 }
+          { type: 'Identifier', line: 3, column: 11 },
         ),
         errorMessage(
           'componentWillReceiveProps',
           '16.9.0',
           'UNSAFE_componentWillReceiveProps',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 4, column: 11 }
+          { type: 'Identifier', line: 4, column: 11 },
         ),
         errorMessage(
           'componentWillUpdate',
           '16.9.0',
           'UNSAFE_componentWillUpdate',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillupdate. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 5, column: 11 }
+          { type: 'Identifier', line: 5, column: 11 },
         ),
       ],
     },
@@ -343,21 +331,21 @@ ruleTester.run('no-deprecated', rule, {
           '16.9.0',
           'UNSAFE_componentWillMount',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillmount. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 4, column: 13 }
+          { type: 'Identifier', line: 4, column: 13 },
         ),
         errorMessage(
           'componentWillReceiveProps',
           '16.9.0',
           'UNSAFE_componentWillReceiveProps',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 5, column: 13 }
+          { type: 'Identifier', line: 5, column: 13 },
         ),
         errorMessage(
           'componentWillUpdate',
           '16.9.0',
           'UNSAFE_componentWillUpdate',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillupdate. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 6, column: 13 }
+          { type: 'Identifier', line: 6, column: 13 },
         ),
       ],
     },
@@ -375,21 +363,21 @@ ruleTester.run('no-deprecated', rule, {
           '16.9.0',
           'UNSAFE_componentWillMount',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillmount. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 3, column: 11 }
+          { type: 'Identifier', line: 3, column: 11 },
         ),
         errorMessage(
           'componentWillReceiveProps',
           '16.9.0',
           'UNSAFE_componentWillReceiveProps',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 4, column: 11 }
+          { type: 'Identifier', line: 4, column: 11 },
         ),
         errorMessage(
           'componentWillUpdate',
           '16.9.0',
           'UNSAFE_componentWillUpdate',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillupdate. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 5, column: 11 }
+          { type: 'Identifier', line: 5, column: 11 },
         ),
       ],
     },
@@ -407,21 +395,21 @@ ruleTester.run('no-deprecated', rule, {
           '16.9.0',
           'UNSAFE_componentWillMount',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillmount. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 3, column: 11 }
+          { type: 'Identifier', line: 3, column: 11 },
         ),
         errorMessage(
           'componentWillReceiveProps',
           '16.9.0',
           'UNSAFE_componentWillReceiveProps',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 4, column: 11 }
+          { type: 'Identifier', line: 4, column: 11 },
         ),
         errorMessage(
           'componentWillUpdate',
           '16.9.0',
           'UNSAFE_componentWillUpdate',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillupdate. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 5, column: 11 }
+          { type: 'Identifier', line: 5, column: 11 },
         ),
       ],
     },
@@ -439,21 +427,21 @@ ruleTester.run('no-deprecated', rule, {
           '16.9.0',
           'UNSAFE_componentWillMount',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillmount. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 3, column: 11 }
+          { type: 'Identifier', line: 3, column: 11 },
         ),
         errorMessage(
           'componentWillReceiveProps',
           '16.9.0',
           'UNSAFE_componentWillReceiveProps',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 4, column: 11 }
+          { type: 'Identifier', line: 4, column: 11 },
         ),
         errorMessage(
           'componentWillUpdate',
           '16.9.0',
           'UNSAFE_componentWillUpdate',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillupdate. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 5, column: 11 }
+          { type: 'Identifier', line: 5, column: 11 },
         ),
       ],
     },
@@ -471,21 +459,21 @@ ruleTester.run('no-deprecated', rule, {
           '16.9.0',
           'UNSAFE_componentWillMount',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillmount. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 3, column: 11 }
+          { type: 'Identifier', line: 3, column: 11 },
         ),
         errorMessage(
           'componentWillReceiveProps',
           '16.9.0',
           'UNSAFE_componentWillReceiveProps',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 4, column: 11 }
+          { type: 'Identifier', line: 4, column: 11 },
         ),
         errorMessage(
           'componentWillUpdate',
           '16.9.0',
           'UNSAFE_componentWillUpdate',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillupdate. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 5, column: 11 }
+          { type: 'Identifier', line: 5, column: 11 },
         ),
       ],
     },
@@ -504,21 +492,21 @@ ruleTester.run('no-deprecated', rule, {
           '16.9.0',
           'UNSAFE_componentWillMount',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillmount. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 4, column: 11 }
+          { type: 'Identifier', line: 4, column: 11 },
         ),
         errorMessage(
           'componentWillReceiveProps',
           '16.9.0',
           'UNSAFE_componentWillReceiveProps',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 5, column: 11 }
+          { type: 'Identifier', line: 5, column: 11 },
         ),
         errorMessage(
           'componentWillUpdate',
           '16.9.0',
           'UNSAFE_componentWillUpdate',
           'https://reactjs.org/docs/react-component.html#unsafe_componentwillupdate. Use https://github.com/reactjs/react-codemod#rename-unsafe-lifecycles to automatically update your components.',
-          { type: 'Identifier', line: 6, column: 11 }
+          { type: 'Identifier', line: 6, column: 11 },
         ),
       ],
     },
@@ -528,20 +516,16 @@ ruleTester.run('no-deprecated', rule, {
         ReactDOM.render(<div></div>, container);
       `,
       errors: [
-        errorMessage(
-          'ReactDOM.render',
-          '18.0.0',
-          'createRoot',
-          'https://reactjs.org/link/switch-to-createroot',
-          { type: 'ImportSpecifier', line: 2, column: 18 }
-        ),
-        errorMessage(
-          'ReactDOM.render',
-          '18.0.0',
-          'createRoot',
-          'https://reactjs.org/link/switch-to-createroot',
-          { type: 'MemberExpression', line: 3, column: 9 }
-        ),
+        errorMessage('ReactDOM.render', '18.0.0', 'createRoot', 'https://reactjs.org/link/switch-to-createroot', {
+          type: 'ImportSpecifier',
+          line: 2,
+          column: 18,
+        }),
+        errorMessage('ReactDOM.render', '18.0.0', 'createRoot', 'https://reactjs.org/link/switch-to-createroot', {
+          type: 'MemberExpression',
+          line: 3,
+          column: 9,
+        }),
       ],
     },
     {
@@ -550,20 +534,16 @@ ruleTester.run('no-deprecated', rule, {
         ReactDOM.hydrate(<div></div>, container);
       `,
       errors: [
-        errorMessage(
-          'ReactDOM.hydrate',
-          '18.0.0',
-          'hydrateRoot',
-          'https://reactjs.org/link/switch-to-createroot',
-          { type: 'ImportSpecifier', line: 2, column: 18 }
-        ),
-        errorMessage(
-          'ReactDOM.hydrate',
-          '18.0.0',
-          'hydrateRoot',
-          'https://reactjs.org/link/switch-to-createroot',
-          { type: 'MemberExpression', line: 3, column: 9 }
-        ),
+        errorMessage('ReactDOM.hydrate', '18.0.0', 'hydrateRoot', 'https://reactjs.org/link/switch-to-createroot', {
+          type: 'ImportSpecifier',
+          line: 2,
+          column: 18,
+        }),
+        errorMessage('ReactDOM.hydrate', '18.0.0', 'hydrateRoot', 'https://reactjs.org/link/switch-to-createroot', {
+          type: 'MemberExpression',
+          line: 3,
+          column: 9,
+        }),
       ],
     },
     {
@@ -577,14 +557,14 @@ ruleTester.run('no-deprecated', rule, {
           '18.0.0',
           'root.unmount',
           'https://reactjs.org/link/switch-to-createroot',
-          { type: 'ImportSpecifier', line: 2, column: 18 }
+          { type: 'ImportSpecifier', line: 2, column: 18 },
         ),
         errorMessage(
           'ReactDOM.unmountComponentAtNode',
           '18.0.0',
           'root.unmount',
           'https://reactjs.org/link/switch-to-createroot',
-          { type: 'MemberExpression', line: 3, column: 9 }
+          { type: 'MemberExpression', line: 3, column: 9 },
         ),
       ],
     },
@@ -599,14 +579,14 @@ ruleTester.run('no-deprecated', rule, {
           '18.0.0',
           'renderToPipeableStream',
           'https://reactjs.org/docs/react-dom-server.html#rendertonodestream',
-          { type: 'ImportSpecifier', line: 2, column: 18 }
+          { type: 'ImportSpecifier', line: 2, column: 18 },
         ),
         errorMessage(
           'ReactDOMServer.renderToNodeStream',
           '18.0.0',
           'renderToPipeableStream',
           'https://reactjs.org/docs/react-dom-server.html#rendertonodestream',
-          { type: 'MemberExpression', line: 3, column: 9 }
+          { type: 'MemberExpression', line: 3, column: 9 },
         ),
       ],
     },

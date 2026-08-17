@@ -192,7 +192,7 @@ ruleTester.run('jsx-tag-spacing', rule, {
     {
       code: '<App prop="foo">< /App>',
       options: closingSlashOptions('always'),
-      features: ['no-ts'],
+      features: ['no-typescript'],
     },
     {
       code: '<p/ >',
@@ -209,7 +209,7 @@ ruleTester.run('jsx-tag-spacing', rule, {
     {
       code: '< App></ App>',
       options: afterOpeningOptions('always'),
-      features: ['no-ts'],
+      features: ['no-typescript'],
     },
     {
       code: '< App/>',
@@ -435,7 +435,7 @@ ruleTester.run('jsx-tag-spacing', rule, {
       output: '<div className="bar"></div>;',
       errors: [{ messageId: 'closeSlashNoSpace' }],
       options: closingSlashOptions('never'),
-      features: ['no-ts'],
+      features: ['no-typescript'],
     },
     {
       code: `
@@ -447,14 +447,14 @@ ruleTester.run('jsx-tag-spacing', rule, {
       `,
       errors: [{ messageId: 'closeSlashNoSpace' }],
       options: closingSlashOptions('never'),
-      features: ['no-ts'],
+      features: ['no-typescript'],
     },
     {
       code: '<App prop="foo"></App>',
       output: '<App prop="foo">< /App>',
       errors: [{ messageId: 'closeSlashNeedSpace' }],
       options: closingSlashOptions('always'),
-      features: ['no-ts'],
+      features: ['no-typescript'],
     },
     {
       code: '<p/>',
@@ -483,10 +483,7 @@ ruleTester.run('jsx-tag-spacing', rule, {
     {
       code: '< App></ App>',
       output: '<App></App>',
-      errors: [
-        { messageId: 'afterOpenNoSpace' },
-        { messageId: 'afterOpenNoSpace' },
-      ],
+      errors: [{ messageId: 'afterOpenNoSpace' }, { messageId: 'afterOpenNoSpace' }],
       options: afterOpeningOptions('never'),
     },
     {
@@ -515,10 +512,7 @@ ruleTester.run('jsx-tag-spacing', rule, {
     {
       code: '<App4></App4>',
       output: '< App4></ App4>',
-      errors: [
-        { messageId: 'afterOpenNeedSpace' },
-        { messageId: 'afterOpenNeedSpace' },
-      ],
+      errors: [{ messageId: 'afterOpenNeedSpace' }, { messageId: 'afterOpenNeedSpace' }],
       options: afterOpeningOptions('always'),
     },
     {

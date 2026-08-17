@@ -88,7 +88,7 @@ ruleTester.run('no-multi-comp', rule, {
       options: [{ ignoreStateless: true }],
     },
     {
-    // multiple non-components
+      // multiple non-components
       code: `
         import React, { createElement } from "react"
         const helperFoo = () => {
@@ -280,7 +280,9 @@ ruleTester.run('no-multi-comp', rule, {
             return <Hello name="John" />;
           }
         });
-      `.split('\n').join('\r'),
+      `
+        .split('\n')
+        .join('\r'),
       errors: [
         {
           messageId: 'onlyOneComponent',
@@ -305,7 +307,9 @@ ruleTester.run('no-multi-comp', rule, {
             return <Hello name="Johnny" />;
           }
         }
-      `.split('\n').join('\r'),
+      `
+        .split('\n')
+        .join('\r'),
       errors: [
         {
           messageId: 'onlyOneComponent',

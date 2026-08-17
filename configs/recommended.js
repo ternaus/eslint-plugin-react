@@ -1,13 +1,6 @@
-'use strict';
+import plugin from '../index.js';
 
-const plugin = require('..');
+const config = plugin.configs.flat.recommended;
 
-const legacyConfig = plugin.configs.recommended;
-
-module.exports = {
-  plugins: { react: plugin },
-  rules: legacyConfig.rules,
-  languageOptions: { parserOptions: legacyConfig.parserOptions },
-};
-
-Object.defineProperty(module.exports, 'languageOptions', { enumerable: false });
+export default config;
+export { config as 'module.exports' };

@@ -25,48 +25,65 @@ describe('ast', () => {
   describe('traverseReturnStatements', () => {
     it('Correctly traverses function declarations', () => {
       const spy = sinon.spy();
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         function foo({prop}) {
           return;
         }
-      `), mockContext, spy);
+      `),
+        mockContext,
+        spy,
+      );
 
       assert(spy.calledOnce);
     });
 
     it('Correctly traverses function expressions', () => {
       const spy = sinon.spy();
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         const foo = function({prop}) {
           return;
         }
-      `).declarations[0].init, mockContext, spy);
+      `).declarations[0].init,
+        mockContext,
+        spy,
+      );
 
       assert(spy.calledOnce);
     });
 
     it('Correctly traverses arrow functions', () => {
       const spy = sinon.spy();
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         ({prop}) => {
           return;
         }
-      `).expression, mockContext, spy);
+      `).expression,
+        mockContext,
+        spy,
+      );
 
       assert(spy.calledOnce);
 
       spy.resetHistory();
 
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         ({prop}) => 'something'
-      `).expression, mockContext, spy);
+      `).expression,
+        mockContext,
+        spy,
+      );
 
       assert(spy.calledOnce);
     });
 
     it('Correctly traverses inside control flow expressions', () => {
       const spy = sinon.spy();
-      traverseReturns(parseCode(`
+      traverseReturns(
+        parseCode(`
         function foo({prop}) {
           if (prop) {
             return 0;
@@ -91,7 +108,10 @@ describe('ast', () => {
 
           const foo = () => 'not valid';
         }
-      `), mockContext, spy);
+      `),
+        mockContext,
+        spy,
+      );
 
       const enterCalls = spy.getCalls();
 

@@ -9,8 +9,6 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
-const babelEslintVersion = require('babel-eslint/package.json').version;
-const semver = require('semver');
 const RuleTester = require('../../helpers/ruleTester');
 
 const rule = require('../../../lib/rules/sort-default-props');
@@ -31,18 +29,19 @@ const parserOptions = {
 
 const ruleTester = new RuleTester({ parserOptions });
 ruleTester.run('sort-default-props', rule, {
-  valid: parsers.all([].concat(
-    {
-      code: `
+  valid: parsers.all(
+    [].concat(
+      {
+        code: `
         var First = createReactClass({
           render: function() {
             return <div />;
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var First = createReactClass({
           propTypes: {
             A: PropTypes.any,
@@ -63,9 +62,9 @@ ruleTester.run('sort-default-props', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var First = createReactClass({
           propTypes: {
             a: PropTypes.any,
@@ -86,10 +85,10 @@ ruleTester.run('sort-default-props', rule, {
           }
         });
       `,
-      options: [{ ignoreCase: true }],
-    },
-    {
-      code: `
+        options: [{ ignoreCase: true }],
+      },
+      {
+        code: `
         var First = createReactClass({
           propTypes: {
             a: PropTypes.any,
@@ -121,9 +120,9 @@ ruleTester.run('sort-default-props', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class First extends React.Component {
           render() {
             return <div />;
@@ -140,9 +139,9 @@ ruleTester.run('sort-default-props', rule, {
         };
         First.defaultProps.justforcheck = "justforcheck";
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class First extends React.Component {
           render() {
             return <div />;
@@ -161,10 +160,10 @@ ruleTester.run('sort-default-props', rule, {
           Z: "Z"
         };
       `,
-      options: [{ ignoreCase: true }],
-    },
-    {
-      code: `
+        options: [{ ignoreCase: true }],
+      },
+      {
+        code: `
         class Component extends React.Component {
           static propTypes = {
             a: PropTypes.any,
@@ -181,10 +180,10 @@ ruleTester.run('sort-default-props', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello</div>;
@@ -197,31 +196,11 @@ ruleTester.run('sort-default-props', rule, {
           "aria-controls": "aria-controls"
         };
       `,
-      options: [{ ignoreCase: true }],
-    },
-    semver.satisfies(babelEslintVersion, '< 9') ? {
-    // Invalid code, should not be validated
-      code: `
-        class Component extends React.Component {
-          propTypes: {
-            a: PropTypes.any,
-            c: PropTypes.any,
-            b: PropTypes.any
-          };
-          defaultProps: {
-            a: "a",
-            c: "c",
-            b: "b"
-          };
-          render() {
-            return <div />;
-          }
-        }
-      `,
-      parser: parsers.BABEL_ESLINT,
-    } : [],
-    {
-      code: `
+        options: [{ ignoreCase: true }],
+      },
+      [],
+      {
+        code: `
         var Hello = createReactClass({
           render: function() {
             let { a, ...b } = obj;
@@ -230,9 +209,9 @@ ruleTester.run('sort-default-props', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         var First = createReactClass({
           propTypes: {
             barRequired: PropTypes.func.isRequired,
@@ -251,9 +230,9 @@ ruleTester.run('sort-default-props', rule, {
           }
         });
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         export default class ClassWithSpreadInPropTypes extends BaseClass {
           static propTypes = {
             b: PropTypes.string,
@@ -267,10 +246,10 @@ ruleTester.run('sort-default-props', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         export default class ClassWithSpreadInPropTypes extends BaseClass {
           static propTypes = {
             a: PropTypes.string,
@@ -290,10 +269,10 @@ ruleTester.run('sort-default-props', rule, {
           }
         }
       `,
-      features: ['class fields'],
-    },
-    {
-      code: `
+        features: ['class fields'],
+      },
+      {
+        code: `
         const defaults = {
           b: "b"
         };
@@ -312,9 +291,9 @@ ruleTester.run('sort-default-props', rule, {
           a: "a"
         };
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const propTypes = require('./externalPropTypes')
         const defaultProps = require('./externalDefaultProps')
         const TextFieldLabel = (props) => {
@@ -323,9 +302,9 @@ ruleTester.run('sort-default-props', rule, {
         TextFieldLabel.propTypes = propTypes;
         TextFieldLabel.defaultProps = defaultProps;
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const First = (props) => <div />;
         export const propTypes = {
             a: PropTypes.any,
@@ -338,9 +317,9 @@ ruleTester.run('sort-default-props', rule, {
         First.propTypes = propTypes;
         First.defaultProps = defaultProps;
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const defaults = {
           b: "b"
         };
@@ -358,9 +337,9 @@ ruleTester.run('sort-default-props', rule, {
         First.propTypes = propTypes;
         First.defaultProps = defaultProps;
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         class First extends React.Component {
           render() {
             return <div />;
@@ -374,8 +353,9 @@ ruleTester.run('sort-default-props', rule, {
             z: PropTypes.string,
         };
       `,
-    }
-  )),
+      },
+    ),
+  ),
 
   invalid: parsers.all([
     {
@@ -404,7 +384,7 @@ ruleTester.run('sort-default-props', rule, {
           column: 13,
           type: 'Property',
         },
-      ], /* ,
+      ] /* ,
       output: `
         class Component extends React.Component {
           static propTypes = {
@@ -421,7 +401,7 @@ ruleTester.run('sort-default-props', rule, {
             return <div />;
           }
         }
-      ` */
+      ` */,
     },
     {
       code: `

@@ -51,7 +51,9 @@ ruleTester.run('iframe-missing-sandbox', rule, {
     { code: '<iframe sandbox="allow-top-navigation"></iframe>' },
     { code: '<iframe sandbox="allow-top-navigation-by-user-activation"></iframe>' },
     { code: '<iframe sandbox="allow-forms allow-modals"></iframe>' },
-    { code: '<iframe sandbox="allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-top-navigation"></iframe>' },
+    {
+      code: '<iframe sandbox="allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-top-navigation"></iframe>',
+    },
     { code: 'React.createElement("iframe", { sandbox: "allow-forms" })' },
     { code: 'React.createElement("iframe", { sandbox: "allow-modals" })' },
     { code: 'React.createElement("iframe", { sandbox: "allow-orientation-lock" })' },
@@ -64,7 +66,9 @@ ruleTester.run('iframe-missing-sandbox', rule, {
     { code: 'React.createElement("iframe", { sandbox: "allow-top-navigation" })' },
     { code: 'React.createElement("iframe", { sandbox: "allow-top-navigation-by-user-activation" })' },
     { code: 'React.createElement("iframe", { sandbox: "allow-forms allow-modals" })' },
-    { code: 'React.createElement("iframe", { sandbox: "allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-top-navigation" })' },
+    {
+      code: 'React.createElement("iframe", { sandbox: "allow-popups allow-popups-to-escape-sandbox allow-pointer-lock allow-same-origin allow-top-navigation" })',
+    },
   ]),
   invalid: parsers.all([
     {

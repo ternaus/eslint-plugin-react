@@ -33,9 +33,11 @@ const expectedError = {
   type: 'JSXAttribute',
 };
 
-const ignoreCaseArgs = [{
-  ignoreCase: true,
-}];
+const ignoreCaseArgs = [
+  {
+    ignoreCase: true,
+  },
+];
 
 ruleTester.run('jsx-no-duplicate-props', rule, {
   valid: parsers.all([

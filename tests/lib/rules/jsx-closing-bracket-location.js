@@ -762,7 +762,7 @@ ruleTester.run('jsx-closing-bracket-location', rule, {
     {
       code: `
         <Provider
-          store>${/* <-- */''}
+          store>${/* <-- */ ''}
           <App
             foo
             />
@@ -911,7 +911,7 @@ ruleTester.run('jsx-closing-bracket-location', rule, {
           >
           <App
             foo
-            />${''/* <-- */}
+            />${'' /* <-- */}
         </Provider>
       `,
       output: `
@@ -939,7 +939,7 @@ ruleTester.run('jsx-closing-bracket-location', rule, {
     {
       code: `
         <Provider
-          store>${''/* <-- */}
+          store>${'' /* <-- */}
           <App
             foo />
         </Provider>
@@ -971,7 +971,7 @@ ruleTester.run('jsx-closing-bracket-location', rule, {
           store>
           <App
             foo
-            />${''/* <--*/}
+            />${'' /* <--*/}
         </Provider>
       `,
       output: `

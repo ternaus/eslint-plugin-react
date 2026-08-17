@@ -353,10 +353,7 @@ ruleTester.run('forbid-dom-props', rule, {
       `,
       options: [
         {
-          forbid: [
-            { propName: 'className' },
-            { propName: 'otherProp', message: 'Avoid using otherProp' },
-          ],
+          forbid: [{ propName: 'className' }, { propName: 'otherProp', message: 'Avoid using otherProp' }],
         },
       ],
       errors: [
@@ -386,11 +383,13 @@ ruleTester.run('forbid-dom-props', rule, {
       `,
       options: [
         {
-          forbid: [{
-            propName: 'accept',
-            disallowedFor: ['form'],
-            message: 'Avoid using the accept attribute on <form>',
-          }],
+          forbid: [
+            {
+              propName: 'accept',
+              disallowedFor: ['form'],
+              message: 'Avoid using the accept attribute on <form>',
+            },
+          ],
         },
       ],
       errors: [

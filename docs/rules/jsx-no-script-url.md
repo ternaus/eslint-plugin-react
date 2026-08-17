@@ -73,7 +73,7 @@ Examples of **incorrect** code for this rule, when configured with the above opt
 
 #### includeFromSettings (default `false`)
 
-Indicates if the `linkComponents` config in [global shared settings](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/README.md#configuration) should also be taken into account. If enabled, components and properties defined in settings will be added to the list provided in first option (if provided):
+Indicates if the `linkComponents` config in [global shared settings](https://github.com/ternaus/eslint-plugin-react#settings) should also be taken into account. If enabled, components and properties defined in settings will be added to the list provided in first option (if provided):
 
 ```json
 {

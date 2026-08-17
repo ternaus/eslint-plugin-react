@@ -15,11 +15,7 @@ describe('variable', () => {
 
     it('should return the latest definition', () => {
       const variable = {
-        defs: [
-          'one',
-          'two',
-          'latest',
-        ],
+        defs: ['one', 'two', 'latest'],
       };
       assert.equal(getLatestVariableDefinition(variable), 'latest');
     });

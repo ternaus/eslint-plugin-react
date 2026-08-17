@@ -8,7 +8,7 @@
 
 <!-- end auto-generated rule header -->
 
-Please use the `"beforeSelfClosing"` option of the [jsx-tag-spacing](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/docs/rules/jsx-tag-spacing.md) rule instead.
+Please use the `"beforeSelfClosing"` option of the [jsx-tag-spacing](https://github.com/ternaus/eslint-plugin-react/blob/main/docs/rules/jsx-tag-spacing.md) rule instead.
 
 Enforce or forbid spaces before the closing bracket of self-closing JSX elements.
 

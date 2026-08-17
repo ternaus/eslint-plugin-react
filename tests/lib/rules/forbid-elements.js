@@ -21,8 +21,6 @@ const parserOptions = {
   },
 };
 
-require('babel-eslint');
-
 // -----------------------------------------------------------------------------
 // Tests
 // -----------------------------------------------------------------------------
@@ -126,15 +124,13 @@ ruleTester.run('forbid-elements', rule, {
       code: '<dotted.Component />',
       options: [
         {
-          forbid: [
-            { element: 'dotted.Component', message: 'that ain\'t cool' },
-          ],
+          forbid: [{ element: 'dotted.Component', message: "that ain't cool" }],
         },
       ],
       errors: [
         {
           messageId: 'forbiddenElement_message',
-          data: { element: 'dotted.Component', message: 'that ain\'t cool' },
+          data: { element: 'dotted.Component', message: "that ain't cool" },
         },
       ],
     },
@@ -142,9 +138,7 @@ ruleTester.run('forbid-elements', rule, {
       code: '<button />',
       options: [
         {
-          forbid: [
-            { element: 'button', message: 'use <Button> instead' },
-          ],
+          forbid: [{ element: 'button', message: 'use <Button> instead' }],
         },
       ],
       errors: [
@@ -158,10 +152,7 @@ ruleTester.run('forbid-elements', rule, {
       code: '<button><input /></button>',
       options: [
         {
-          forbid: [
-            { element: 'button' },
-            { element: 'input' },
-          ],
+          forbid: [{ element: 'button' }, { element: 'input' }],
         },
       ],
       errors: [
@@ -248,15 +239,13 @@ ruleTester.run('forbid-elements', rule, {
       code: 'React.createElement(dotted.Component)',
       options: [
         {
-          forbid: [
-            { element: 'dotted.Component', message: 'that ain\'t cool' },
-          ],
+          forbid: [{ element: 'dotted.Component', message: "that ain't cool" }],
         },
       ],
       errors: [
         {
           messageId: 'forbiddenElement_message',
-          data: { element: 'dotted.Component', message: 'that ain\'t cool' },
+          data: { element: 'dotted.Component', message: "that ain't cool" },
         },
       ],
     },
@@ -284,9 +273,7 @@ ruleTester.run('forbid-elements', rule, {
       code: 'React.createElement("button")',
       options: [
         {
-          forbid: [
-            { element: 'button', message: 'use <Button> instead' },
-          ],
+          forbid: [{ element: 'button', message: 'use <Button> instead' }],
         },
       ],
       errors: [
@@ -300,9 +287,7 @@ ruleTester.run('forbid-elements', rule, {
       code: 'React.createElement("button", {}, React.createElement("input"))',
       options: [
         {
-          forbid: [
-            { element: 'button' }, { element: 'input' },
-          ],
+          forbid: [{ element: 'button' }, { element: 'input' }],
         },
       ],
       errors: [

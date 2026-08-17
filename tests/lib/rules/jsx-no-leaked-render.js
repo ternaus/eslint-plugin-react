@@ -9,8 +9,6 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-const semver = require('semver');
-const eslintPkg = require('eslint/package.json');
 const RuleTester = require('../../helpers/ruleTester');
 const rule = require('../../../lib/rules/jsx-no-leaked-render');
 
@@ -30,109 +28,110 @@ const parserOptions = {
 
 const ruleTester = new RuleTester({ parserOptions });
 ruleTester.run('jsx-no-leaked-render', rule, {
-  valid: parsers.all([
-    {
-      code: `
+  valid:
+    parsers.all([
+      {
+        code: `
         const Component = () => {
           return <div>{customTitle || defaultTitle}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{elements}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>There are {elements.length} elements</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements, count }) => {
           return <div>{!count && 'No results found'}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{!!elements.length && <List elements={elements}/>}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{Boolean(elements.length) && <List elements={elements}/>}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{elements.length > 0 && <List elements={elements}/>}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{elements.length ? <List elements={elements}/> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements, count }) => {
           return <div>{count ? <List elements={elements}/> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements, count }) => {
           return <div>{count ? <List elements={elements}/> : null}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-    },
-    {
-      code: `
+        options: [{ validStrategies: ['ternary'] }],
+      },
+      {
+        code: `
         const Component = ({ elements, count }) => {
           return <div>{!!count && <List elements={elements}/>}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-    },
-    {
-      code: `
+        options: [{ validStrategies: ['coerce'] }],
+      },
+      {
+        code: `
         const Component = ({ elements, count }) => {
           return <div>{count ? <List elements={elements}/> : null}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce', 'ternary'] }],
-    },
-    {
-      code: `
+        options: [{ validStrategies: ['coerce', 'ternary'] }],
+      },
+      {
+        code: `
         const Component = ({ elements, count }) => {
           return <div>{!!count && <List elements={elements}/>}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce', 'ternary'] }],
-    },
+        options: [{ validStrategies: ['coerce', 'ternary'] }],
+      },
 
-    // Fixes for:
-    // - https://github.com/jsx-eslint/eslint-plugin-react/issues/3292
-    // - https://github.com/jsx-eslint/eslint-plugin-react/issues/3297
-    {
-      // It shouldn't delete valid alternate from ternary expressions when "coerce" is the only valid strategy
-      code: `
+      // Fixes for:
+      // - https://github.com/jsx-eslint/eslint-plugin-react/issues/3292
+      // - https://github.com/jsx-eslint/eslint-plugin-react/issues/3297
+      {
+        // It shouldn't delete valid alternate from ternary expressions when "coerce" is the only valid strategy
+        code: `
         const Component = ({ elements, count }) => {
           return (
             <div>
@@ -142,20 +141,20 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-    },
-    {
-      // It shouldn't delete valid branches from ternary expressions when ["coerce", "ternary"] are only valid strategies
-      code: `
+        options: [{ validStrategies: ['coerce'] }],
+      },
+      {
+        // It shouldn't delete valid branches from ternary expressions when ["coerce", "ternary"] are only valid strategies
+        code: `
         const Component = ({ elements, count }) => {
           return <div>{direction ? (direction === "down" ? "▼" : "▲") : ""}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce', 'ternary'] }],
-    },
-    {
-      // It shouldn't report nested logical expressions when "coerce" is the only valid strategy
-      code: `
+        options: [{ validStrategies: ['coerce', 'ternary'] }],
+      },
+      {
+        // It shouldn't report nested logical expressions when "coerce" is the only valid strategy
+        code: `
         const Component = ({ direction }) => {
           return (
             <div>
@@ -167,60 +166,61 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-    },
-    // Fixes for:
-    // - https://github.com/jsx-eslint/eslint-plugin-react/issues/3354
-    {
-      code: `
+        options: [{ validStrategies: ['coerce'] }],
+      },
+      // Fixes for:
+      // - https://github.com/jsx-eslint/eslint-plugin-react/issues/3354
+      {
+        code: `
         const Component = ({ elements, count }) => {
           return <div>{count ? <List elements={elements}/> : <EmptyList />}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce', 'ternary'] }],
-    },
-    {
-      code: `
+        options: [{ validStrategies: ['coerce', 'ternary'] }],
+      },
+      {
+        code: `
         const Component = ({ elements, count }) => {
           return <div>{count ? <List elements={elements}/> : <EmptyList />}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-    },
-    {
-      code: `
+        options: [{ validStrategies: ['coerce'] }],
+      },
+      {
+        code: `
         const isOpen = true;
         const Component = () => {
           return <Popover open={isOpen && items.length > 0} />
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-    },
-    {
-      code: `
+        options: [{ validStrategies: ['coerce'] }],
+      },
+      {
+        code: `
         const isOpen = false;
         const Component = () => {
           return <Popover open={isOpen && items.length > 0} />
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-    },
+        options: [{ validStrategies: ['coerce'] }],
+      },
 
-    // See #3292
-    {
-      code: `
+      // See #3292
+      {
+        code: `
         const Component = ({ enabled, checked }) => {
           return <CheckBox checked={enabled && checked} />
         }
       `,
-      options: [{ ignoreAttributes: true }],
-    },
-  ]) || [],
+        options: [{ ignoreAttributes: true }],
+      },
+    ]) || [],
 
-  invalid: parsers.all([].concat(
-    // Common invalid cases with default options
-    {
-      code: `
+  invalid: parsers.all(
+    [].concat(
+      // Common invalid cases with default options
+      {
+        code: `
         const Example = () => {
           return (
             <>
@@ -231,25 +231,25 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      features: ['fragment'],
-      errors: [
-        {
-          message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-          line: 5,
-          column: 16,
-        },
-        {
-          message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-          line: 6,
-          column: 16,
-        },
-        {
-          message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-          line: 7,
-          column: 16,
-        },
-      ],
-      output: `
+        features: ['fragment'],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 5,
+            column: 16,
+          },
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 6,
+            column: 16,
+          },
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 7,
+            column: 16,
+          },
+        ],
+        output: `
         const Example = () => {
           return (
             <>
@@ -260,11 +260,11 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      settings: { react: { version: '17.999.999' } },
-    },
+        settings: { react: { version: '17.999.999' } },
+      },
 
-    {
-      code: `
+      {
+        code: `
         const Example = () => {
           return (
             <>
@@ -275,20 +275,20 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      features: ['fragment'],
-      errors: [
-        {
-          message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-          line: 5,
-          column: 16,
-        },
-        {
-          message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-          line: 7,
-          column: 16,
-        },
-      ],
-      output: `
+        features: ['fragment'],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 5,
+            column: 16,
+          },
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 7,
+            column: 16,
+          },
+        ],
+        output: `
         const Example = () => {
           return (
             <>
@@ -299,554 +299,614 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      settings: { react: { version: '18.0.0' } },
-    },
+        settings: { react: { version: '18.0.0' } },
+      },
 
-    // Invalid tests with both strategies enabled (default)
-    {
-      code: `
+      // Invalid tests with both strategies enabled (default)
+      {
+        code: `
         const Component = ({ count, title }) => {
           return <div>{count && title}</div>
         }
       `,
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, title }) => {
           return <div>{count ? title : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count }) => {
           return <div>{count && <span>There are {count} results</span>}</div>
         }
       `,
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count }) => {
           return <div>{count ? <span>There are {count} results</span> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{elements.length && <List elements={elements}/>}</div>
         }
       `,
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ elements }) => {
           return <div>{elements.length ? <List elements={elements}/> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ nestedCollection }) => {
           return <div>{nestedCollection.elements.length && <List elements={nestedCollection.elements}/>}</div>
         }
       `,
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ nestedCollection }) => {
           return <div>{nestedCollection.elements.length ? <List elements={nestedCollection.elements}/> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{elements[0] && <List elements={elements}/>}</div>
         }
       `,
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ elements }) => {
           return <div>{elements[0] ? <List elements={elements}/> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ numberA, numberB }) => {
           return <div>{(numberA || numberB) && <Results>{numberA+numberB}</Results>}</div>
         }
       `,
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ numberA, numberB }) => {
           return <div>{(numberA || numberB) ? <Results>{numberA+numberB}</Results> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ numberA, numberB }) => {
           return <div>{(numberA || numberB) && <Results>{numberA+numberB}</Results>}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce', 'ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce', 'ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ numberA, numberB }) => {
           return <div>{!!(numberA || numberB) && <Results>{numberA+numberB}</Results>}</div>
         }
       `,
-    },
+      },
 
-    // Invalid tests only with "ternary" strategy enabled
-    {
-      code: `
+      // Invalid tests only with "ternary" strategy enabled
+      {
+        code: `
         const Component = ({ count, title }) => {
           return <div>{count && title}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, title }) => {
           return <div>{count ? title : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count }) => {
           return <div>{count && <span>There are {count} results</span>}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count }) => {
           return <div>{count ? <span>There are {count} results</span> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{elements.length && <List elements={elements}/>}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ elements }) => {
           return <div>{elements.length ? <List elements={elements}/> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ nestedCollection }) => {
           return <div>{nestedCollection.elements.length && <List elements={nestedCollection.elements}/>}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ nestedCollection }) => {
           return <div>{nestedCollection.elements.length ? <List elements={nestedCollection.elements}/> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{elements[0] && <List elements={elements}/>}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ elements }) => {
           return <div>{elements[0] ? <List elements={elements}/> : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ numberA, numberB }) => {
           return <div>{(numberA || numberB) && <Results>{numberA+numberB}</Results>}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ numberA, numberB }) => {
           return <div>{(numberA || numberB) ? <Results>{numberA+numberB}</Results> : null}</div>
         }
       `,
-    },
+      },
 
-    // cases: boolean coerce isn't valid if strategy is only "ternary"
-    {
-      code: `
+      // cases: boolean coerce isn't valid if strategy is only "ternary"
+      {
+        code: `
         const Component = ({ someCondition, title }) => {
           return <div>{!someCondition && title}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ someCondition, title }) => {
           return <div>{!someCondition ? title : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count, title }) => {
           return <div>{!!count && title}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, title }) => {
           return <div>{count ? title : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count, title }) => {
           return <div>{count > 0 && title}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, title }) => {
           return <div>{count > 0 ? title : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count, title }) => {
           return <div>{0 != count && title}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, title }) => {
           return <div>{0 != count ? title : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count, total, title }) => {
           return <div>{count < total && title}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, total, title }) => {
           return <div>{count < total ? title : null}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count, title, somethingElse }) => {
           return <div>{!!(count && somethingElse) && title}</div>
         }
       `,
-      options: [{ validStrategies: ['ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, title, somethingElse }) => {
           return <div>{count && somethingElse ? title : null}</div>
         }
       `,
-    },
+      },
 
-    // Invalid tests only with "coerce" strategy enabled
-    {
-      code: `
+      // Invalid tests only with "coerce" strategy enabled
+      {
+        code: `
         const Component = ({ count, title }) => {
           return <div>{count && title}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, title }) => {
           return <div>{!!count && title}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count }) => {
           return <div>{count && <span>There are {count} results</span>}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count }) => {
           return <div>{!!count && <span>There are {count} results</span>}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{elements.length && <List elements={elements}/>}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ elements }) => {
           return <div>{!!elements.length && <List elements={elements}/>}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ nestedCollection }) => {
           return <div>{nestedCollection.elements.length && <List elements={nestedCollection.elements}/>}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ nestedCollection }) => {
           return <div>{!!nestedCollection.elements.length && <List elements={nestedCollection.elements}/>}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ elements }) => {
           return <div>{elements[0] && <List elements={elements}/>}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ elements }) => {
           return <div>{!!elements[0] && <List elements={elements}/>}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ numberA, numberB }) => {
           return <div>{(numberA || numberB) && <Results>{numberA+numberB}</Results>}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ numberA, numberB }) => {
           return <div>{!!(numberA || numberB) && <Results>{numberA+numberB}</Results>}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ connection, hasError, hasErrorUpdate}) => {
           return <div>{connection && (hasError || hasErrorUpdate)}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ connection, hasError, hasErrorUpdate}) => {
           return <div>{!!connection && (hasError || hasErrorUpdate)}</div>
         }
       `,
-    },
+      },
 
-    // cases: ternary isn't valid if strategy is only "coerce"
-    {
-      code: `
+      // cases: ternary isn't valid if strategy is only "coerce"
+      {
+        code: `
         const Component = ({ count, title }) => {
           return <div>{count ? title : null}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, title }) => {
           return <div>{!!count && title}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count, title }) => {
           return <div>{!count ? title : null}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, title }) => {
           return <div>{!count && title}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ count, somethingElse, title }) => {
           return <div>{count && somethingElse ? title : null}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ count, somethingElse, title }) => {
           return <div>{!!count && !!somethingElse && title}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const Component = ({ items, somethingElse, title }) => {
           return <div>{items.length > 0 && somethingElse && title}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-      output: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+        output: `
         const Component = ({ items, somethingElse, title }) => {
           return <div>{items.length > 0 && !!somethingElse && title}</div>
         }
       `,
-    },
-    {
-      code: `
+      },
+      {
+        code: `
         const MyComponent = () => {
           const items = []
           const breakpoint = { phones: true }
@@ -854,8 +914,8 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           return <div>{items.length > 0 && breakpoint.phones && <span />}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce', 'ternary'] }],
-      output: `
+        options: [{ validStrategies: ['coerce', 'ternary'] }],
+        output: `
         const MyComponent = () => {
           const items = []
           const breakpoint = { phones: true }
@@ -863,87 +923,97 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           return <div>{items.length > 0 && !!breakpoint.phones && <span />}</div>
         }
       `,
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 6,
-        column: 24,
-      }],
-    },
-    {
-      code: `
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 6,
+            column: 24,
+          },
+        ],
+      },
+      {
+        code: `
         const MyComponent = () => {
           return <div>{maybeObject && (isFoo ? <Aaa /> : <Bbb />)}</div>
         }
       `,
-      output: `
+        output: `
         const MyComponent = () => {
           return <div>{!!maybeObject && (isFoo ? <Aaa /> : <Bbb />)}</div>
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 24,
-      }],
-    },
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 24,
+          },
+        ],
+      },
 
-    // See #3292
-    {
-      code: `
+      // See #3292
+      {
+        code: `
         const Component = ({ enabled, checked }) => {
           return <CheckBox checked={enabled && checked} />
         }
       `,
-      output: `
+        output: `
         const Component = ({ enabled, checked }) => {
           return <CheckBox checked={enabled ? checked : null} />
         }
       `,
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 37,
-      }],
-    },
-    {
-      code: `
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 37,
+          },
+        ],
+      },
+      {
+        code: `
         const MyComponent = () => {
           return <Something checked={isIndeterminate ? false : isChecked} />
         }
       `,
-      output: semver.satisfies(eslintPkg.version, '> 4') ? `
+        output: `
         const MyComponent = () => {
           return <Something checked={!isIndeterminate && isChecked} />
         }
-      ` : null,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 38,
-      }],
-    },
-    {
-      code: `
+      `,
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 38,
+          },
+        ],
+      },
+      {
+        code: `
         const MyComponent = () => {
           return <Something checked={cond && isIndeterminate ? false : isChecked} />
         }
       `,
-      output: semver.satisfies(eslintPkg.version, '> 4') ? `
+        output: `
         const MyComponent = () => {
           return <Something checked={!!cond && !!isIndeterminate ? false : isChecked} />
         }
-      ` : null,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 3,
-        column: 38,
-      }],
-    },
-    semver.satisfies(eslintPkg.version, '> 4') ? {
-      code: `
+      `,
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 3,
+            column: 38,
+          },
+        ],
+      },
+      {
+        code: `
         const MyComponent = () => {
           return (
             <>
@@ -956,7 +1026,7 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      output: `
+        output: `
         const MyComponent = () => {
           return (
             <>
@@ -969,15 +1039,17 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      options: [{ validStrategies: ['coerce', 'ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 5,
-        column: 16,
-      }],
-    } : [],
-    semver.satisfies(eslintPkg.version, '> 4') ? {
-      code: `
+        options: [{ validStrategies: ['coerce', 'ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 5,
+            column: 16,
+          },
+        ],
+      },
+      {
+        code: `
         const MyComponent = () => {
           return (
             <>
@@ -991,7 +1063,7 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      output: `
+        output: `
         const MyComponent = () => {
           return (
             <>
@@ -1005,35 +1077,39 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      options: [{ validStrategies: ['coerce', 'ternary'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 5,
-        column: 16,
-      }],
-    } : [],
-    {
-      code: `
+        options: [{ validStrategies: ['coerce', 'ternary'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 5,
+            column: 16,
+          },
+        ],
+      },
+      {
+        code: `
         const isOpen = 0;
         const Component = () => {
           return <Popover open={isOpen && items.length > 0} />
         }
       `,
-      output: `
+        output: `
         const isOpen = 0;
         const Component = () => {
           return <Popover open={!!isOpen && items.length > 0} />
         }
       `,
-      options: [{ validStrategies: ['coerce'] }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 4,
-        column: 33,
-      }],
-    },
-    {
-      code: `
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 4,
+            column: 33,
+          },
+        ],
+      },
+      {
+        code: `
         const Component = ({ enabled }) => {
           return (
             <Foo bar={
@@ -1042,7 +1118,7 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      output: `
+        output: `
         const Component = ({ enabled }) => {
           return (
             <Foo bar={
@@ -1051,12 +1127,15 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-      options: [{ ignoreAttributes: true }],
-      errors: [{
-        message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-        line: 5,
-        column: 27,
-      }],
-    }
-  )),
+        options: [{ ignoreAttributes: true }],
+        errors: [
+          {
+            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
+            line: 5,
+            column: 27,
+          },
+        ],
+      },
+    ),
+  ),
 });

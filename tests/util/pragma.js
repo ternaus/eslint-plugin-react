@@ -23,7 +23,7 @@ const DEFAULT_SETTINGS = {
 const fakeContext = (code) => {
   const ast = espree.parse(code, DEFAULT_CONFIG);
   return {
-    getSourceCode: () => new SourceCode(code, ast),
+    sourceCode: new SourceCode(code, ast),
     settings: DEFAULT_SETTINGS,
   };
 };
@@ -42,18 +42,12 @@ describe('pragma', () => {
 
     it('finds the pragma in a line comment', () => {
       const code = '// @jsx jsx';
-      assert.strictEqual(
-        getFromContext(fakeContext(code)),
-        'jsx'
-      );
+      assert.strictEqual(getFromContext(fakeContext(code)), 'jsx');
     });
 
     it('defaults to the value of settings.react.pragma', () => {
       const code = '';
-      assert.strictEqual(
-        getFromContext(fakeContext(code)),
-        DEFAULT_SETTINGS.react.pragma
-      );
+      assert.strictEqual(getFromContext(fakeContext(code)), DEFAULT_SETTINGS.react.pragma);
     });
 
     it('returns React if the pragma is invalid', () => {

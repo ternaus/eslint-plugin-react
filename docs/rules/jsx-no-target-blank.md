@@ -2,7 +2,7 @@
 
 📝 Disallow `target="_blank"` attribute without `rel="noreferrer"`.
 
-💼 This rule is enabled in the ☑️ `recommended` [config](https://github.com/jsx-eslint/eslint-plugin-react/#shareable-configs).
+💼 This rule is enabled in the ☑️ `recommended` [config](https://github.com/ternaus/eslint-plugin-react#configs).
 
 🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 
@@ -107,7 +107,7 @@ var Hello = <a target='_blank' href="https://example.com/"></form>
 
 ### Custom link components
 
-This rule supports the ability to use custom components for links, such as `<Link />` which is popular in libraries like `react-router`, `next.js` and `gatsby`. To enable this, define your custom link components in the global [shared settings](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/README.md#configuration) under the `linkComponents` configuration area. Once configured, this rule will check those components as if they were `<a />` elements.
+This rule supports the ability to use custom components for links, such as `<Link />` which is popular in libraries like `react-router`, `next.js` and `gatsby`. To enable this, define your custom link components in the global [shared settings](https://github.com/ternaus/eslint-plugin-react#settings) under the `linkComponents` configuration area. Once configured, this rule will check those components as if they were `<a />` elements.
 
 Examples of **incorrect** code for this rule:
 
@@ -127,7 +127,7 @@ var Hello = <Link />
 
 ### Custom form components
 
-This rule supports the ability to use custom components for forms. To enable this, define your custom form components in the global [shared settings](https://github.com/jsx-eslint/eslint-plugin-react/blob/master/README.md#configuration) under the `formComponents` configuration area. Once configured, this rule will check those components as if they were `<form />` elements.
+This rule supports the ability to use custom components for forms. To enable this, define your custom form components in the global [shared settings](https://github.com/ternaus/eslint-plugin-react#settings) under the `formComponents` configuration area. Once configured, this rule will check those components as if they were `<form />` elements.
 
 ## When To Override It
 

@@ -9,12 +9,7 @@
 // Requirements
 // ------------------------------------------------------------------------------
 
-const semver = require('semver');
-const eslintPkg = require('eslint/package.json');
-const babelEslintVersion = require('babel-eslint/package.json').version;
 const RuleTester = require('../../helpers/ruleTester');
-
-require('object.entries/auto'); // for node 6, eslint 5, new TS parser, `function Hello({firstname}: Props): React$Element {` cases
 
 const rule = require('../../../lib/rules/no-unused-prop-types');
 
@@ -1448,14 +1443,13 @@ ruleTester.run('no-unused-prop-types', rule, {
       features: ['class fields'],
     },
     {
-      // Should stop at the decorator when searching for a parent component
       code: `
         @asyncConnect([{
           promise: ({dispatch}) => {}
         }])
         class Something extends Component {}
       `,
-      features: ['no-default'],
+      features: ['decorators'],
     },
     {
       // Destructured shape props are skipped by default
@@ -2196,7 +2190,7 @@ ruleTester.run('no-unused-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['class fields'],
     },
     {
       // Multiple props used inside of an async class property
@@ -2214,7 +2208,7 @@ ruleTester.run('no-unused-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['class fields'],
     },
     {
       code: `
@@ -2269,7 +2263,7 @@ ruleTester.run('no-unused-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['class fields'],
     },
     {
       // Multiple destructured props inside of async class property
@@ -2288,7 +2282,7 @@ ruleTester.run('no-unused-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['class fields'],
     },
     {
       code: `
@@ -3025,7 +3019,7 @@ ruleTester.run('no-unused-prop-types', rule, {
         }
       }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['class fields'],
     },
     {
       // Issue #1068
@@ -3050,7 +3044,7 @@ ruleTester.run('no-unused-prop-types', rule, {
         }
       }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['class fields'],
     },
     {
       // Issue #1068
@@ -3075,7 +3069,7 @@ ruleTester.run('no-unused-prop-types', rule, {
         }
       }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
+      features: ['class fields'],
     },
     {
       code: `
@@ -3366,7 +3360,7 @@ ruleTester.run('no-unused-prop-types', rule, {
           bar,
         };
       `,
-      features: ['ts', 'fragment', 'no-babel'],
+      features: ['ts', 'fragment'],
     },
     {
       code: `
@@ -3419,7 +3413,7 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['ts', 'class fields', 'no-babel'],
+      features: ['ts', 'class fields'],
     },
     {
       code: `
@@ -3428,7 +3422,7 @@ ruleTester.run('no-unused-prop-types', rule, {
         }
         export default Thing;
       `,
-      features: ['ts', 'no-babel'],
+      features: ['ts'],
     },
     // this test checks that there is no crash if no declaration is found (TSTypeLiteral).
     {
@@ -3613,7 +3607,7 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div><span>{firstname}</span></div>;
         };
       `,
-      features: ['ts', 'no-babel'],
+      features: ['ts'],
     },
     {
       code: `
@@ -3738,7 +3732,7 @@ ruleTester.run('no-unused-prop-types', rule, {
         type StateProps = ReturnType<typeof mapStateToProps>
         type DispatchProps = ReturnType<typeof mapDispatchToProps>
       `,
-      features: semver.satisfies(babelEslintVersion, '> 8') ? ['types'] : ['ts', 'no-babel'],
+      features: ['types'],
     },
     // Issue: #2795
     {
@@ -3767,7 +3761,7 @@ ruleTester.run('no-unused-prop-types', rule, {
         type StateProps = ReturnType<typeof mapStateToProps>
         type DispatchProps = ReturnType<typeof mapDispatchToProps>
       `,
-      features: [semver.satisfies(babelEslintVersion, '> 8') ? 'types' : 'flow'],
+      features: ['types'],
     },
     // Issue: #2795
     {
@@ -3795,7 +3789,7 @@ ruleTester.run('no-unused-prop-types', rule, {
         type StateProps = ReturnType<typeof mapStateToProps>
         type DispatchProps = ReturnType<typeof mapDispatchToProps>
       `,
-      features: [semver.satisfies(babelEslintVersion, '> 8') ? 'types' : 'flow'],
+      features: ['types'],
     },
     {
       code: `
@@ -3978,9 +3972,10 @@ ruleTester.run('no-unused-prop-types', rule, {
     },
   ]),
 
-  invalid: parsers.all([].concat(
-    {
-      code: `
+  invalid: parsers.all(
+    [].concat(
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             unused: PropTypes.string
@@ -3990,17 +3985,17 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         });
       `,
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             name: PropTypes.string
@@ -4010,17 +4005,17 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         });
       `,
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'name' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'name' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static propTypes = {
             name: PropTypes.string
@@ -4030,18 +4025,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'name' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'name' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello {this.props.firstname} {this.props.lastname}</div>;
@@ -4051,10 +4046,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           unused: PropTypes.string
         };
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello {this.props.name}</div>;
@@ -4069,10 +4064,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             unused: PropTypes.string.isRequired,
@@ -4088,13 +4083,13 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         });
       `,
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-        { message: '\'anotherunused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          { message: "'unused' PropType is defined but prop is never used" },
+          { message: "'anotherunused' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var { firstname, lastname } = this.props;
@@ -4105,10 +4100,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           unused: PropTypes.string
         };
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.z
@@ -4121,11 +4116,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           })
         };
       `,
-      options: [{ skipShapeProps: false }],
-      errors: [{ message: '\'a.b\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'a.b' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.b.z;
@@ -4140,11 +4135,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           })
         };
       `,
-      options: [{ skipShapeProps: false }],
-      errors: [{ message: '\'a.b.c\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'a.b.c' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.b.c;
@@ -4161,13 +4156,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           )
         };
       `,
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'a.*.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'a.*.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             var i = 3;
@@ -4186,13 +4179,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           )
         };
       `,
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'a.*.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'a.*.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props.a.length;
@@ -4213,14 +4204,14 @@ ruleTester.run('no-unused-prop-types', rule, {
           ])
         };
       `,
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'a.unused\' PropType is defined but prop is never used' },
-        { message: '\'a.anotherunused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipShapeProps: false }],
+        errors: [
+          { message: "'a.unused' PropType is defined but prop is never used" },
+          { message: "'a.anotherunused' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props["some.value"];
@@ -4231,12 +4222,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           "some.unused": PropTypes.string
         };
       `,
-      errors: [
-        { message: '\'some.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'some.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             this.props["arr"][1]["some.value"];
@@ -4251,13 +4240,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           )
         };
       `,
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'arr.*.some.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'arr.*.some.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static propTypes = {
             unused: PropTypes.string
@@ -4270,13 +4257,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             if (true) {
@@ -4290,76 +4275,74 @@ ruleTester.run('no-unused-prop-types', rule, {
           unused: PropTypes.string
         }
       `,
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         var Hello = function(props) {
           return <div>Hello {props.name}</div>;
         }
         Hello.prototype.propTypes = {unused: PropTypes.string};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         function Hello(props) {
           return <div>Hello {props.name}</div>;
         }
         Hello.prototype.propTypes = {unused: PropTypes.string};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         var Hello = (props) => {
           return <div>Hello {props.name}</div>;
         }
         Hello.prototype.propTypes = {unused: PropTypes.string};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         var Hello = (props) => {
           const {name} = props;
           return <div>Hello {name}</div>;
         }
         Hello.prototype.propTypes = {unused: PropTypes.string};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         function Hello({ name }) {
           return <div>Hello {name}</div>;
         }
         Hello.prototype.propTypes = {unused: PropTypes.string};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const Hello = function({ name }) {
           return <div>Hello {name}</div>;
         }
         Hello.prototype.propTypes = {unused: PropTypes.string};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const Hello = ({ name }) => {
           return <div>Hello {name}</div>;
         }
         Hello.prototype.propTypes = {unused: PropTypes.string};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static propTypes = {unused: PropTypes.string}
           render() {
@@ -4368,11 +4351,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static propTypes = {unused: PropTypes.string}
           constructor(props, context) {
@@ -4381,11 +4364,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           static propTypes = {unused: PropTypes.string}
           constructor(props, context) {
@@ -4394,11 +4377,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         function HelloComponent() {
           var Hello = createReactClass({
             propTypes: {unused: PropTypes.string},
@@ -4410,10 +4393,10 @@ ruleTester.run('no-unused-prop-types', rule, {
         }
         module.exports = HelloComponent();
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const Hello = (props) => {
           let team = props.names.map((name) => {
               return <li>{name}, {props.company}</li>;
@@ -4422,10 +4405,10 @@ ruleTester.run('no-unused-prop-types', rule, {
         };
         Hello.prototype.propTypes = {unused: PropTypes.string};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const Annotation = props => (
           <div>
             {props.text}
@@ -4433,12 +4416,10 @@ ruleTester.run('no-unused-prop-types', rule, {
         )
         Annotation.prototype.propTypes = {unused: PropTypes.string};
       `,
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         for (var key in foo) {
           var Hello = createReactClass({
             propTypes: {unused: PropTypes.string},
@@ -4448,12 +4429,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           });
         }
       `,
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         var propTypes = {
           unused: PropTypes.string
         };
@@ -4466,12 +4445,10 @@ ruleTester.run('no-unused-prop-types', rule, {
         }
         Test.propTypes = propTypes;
       `,
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Test extends Foo.Component {
           render() {
             return (
@@ -4483,11 +4460,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           unused: PropTypes.string
         };
       `,
-      settings,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        settings,
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         /** @jsx Foo */
         class Test extends Foo.Component {
           render() {
@@ -4500,10 +4477,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           unused: PropTypes.string
         };
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         /** @jsx Foo */
         /** @jsx React */
         class Test extends Foo.Component {
@@ -4517,10 +4494,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           unused: PropTypes.string
         };
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         /**
          * Copyright ....
          * @jsx Foo
@@ -4537,10 +4514,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           unused: PropTypes.string
         };
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: {
             unused: string
@@ -4550,29 +4527,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    semver.satisfies(babelEslintVersion, '< 9') ? [
+        features: ['types'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      [],
       {
         code: `
-          class Hello extends React.Component {
-            props: {
-              unused: Object;
-            };
-            render () {
-              return <div>Hello {this.props.firstname}</div>;
-            }
-          }
-        `,
-        features: ['flow'],
-        errors: [
-          { message: '\'unused\' PropType is defined but prop is never used' },
-        ],
-      },
-    ] : [],
-    {
-      code: `
         type Props = {unused: Object;};
         class Hello extends React.Component {
           props: Props;
@@ -4581,13 +4541,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = $ReadOnly<{unused: Object;}>;
         class Hello extends React.Component {
           props: Props;
@@ -4596,13 +4554,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type PropsA = { a: string }
         type PropsB = { b: string }
         type Props = PropsA & PropsB;
@@ -4615,13 +4571,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-      errors: [
-        { message: '\'b\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [{ message: "'b' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type PropsA = { foo: string };
         type PropsB = { bar: string };
         type PropsC = { zap: string };
@@ -4635,13 +4589,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-      errors: [
-        { message: '\'zap\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [{ message: "'zap' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type PropsB = { foo: string };
         type PropsC = { bar: string };
         type Props = PropsB & {
@@ -4656,13 +4608,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      errors: [
-        { message: '\'zap\' PropType is defined but prop is never used' },
-      ],
-      features: ['types'],
-    },
-    {
-      code: `
+        errors: [{ message: "'zap' PropType is defined but prop is never used" }],
+        features: ['types'],
+      },
+      {
+        code: `
         type PropsB = { foo: string };
         type PropsC = { bar: string };
         type Props = {
@@ -4677,13 +4627,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      errors: [
-        { message: '\'zap\' PropType is defined but prop is never used' },
-      ],
-      features: ['types'],
-    },
-    {
-      code: `
+        errors: [{ message: "'zap' PropType is defined but prop is never used" }],
+        features: ['types'],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: {
             name: {
@@ -4695,14 +4643,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'name.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'name.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {name: {unused: string;};};
         class Hello extends React.Component {
           props: Props;
@@ -4711,14 +4657,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'name.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'name.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           props: {person: {name: {unused: string;};};};
           render () {
@@ -4726,14 +4670,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'person.name.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'person.name.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {person: {name: {unused: string;};};};
         class Hello extends React.Component {
           props: Props;
@@ -4742,14 +4684,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'person.name.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'person.name.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {name: {unused: string;}};
         class Hello extends React.Component {
           props: {people: Person[];};
@@ -4762,14 +4702,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'people.*.name.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'people.*.name.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {name: {unused: string;}};
         type Props = {people: Person[];};
         class Hello extends React.Component {
@@ -4783,14 +4721,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'people.*.name.unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'people.*.name.unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {result?: {ok: string | boolean;}|{ok: number | Array}};
         class Hello extends React.Component {
           props: Props;
@@ -4799,41 +4735,41 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'result.ok\' PropType is defined but prop is never used' },
-        { message: '\'result.ok\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        options: [{ skipShapeProps: false }],
+        errors: [
+          { message: "'result.ok' PropType is defined but prop is never used" },
+          { message: "'result.ok' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         function Greetings({names}) {
           names = names.map(({firstname, lastname}) => <div>{firstname} {lastname}</div>);
           return <Hello>{names}</Hello>;
         }
         Greetings.propTypes = {unused: Object};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const MyComponent = props => (
           <div onClick={() => props.toggle()}></div>
         )
         MyComponent.propTypes = {unused: Object};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const MyComponent = props => props.test ? <div /> : <span />
         MyComponent.propTypes = {unused: Object};
       `,
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {
           unused: ?string,
         };
@@ -4841,11 +4777,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div>Hello {firstname} {lastname}</div>;
         }
       `,
-      features: ['types'],
-      errors: [{ message: '\'unused\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -4857,18 +4793,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -4879,18 +4815,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -4901,18 +4837,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -4922,18 +4858,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -4944,18 +4880,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -4965,18 +4901,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -4987,18 +4923,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -5008,18 +4944,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -5030,18 +4966,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             unused: PropTypes.bool
@@ -5051,18 +4987,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'unused' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'unused' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             something: PropTypes.bool
@@ -5072,18 +5008,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'something' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'something' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             something: PropTypes.bool
@@ -5093,17 +5029,17 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         })
       `,
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'something' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'something' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             foo: PropTypes.string,
@@ -5117,19 +5053,19 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'bar' },
-          line: 5,
-          column: 13,
-        },
-      ],
-    },
-    {
-      // Multiple props used inside of an async class property
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'bar' },
+            line: 5,
+            column: 13,
+          },
+        ],
+      },
+      {
+        // Multiple props used inside of an async class property
+        code: `
         export class Example extends Component {
           static propTypes = {
             foo: PropTypes.func,
@@ -5142,18 +5078,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'baz' },
-          line: 6,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'baz' },
+            line: 6,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           componentWillUpdate (nextProps) {
             if (nextProps.foo) {
@@ -5166,17 +5102,17 @@ ruleTester.run('no-unused-prop-types', rule, {
           bar: PropTypes.string,
         };
       `,
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'bar' },
-          line: 11,
-          column: 11,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'bar' },
+            line: 11,
+            column: 11,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             foo: PropTypes.string,
@@ -5190,19 +5126,19 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'bar' },
-          line: 5,
-          column: 13,
-        },
-      ],
-    },
-    {
-      // Multiple destructured props inside of async class property
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'bar' },
+            line: 5,
+            column: 13,
+          },
+        ],
+      },
+      {
+        // Multiple destructured props inside of async class property
+        code: `
         export class Example extends Component {
           static propTypes = {
             foo: PropTypes.func,
@@ -5216,12 +5152,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields', 'no-ts-old'], // TODO: FIXME: remove no-ts-old and fix
-      errors: [{ message: '\'foo\' PropType is defined but prop is never used' }],
-    },
-    {
-      // Multiple props used inside of an async class method
-      code: `
+        features: ['class fields'],
+        errors: [{ message: "'foo' PropType is defined but prop is never used" }],
+      },
+      {
+        // Multiple props used inside of an async class method
+        code: `
         export class Example extends Component {
           static propTypes = {
             foo: PropTypes.func,
@@ -5234,18 +5170,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'bar' },
-          line: 5,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'bar' },
+            line: 5,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           shouldComponentUpdate (nextProps) {
             if (nextProps.foo) {
@@ -5258,17 +5194,17 @@ ruleTester.run('no-unused-prop-types', rule, {
           bar: PropTypes.string,
         };
       `,
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'bar' },
-          line: 11,
-          column: 11,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'bar' },
+            line: 11,
+            column: 11,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             foo: PropTypes.string,
@@ -5282,19 +5218,19 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'bar' },
-          line: 5,
-          column: 13,
-        },
-      ],
-    },
-    {
-      // Multiple destructured props inside of async class method
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'bar' },
+            line: 5,
+            column: 13,
+          },
+        ],
+      },
+      {
+        // Multiple destructured props inside of async class method
+        code: `
         export class Example extends Component {
           static propTypes = {
             foo: PropTypes.func,
@@ -5308,19 +5244,19 @@ ruleTester.run('no-unused-prop-types', rule, {
           };
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'baz' },
-          line: 6,
-          column: 13,
-        },
-      ],
-    },
-    {
-      // factory functions that return async functions
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'baz' },
+            line: 6,
+            column: 13,
+          },
+        ],
+      },
+      {
+        // factory functions that return async functions
+        code: `
         export class Example extends Component {
           static propTypes = {
             foo: PropTypes.func,
@@ -5335,18 +5271,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'baz' },
-          line: 6,
-          column: 13,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'baz' },
+            line: 6,
+            column: 13,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           componentDidUpdate (nextProps) {
             if (nextProps.foo) {
@@ -5359,17 +5295,17 @@ ruleTester.run('no-unused-prop-types', rule, {
           bar: PropTypes.string,
         };
       `,
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'bar' },
-          line: 11,
-          column: 11,
-        },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'bar' },
+            line: 11,
+            column: 11,
+          },
+        ],
+      },
+      {
+        code: `
         class Hello extends Component {
           componentDidUpdate (nextProps) {
             if (nextProps.foo) {
@@ -5382,20 +5318,20 @@ ruleTester.run('no-unused-prop-types', rule, {
           bar: PropTypes.string,
         });
       `,
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'bar' },
-          line: 11,
-          column: 11,
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'bar' },
+            line: 11,
+            column: 11,
+          },
+        ],
+        settings: {
+          propWrapperFunctions: ['forbidExtraProps'],
         },
-      ],
-      settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
       },
-    },
-    {
-      code: `
+      {
+        code: `
         class Hello extends Component {
           propTypes = forbidExtraProps({
             foo: PropTypes.string,
@@ -5408,22 +5344,22 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         };
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'bar' },
-          line: 5,
-          column: 13,
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'bar' },
+            line: 5,
+            column: 13,
+          },
+        ],
+        settings: {
+          propWrapperFunctions: ['forbidExtraProps'],
         },
-      ],
-      settings: {
-        propWrapperFunctions: ['forbidExtraProps'],
       },
-    },
-    {
-      // factory functions that return async functions
-      code: `
+      {
+        // factory functions that return async functions
+        code: `
         export class Example extends Component {
           static propTypes = {
             foo: PropTypes.func,
@@ -5438,19 +5374,19 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'foo' },
-          line: 4,
-          column: 13,
-        },
-      ],
-    },
-    {
-      // Multiple props used inside of an async function
-      code: `
+        features: ['class fields'],
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'foo' },
+            line: 4,
+            column: 13,
+          },
+        ],
+      },
+      {
+        // Multiple props used inside of an async function
+        code: `
         class Example extends Component {
           render() {
             async function onSubmit() {
@@ -5466,19 +5402,19 @@ ruleTester.run('no-unused-prop-types', rule, {
           baz: PropTypes.func,
         }
       `,
-      parserOptions: Object.assign({}, parserOptions, { ecmaVersion: 2017 }),
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'baz' },
-          line: 14,
-          column: 11,
-        },
-      ],
-    },
-    {
-      // Multiple props used inside of an async arrow function
-      code: `
+        parserOptions: Object.assign({}, parserOptions, { ecmaVersion: 2017 }),
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'baz' },
+            line: 14,
+            column: 11,
+          },
+        ],
+      },
+      {
+        // Multiple props used inside of an async arrow function
+        code: `
         class Example extends Component {
           render() {
             const onSubmit = async () => {
@@ -5494,19 +5430,19 @@ ruleTester.run('no-unused-prop-types', rule, {
           baz: PropTypes.func,
         }
       `,
-      parserOptions: Object.assign({}, parserOptions, { ecmaVersion: 2017 }),
-      errors: [
-        {
-          messageId: 'unusedPropType',
-          data: { name: 'foo' },
-          line: 12,
-          column: 11,
-        },
-      ],
-    },
-    {
-      // None of the props are used issue #1162
-      code: `
+        parserOptions: Object.assign({}, parserOptions, { ecmaVersion: 2017 }),
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'foo' },
+            line: 12,
+            column: 11,
+          },
+        ],
+      },
+      {
+        // None of the props are used issue #1162
+        code: `
         import React from "react";
         var Hello = React.createReactClass({
          propTypes: {
@@ -5517,10 +5453,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         });
       `,
-      errors: [{ message: '\'name\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'name' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Comp1 extends Component {
           render() {
             return <span />;
@@ -5538,14 +5474,14 @@ ruleTester.run('no-unused-prop-types', rule, {
           prop2: PropTypes.arrayOf(Comp1.propTypes.prop1)
         };
       `,
-      errors: [
-        { message: '\'prop1\' PropType is defined but prop is never used' },
-        { message: '\'prop2\' PropType is defined but prop is never used' },
-        { message: '\'prop2.*\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        errors: [
+          { message: "'prop1' PropType is defined but prop is never used" },
+          { message: "'prop2' PropType is defined but prop is never used" },
+          { message: "'prop2.*' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         class Comp1 extends Component {
           render() {
             return <span />;
@@ -5563,15 +5499,15 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['class fields'],
-      errors: [
-        { message: '\'prop1\' PropType is defined but prop is never used' },
-        { message: '\'prop2\' PropType is defined but prop is never used' },
-        { message: '\'prop2.*\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['class fields'],
+        errors: [
+          { message: "'prop1' PropType is defined but prop is never used" },
+          { message: "'prop2' PropType is defined but prop is never used" },
+          { message: "'prop2.*' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         class Comp1 extends Component {
           render() {
             return <span />;
@@ -5589,15 +5525,15 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         });
       `,
-      errors: [
-        { message: '\'prop1\' PropType is defined but prop is never used' },
-        { message: '\'prop2\' PropType is defined but prop is never used' },
-        { message: '\'prop2.*\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      // issue #1097
-      code: `
+        errors: [
+          { message: "'prop1' PropType is defined but prop is never used" },
+          { message: "'prop2' PropType is defined but prop is never used" },
+          { message: "'prop2.*' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        // issue #1097
+        code: `
         class HelloGraphQL extends Component {
           render() {
               return <div>Hello</div>;
@@ -5615,11 +5551,11 @@ ruleTester.run('no-unused-prop-types', rule, {
 
         export default connect(mapStateToProps, mapDispatchToProps)(HellowQueries)
       `,
-      errors: [{ message: '\'aProp\' PropType is defined but prop is never used' }],
-    },
-    {
-      // issue #2138
-      code: `
+        errors: [{ message: "'aProp' PropType is defined but prop is never used" }],
+      },
+      {
+        // issue #2138
+        code: `
         type UsedProps = {|
           usedProp: number,
         |};
@@ -5634,17 +5570,17 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div>{usedProp}</div>;
         }
       `,
-      features: ['flow'],
-      errors: [
-        {
-          message: "'unusedProp' PropType is defined but prop is never used",
-          line: 7,
-          column: 11,
-        },
-      ],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [
+          {
+            message: "'unusedProp' PropType is defined but prop is never used",
+            line: 7,
+            column: 11,
+          },
+        ],
+      },
+      {
+        code: `
         type Props = {
           firstname: string,
           lastname: string,
@@ -5655,11 +5591,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {
           firstname: string,
           lastname: string,
@@ -5670,12 +5606,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      features: ['flow'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.52' } },
+        features: ['flow'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {
           firstname: string,
           lastname: string,
@@ -5686,11 +5622,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class MyComponent extends React.Component {
           render() {
             return <div>Hello {this.props.firstname}</div>
@@ -5702,11 +5638,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           foo: PropTypes.string,
         };
       `,
-      options: [{ ignore: ['foo'] }],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        options: [{ ignore: ['foo'] }],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {
           firstname: string,
           lastname: string,
@@ -5718,12 +5654,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      options: [{ ignore: ['foo'] }],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        options: [{ ignore: ['foo'] }],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = string;
         class Hello extends React.Component<{ person: Person }> {
           render () {
@@ -5731,12 +5667,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      settings: { react: { flowVersion: '0.53' } },
-      errors: [{ message: '\'person\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        settings: { react: { flowVersion: '0.53' } },
+        errors: [{ message: "'person' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = string;
         class Hello extends React.Component<void, { person: Person }, void> {
           render () {
@@ -5744,13 +5680,13 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
-      errors: [{ message: '\'person\' PropType is defined but prop is never used' }],
-      features: ['flow'],
-    },
-    (semver.satisfies(eslintPkg.version, '> 3') ? [
-      {
-        code: `
+        settings: { react: { flowVersion: '0.52' } },
+        errors: [{ message: "'person' PropType is defined but prop is never used" }],
+        features: ['flow'],
+      },
+      [
+        {
+          code: `
           function higherOrderComponent<P: { foo: string }>() {
             return class extends React.Component<P> {
               render() {
@@ -5759,13 +5695,13 @@ ruleTester.run('no-unused-prop-types', rule, {
             }
           }
         `,
-        errors: [{ message: '\'foo\' PropType is defined but prop is never used' }],
-        features: ['flow'],
-      },
-    ] : []),
-    {
-      // issue #1506
-      code: `
+          errors: [{ message: "'foo' PropType is defined but prop is never used" }],
+          features: ['flow'],
+        },
+      ],
+      {
+        // issue #1506
+        code: `
         class MyComponent extends React.Component {
           onFoo() {
             this.setState(({ doSomething }, props) => {
@@ -5782,11 +5718,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           doSomething: PropTypes.func
         };
       `,
-      errors: [{ message: '\'doSomething\' PropType is defined but prop is never used' }],
-    },
-    {
-      // issue #1685
-      code: `
+        errors: [{ message: "'doSomething' PropType is defined but prop is never used" }],
+      },
+      {
+        // issue #1685
+        code: `
         class MyComponent extends React.Component {
           onFoo() {
             this.setState(prevState => ({
@@ -5803,10 +5739,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           doSomething: PropTypes.func
         };
       `,
-      errors: [{ message: '\'doSomething\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'doSomething' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {
           firstname: string,
           lastname: string,
@@ -5817,12 +5753,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.53' } },
-      features: ['flow'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        settings: { react: { flowVersion: '0.53' } },
+        features: ['flow'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             something: PropTypes.bool
@@ -5833,12 +5769,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { version: '16.2.0' } },
-      features: ['class fields'],
-      errors: [{ message: '\'something\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        settings: { react: { version: '16.2.0' } },
+        features: ['class fields'],
+        errors: [{ message: "'something' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends Component {
           static propTypes = {
             something: PropTypes.bool
@@ -5849,12 +5785,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { version: '16.2.0' } },
-      features: ['class fields'],
-      errors: [{ message: '\'something\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        settings: { react: { version: '16.2.0' } },
+        features: ['class fields'],
+        errors: [{ message: "'something' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class MyComponent extends React.Component {
           static propTypes = {
             defaultValue: 'bar'
@@ -5875,12 +5811,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { version: '16.2.0' } },
-      features: ['class fields'],
-      errors: [{ message: '\'defaultValue\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        settings: { react: { version: '16.2.0' } },
+        features: ['class fields'],
+        errors: [{ message: "'defaultValue' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class MyComponent extends React.Component {
           static propTypes = {
             defaultValue: PropTypes.string
@@ -5896,13 +5832,13 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { version: '16.2.0' } },
-      features: ['class fields'],
-      errors: [{ message: '\'defaultValue\' PropType is defined but prop is never used' }],
-    },
-    {
-      // Mixed union and intersection types
-      code: `
+        settings: { react: { version: '16.2.0' } },
+        features: ['class fields'],
+        errors: [{ message: "'defaultValue' PropType is defined but prop is never used" }],
+      },
+      {
+        // Mixed union and intersection types
+        code: `
         import React from 'react';
         type OtherProps = {
           firstname: string,
@@ -5919,11 +5855,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ message: '\'age\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'age' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render() {
             return <div>Hello</div>;
@@ -5937,15 +5873,15 @@ ruleTester.run('no-unused-prop-types', rule, {
         };
         Hello.propTypes.a.b.c = PropTypes.number;
       `,
-      options: [{ skipShapeProps: false }],
-      errors: [
-        { message: '\'a\' PropType is defined but prop is never used' },
-        { message: '\'a.b\' PropType is defined but prop is never used' },
-        { message: '\'a.b.c\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        options: [{ skipShapeProps: false }],
+        errors: [
+          { message: "'a' PropType is defined but prop is never used" },
+          { message: "'a.b' PropType is defined but prop is never used" },
+          { message: "'a.b.c' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         type Props = { foo: string }
         function higherOrderComponent<Props>() {
           return class extends React.Component<Props> {
@@ -5955,11 +5891,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ message: '\'foo\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'foo' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {
           ...data,
           lastname: string
@@ -5971,11 +5907,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {|
           ...data,
           lastname: string
@@ -5987,11 +5923,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {
           ...$Exact<data>,
           lastname: string
@@ -6003,11 +5939,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         import type {Data} from './Data'
         type Person = {
           ...Data,
@@ -6020,11 +5956,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         import type {Data} from 'some-libdef-like-flow-typed-provides'
         type Person = {
           ...Data,
@@ -6037,11 +5973,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         class Hello extends React.Component {
           render () {
             return <div>Hello {this.props.firstname}</div>;
@@ -6052,10 +5988,10 @@ ruleTester.run('no-unused-prop-types', rule, {
           lastname: PropTypes.string
         };
       `,
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         import type {BasePerson} from './types'
         type Props = {
           person: {
@@ -6070,12 +6006,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['flow'],
-      options: [{ skipShapeProps: false }],
-      errors: [{ message: '\'person.lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        features: ['flow'],
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'person.lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         import BasePerson from './types'
         class Hello extends React.Component {
           render () {
@@ -6089,11 +6025,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           })
         };
       `,
-      options: [{ skipShapeProps: false }],
-      errors: [{ message: '\'person.lastname\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        options: [{ skipShapeProps: false }],
+        errors: [{ message: "'person.lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {notTarget: string, unused: string};
         class Hello extends React.Component {
           props: Props;
@@ -6103,13 +6039,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['types'],
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         import PropTypes from 'prop-types';
         import React from 'react';
 
@@ -6129,10 +6063,10 @@ ruleTester.run('no-unused-prop-types', rule, {
 
         export default MyComponent;
       `,
-      errors: [{ message: '\'unUsedProp\' PropType is defined but prop is never used' }],
-    },
-    {
-      code: `
+        errors: [{ message: "'unUsedProp' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const Foo = (props) => {
           const { foo } = props as unknown;
           (props as unknown).bar as unknown;
@@ -6145,14 +6079,14 @@ ruleTester.run('no-unused-prop-types', rule, {
           barUnused,
         };
       `,
-      features: ['ts', 'fragment', 'no-babel'],
-      errors: [
-        { message: '\'fooUnused\' PropType is defined but prop is never used' },
-        { message: '\'barUnused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts', 'fragment'],
+        errors: [
+          { message: "'fooUnused' PropType is defined but prop is never used" },
+          { message: "'barUnused' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         class Foo extends React.Component {
           static propTypes = {
             prevPropUnused,
@@ -6202,22 +6136,22 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'prevPropUnused\' PropType is defined but prop is never used' },
-        { message: '\'nextPropUnused\' PropType is defined but prop is never used' },
-        { message: '\'setStatePropUnused\' PropType is defined but prop is never used' },
-        { message: '\'thisPropsAliasDestructPropUnused\' PropType is defined but prop is never used' },
-        { message: '\'thisPropsAliasPropUnused\' PropType is defined but prop is never used' },
-        { message: '\'thisDestructPropsAliasDestructPropUnused\' PropType is defined but prop is never used' },
-        { message: '\'thisDestructPropsAliasPropUnused\' PropType is defined but prop is never used' },
-        { message: '\'thisDestructPropsDestructPropUnused\' PropType is defined but prop is never used' },
-        { message: '\'thisPropsDestructPropUnused\' PropType is defined but prop is never used' },
-        { message: '\'thisPropsPropUnused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          { message: "'prevPropUnused' PropType is defined but prop is never used" },
+          { message: "'nextPropUnused' PropType is defined but prop is never used" },
+          { message: "'setStatePropUnused' PropType is defined but prop is never used" },
+          { message: "'thisPropsAliasDestructPropUnused' PropType is defined but prop is never used" },
+          { message: "'thisPropsAliasPropUnused' PropType is defined but prop is never used" },
+          { message: "'thisDestructPropsAliasDestructPropUnused' PropType is defined but prop is never used" },
+          { message: "'thisDestructPropsAliasPropUnused' PropType is defined but prop is never used" },
+          { message: "'thisDestructPropsDestructPropUnused' PropType is defined but prop is never used" },
+          { message: "'thisPropsDestructPropUnused' PropType is defined but prop is never used" },
+          { message: "'thisPropsPropUnused' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         type Person = {
           lastname: string
         };
@@ -6225,13 +6159,11 @@ ruleTester.run('no-unused-prop-types', rule, {
             return <div>Hello {props.firstname}</div>;
         }
       `,
-      features: ['types'],
-      errors: [
-        { message: '\'lastname\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {
           lastname: string
         };
@@ -6239,13 +6171,11 @@ ruleTester.run('no-unused-prop-types', rule, {
             return <div>Hello {props?.firstname}</div>;
         }
       `,
-      features: ['types', 'optional chaining'],
-      errors: [
-        { message: '\'lastname\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['types', 'optional chaining'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {
           lastname: string
         };
@@ -6253,13 +6183,11 @@ ruleTester.run('no-unused-prop-types', rule, {
             return <div>Hello {props?.firstname}</div>;
         }
       `,
-      features: ['types'],
-      errors: [
-        { message: '\'lastname\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['types'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {
           lastname?: string
         };
@@ -6267,13 +6195,11 @@ ruleTester.run('no-unused-prop-types', rule, {
             return <div>Hello {props.firstname}</div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'lastname\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {
           lastname?: string
         };
@@ -6281,13 +6207,11 @@ ruleTester.run('no-unused-prop-types', rule, {
             return <div>Hello {props?.firstname}</div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'lastname\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Person = {
           firstname: string
           lastname: string
@@ -6296,13 +6220,11 @@ ruleTester.run('no-unused-prop-types', rule, {
             return <div>Hello {firstname}</div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'lastname\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         interface Person {
           firstname: string
           lastname: string
@@ -6311,13 +6233,11 @@ ruleTester.run('no-unused-prop-types', rule, {
             return <div>Hello {firstname}</div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'lastname\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         interface Foo {
           foo: string;
           [blah: string]: number;
@@ -6326,13 +6246,11 @@ ruleTester.run('no-unused-prop-types', rule, {
             return <div>Hello {bar}</div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'foo\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'foo' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         interface Props {
           'aria-label': string;
         }
@@ -6340,13 +6258,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'aria-label\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'aria-label' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         interface Props {
         [1234]: string;
         }
@@ -6354,25 +6270,21 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'1234\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'1234' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const Hello = ({firstname}: {firstname: string, lastname: string}) => {
             return <div>Hello {firstname}</div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'lastname\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-    // test same name of interface should be merge
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
+      {
+        // test same name of interface should be merge
+        code: `
         interface Foo {
           x: number;
         }
@@ -6392,14 +6304,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           </span>
         );
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'z\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-    // test extends
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'z' PropType is defined but prop is never used" }],
+      },
+      {
+        // test extends
+        code: `
         interface Foo {
           x: number;
         }
@@ -6414,14 +6324,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           </span>
         );
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'y\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-    // test extends
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'y' PropType is defined but prop is never used" }],
+      },
+      {
+        // test extends
+        code: `
         interface Foo {
           x: number;
         }
@@ -6440,15 +6348,15 @@ ruleTester.run('no-unused-prop-types', rule, {
           </span>
         );
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'y\' PropType is defined but prop is never used' },
-        { message: '\'z\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-    // test same name merge and extends
-      code: `
+        features: ['ts'],
+        errors: [
+          { message: "'y' PropType is defined but prop is never used" },
+          { message: "'z' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        // test same name merge and extends
+        code: `
         interface Foo {
           x: number;
         }
@@ -6467,15 +6375,15 @@ ruleTester.run('no-unused-prop-types', rule, {
           </span>
         );
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'z\' PropType is defined but prop is never used' },
-        { message: '\'y\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-    // test same name merge and extends
-      code: `
+        features: ['ts'],
+        errors: [
+          { message: "'z' PropType is defined but prop is never used" },
+          { message: "'y' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        // test same name merge and extends
+        code: `
         interface Foo {
           x: number;
         }
@@ -6494,14 +6402,14 @@ ruleTester.run('no-unused-prop-types', rule, {
           </span>
         );
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'z\' PropType is defined but prop is never used' },
-        { message: '\'y\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          { message: "'z' PropType is defined but prop is never used" },
+          { message: "'y' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         type User = {
           user: string;
         }
@@ -6532,14 +6440,14 @@ ruleTester.run('no-unused-prop-types', rule, {
           return null;
         };
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'age\' PropType is defined but prop is never used' },
-        { message: '\'birthday\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          { message: "'age' PropType is defined but prop is never used" },
+          { message: "'birthday' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         const mapStateToProps = state => ({
           books: state.books
         });
@@ -6551,13 +6459,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'books\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'books' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const mapStateToProps = state => ({
           books: state.books,
         });
@@ -6570,14 +6476,14 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div />;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'books\' PropType is defined but prop is never used' },
-        { message: '\'username\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          { message: "'books' PropType is defined but prop is never used" },
+          { message: "'username' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         interface BooksTable extends ReturnType<() => {books:Array<string>}> {
           username: string;
         }
@@ -6586,14 +6492,14 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'books\' PropType is defined but prop is never used' },
-        { message: '\'username\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          { message: "'books' PropType is defined but prop is never used" },
+          { message: "'username' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         type BooksTable = ReturnType<() => {books:Array<string>}> & {
           username: string;
         }
@@ -6602,14 +6508,14 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'books\' PropType is defined but prop is never used' },
-        { message: '\'username\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          { message: "'books' PropType is defined but prop is never used" },
+          { message: "'username' PropType is defined but prop is never used" },
+        ],
+      },
+      {
+        code: `
         type mapStateToProps = ReturnType<() => {books:Array<string>}>;
 
         type Props = {
@@ -6622,15 +6528,15 @@ ruleTester.run('no-unused-prop-types', rule, {
           return <div></div>;
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'books\' PropType is defined but prop is never used' },
-        { message: '\'username\' PropType is defined but prop is never used' },
-      ],
-    },
-    // Issue: #2795
-    {
-      code: `
+        features: ['ts'],
+        errors: [
+          { message: "'books' PropType is defined but prop is never used" },
+          { message: "'username' PropType is defined but prop is never used" },
+        ],
+      },
+      // Issue: #2795
+      {
+        code: `
         type ConnectedProps = DispatchProps &
           StateProps
 
@@ -6655,12 +6561,12 @@ ruleTester.run('no-unused-prop-types', rule, {
         type StateProps = ReturnType<typeof mapStateToProps>
         type DispatchProps = ReturnType<typeof mapDispatchToProps>
       `,
-      features: ['ts', 'no-ts-old', 'no-babel'], // TODO: FIXME: remove no-ts-old and no-babel and fix
-      errors: [{ message: '\'prop1\' PropType is defined but prop is never used' }],
-    },
-    // Issue: #296
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'prop1' PropType is defined but prop is never used" }],
+      },
+      // Issue: #296
+      {
+        code: `
         function Foo(props) {
           const { bar: { nope } } = props;
           return <div test={nope} />;
@@ -6673,11 +6579,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           }),
         };
       `,
-      errors: [{ message: '\'foo\' PropType is defined but prop is never used' }],
-    },
+        errors: [{ message: "'foo' PropType is defined but prop is never used" }],
+      },
 
-    {
-      code: `
+      {
+        code: `
         interface Props {
           readonly firstname: string;
           readonly lastname: string;
@@ -6689,12 +6595,12 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel'],
-      errors: [{ message: '\'lastname\' PropType is defined but prop is never used' }],
-    },
+        features: ['ts'],
+        errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
+      },
 
-    {
-      code: `
+      {
+        code: `
         import React from "react";
 
         var Hello = React.createClass({
@@ -6708,18 +6614,18 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         });
       `,
-      settings: {
-        react: {
-          createClass: 'createClass',
+        settings: {
+          react: {
+            createClass: 'createClass',
+          },
         },
+        errors: [
+          { message: "'foo' PropType is defined but prop is never used" },
+          { message: "'propTypes' PropType is defined but prop is never used" },
+        ],
       },
-      errors: [
-        { message: '\'foo\' PropType is defined but prop is never used' },
-        { message: '\'propTypes\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+      {
+        code: `
         import React from "react";
 
         type props = {
@@ -6733,13 +6639,11 @@ ruleTester.run('no-unused-prop-types', rule, {
 
         export default Demo;
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'bar\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'bar' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         type Props = {
           used: string;
           unused: string;
@@ -6753,13 +6657,11 @@ ruleTester.run('no-unused-prop-types', rule, {
           )
         );
       `,
-      features: ['ts', 'no-babel'],
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    },
-    {
-      code: `
+        features: ['ts'],
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+      {
+        code: `
         const Demo = React.memo(
           React.forwardRef(({ used }, ref) => {
             return <div ref={ref}>{used}</div>
@@ -6770,9 +6672,8 @@ ruleTester.run('no-unused-prop-types', rule, {
           unused: PropTypes.string,
         };
       `,
-      errors: [
-        { message: '\'unused\' PropType is defined but prop is never used' },
-      ],
-    }
-  )),
+        errors: [{ message: "'unused' PropType is defined but prop is never used" }],
+      },
+    ),
+  ),
 });

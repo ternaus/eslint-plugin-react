@@ -89,11 +89,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'lifecycle',
-            'render',
-            'everything-else',
-          ],
+          order: ['lifecycle', 'render', 'everything-else'],
         },
       ],
     },
@@ -184,12 +180,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'lifecycle',
-            'everything-else',
-            'render',
-            '/on.*/',
-          ],
+          order: ['lifecycle', 'everything-else', 'render', '/on.*/'],
         },
       ],
     },
@@ -206,16 +197,9 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'lifecycle',
-            'everything-else',
-            'render',
-            'customGroup',
-          ],
+          order: ['lifecycle', 'everything-else', 'render', 'customGroup'],
           groups: {
-            customGroup: [
-              '/on.*/',
-            ],
+            customGroup: ['/on.*/'],
           },
         },
       ],
@@ -232,11 +216,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            '/on.*/',
-            'render',
-            '/.*Click/',
-          ],
+          order: ['/on.*/', 'render', '/.*Click/'],
         },
       ],
     },
@@ -253,12 +233,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'constructor',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['constructor', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -303,13 +278,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['types'],
       options: [
         {
-          order: [
-            'type-annotations',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['type-annotations', 'static-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -328,13 +297,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['types'],
       options: [
         {
-          order: [
-            'type-annotations',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['type-annotations', 'static-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -381,13 +344,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'getters',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['getters', 'static-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -404,13 +361,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'setters',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['setters', 'static-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -430,12 +381,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'instance-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['instance-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -455,12 +401,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'instance-variables',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['instance-variables', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -478,13 +419,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'static-methods',
-            'render',
-            '/^get.+$/',
-            '/^on.+$/',
-            '/^render.+$/',
-          ],
+          order: ['static-methods', 'render', '/^get.+$/', '/^on.+$/', '/^render.+$/'],
         },
       ],
     },
@@ -502,13 +437,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'static-methods',
-            'render',
-            '/^get.+$/',
-            '/^on.+$/',
-            '/^render.+$/',
-          ],
+          order: ['static-methods', 'render', '/^get.+$/', '/^on.+$/', '/^render.+$/'],
         },
       ],
     },
@@ -545,14 +474,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'state',
-            'instance-variables',
-            'static-methods',
-            'lifecycle',
-            'render',
-            'everything-else',
-          ],
+          order: ['state', 'instance-variables', 'static-methods', 'lifecycle', 'render', 'everything-else'],
         },
       ],
     },
@@ -570,10 +492,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'static-variables',
-            'static-methods',
-          ],
+          order: ['static-variables', 'static-methods'],
         },
       ],
     },
@@ -591,10 +510,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'static-methods',
-            'static-variables',
-          ],
+          order: ['static-methods', 'static-variables'],
         },
       ],
     },
@@ -613,11 +529,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'instance-variables',
-            'static-variables',
-            'static-methods',
-          ],
+          order: ['instance-variables', 'static-variables', 'static-methods'],
         },
       ],
     },
@@ -636,11 +548,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'static-variables',
-            'instance-variables',
-            'static-methods',
-          ],
+          order: ['static-variables', 'instance-variables', 'static-methods'],
         },
       ],
     },
@@ -658,12 +566,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'static-methods',
-            'render',
-            'static-variables',
-            'instance-variables',
-          ],
+          order: ['static-methods', 'render', 'static-variables', 'instance-variables'],
         },
       ],
     },
@@ -687,13 +590,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'static-variables',
-            'instance-variables',
-            'constructor',
-            'everything-else',
-            'render',
-          ],
+          order: ['static-variables', 'instance-variables', 'constructor', 'everything-else', 'render'],
         },
       ],
     },
@@ -826,10 +723,7 @@ ruleTester.run('sort-comp', rule, {
       `,
       options: [
         {
-          order: [
-            'lifecycle',
-            'render',
-          ],
+          order: ['lifecycle', 'render'],
         },
       ],
       errors: [
@@ -913,13 +807,7 @@ ruleTester.run('sort-comp', rule, {
       ],
       options: [
         {
-          order: [
-            'type-annotations',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['type-annotations', 'static-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -948,13 +836,7 @@ ruleTester.run('sort-comp', rule, {
       ],
       options: [
         {
-          order: [
-            'type-annotations',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['type-annotations', 'static-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -1016,13 +898,7 @@ ruleTester.run('sort-comp', rule, {
       ],
       options: [
         {
-          order: [
-            'getters',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['getters', 'static-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -1049,13 +925,7 @@ ruleTester.run('sort-comp', rule, {
       ],
       options: [
         {
-          order: [
-            'setters',
-            'static-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['setters', 'static-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -1085,12 +955,7 @@ ruleTester.run('sort-comp', rule, {
       ],
       options: [
         {
-          order: [
-            'instance-methods',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['instance-methods', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -1120,12 +985,7 @@ ruleTester.run('sort-comp', rule, {
       ],
       options: [
         {
-          order: [
-            'instance-variables',
-            'lifecycle',
-            'everything-else',
-            'render',
-          ],
+          order: ['instance-variables', 'lifecycle', 'everything-else', 'render'],
         },
       ],
     },
@@ -1150,11 +1010,7 @@ ruleTester.run('sort-comp', rule, {
       ],
       options: [
         {
-          order: [
-            'setters',
-            'lifecycle',
-            'render',
-          ],
+          order: ['setters', 'lifecycle', 'render'],
         },
       ],
     },
@@ -1178,10 +1034,7 @@ ruleTester.run('sort-comp', rule, {
       ],
       options: [
         {
-          order: [
-            'foo',
-            'render',
-          ],
+          order: ['foo', 'render'],
         },
       ],
     },
@@ -1209,10 +1062,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'static-variables',
-            'static-methods',
-          ],
+          order: ['static-variables', 'static-methods'],
         },
       ],
     },
@@ -1241,11 +1091,7 @@ ruleTester.run('sort-comp', rule, {
       features: ['class fields'],
       options: [
         {
-          order: [
-            'instance-variables',
-            'static-variables',
-            'static-methods',
-          ],
+          order: ['instance-variables', 'static-variables', 'static-methods'],
         },
       ],
     },
@@ -1273,12 +1119,7 @@ ruleTester.run('sort-comp', rule, {
       ],
       options: [
         {
-          order: [
-            'static-methods',
-            'render',
-            'static-variables',
-            'instance-variables',
-          ],
+          order: ['static-methods', 'render', 'static-variables', 'instance-variables'],
         },
       ],
     },

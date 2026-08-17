@@ -176,7 +176,7 @@ ruleTester.run('prefer-read-only-props', rule, {
 
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
     {
       code: `
@@ -190,7 +190,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
     {
       code: `
@@ -203,7 +203,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
     {
       code: `
@@ -216,7 +216,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
     {
       code: `
@@ -229,7 +229,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
     {
       code: `
@@ -244,7 +244,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
   ]),
 
@@ -474,7 +474,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'readOnlyProp',
@@ -505,7 +505,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'readOnlyProp',
@@ -534,7 +534,7 @@ ruleTester.run('prefer-read-only-props', rule, {
         };
         export default MyComponent;
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'readOnlyProp',
@@ -567,7 +567,7 @@ ruleTester.run('prefer-read-only-props', rule, {
           }
         }
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
       errors: [
         {
           messageId: 'readOnlyProp',

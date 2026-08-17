@@ -1,14 +1,9 @@
-# Security Policy
+# Security policy
 
-## Supported Versions
+Security fixes are provided for the current 8.x release line when used with its
+supported runtime matrix: ESLint 10 and Node.js 22.13, 24, or 26.
 
-This is the list of versions of `eslint-plugin-react` which are currently being supported with security updates.
-
-| Version  | Supported          |
-| -------- | ------------------ |
-| 7.x      | :white_check_mark: |
-| < 7.x    | :x:                |
-
-## Reporting a Vulnerability
-
-To report a security vulnerability, please [file a private vulnerability report via GitHub](https://github.com/jsx-eslint/eslint-plugin-react/security/advisories/new).
+Please report a vulnerability privately through
+[GitHub security advisories](https://github.com/ternaus/eslint-plugin-react/security/advisories/new).
+Include a minimal reproduction, the affected package version, and the expected
+security impact. Do not open a public issue before a fix is available.

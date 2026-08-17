@@ -95,15 +95,16 @@ const expectedViolations = [
 ];
 
 ruleTester.run('no-object-type-as-default-prop', rule, {
-  valid: parsers.all([].concat(
-    `
+  valid: parsers.all(
+    [].concat(
+      `
       function Foo({
         bar = emptyFunction,
       }) {
         return null;
       }
     `,
-    `
+      `
       function Foo({
         bar = emptyFunction,
         ...rest
@@ -111,7 +112,7 @@ ruleTester.run('no-object-type-as-default-prop', rule, {
         return null;
       }
     `,
-    `
+      `
       function Foo({
         bar = 1,
         baz = 'hello',
@@ -119,12 +120,12 @@ ruleTester.run('no-object-type-as-default-prop', rule, {
         return null;
       }
     `,
-    `
+      `
       function Foo(props) {
         return null;
       }
     `,
-    `
+      `
       function Foo(props) {
         return null;
       }
@@ -133,28 +134,30 @@ ruleTester.run('no-object-type-as-default-prop', rule, {
         bar: () => {}
       }
     `,
-    `
+      `
       const Foo = () => {
         return null;
       };
     `,
-    `
+      `
       const Foo = ({bar = 1}) => {
         return null;
       };
     `,
-    `
+      `
       const Foo = ({bar = 1}, context) => {
         return null;
       };
     `,
-    `
+      `
       export default function NotAComponent({foo = {}}) {}
-    `
-  )),
-  invalid: parsers.all([].concat(
-    {
-      code: `
+    `,
+    ),
+  ),
+  invalid: parsers.all(
+    [].concat(
+      {
+        code: `
         function Foo({
           a = {},
           b = ['one', 'two'],
@@ -169,10 +172,10 @@ ruleTester.run('no-object-type-as-default-prop', rule, {
           return null;
         }
       `,
-      errors: expectedViolations,
-    },
-    {
-      code: `
+        errors: expectedViolations,
+      },
+      {
+        code: `
         const Foo = ({
           a = {},
           b = ['one', 'two'],
@@ -187,10 +190,10 @@ ruleTester.run('no-object-type-as-default-prop', rule, {
           return null;
         }
       `,
-      errors: expectedViolations,
-    },
-    {
-      code: `
+        errors: expectedViolations,
+      },
+      {
+        code: `
         const Foo = ({
           a = {},
           b = ['one', 'two'],
@@ -205,7 +208,8 @@ ruleTester.run('no-object-type-as-default-prop', rule, {
           return null;
         }
       `,
-      errors: expectedViolations,
-    }
-  )),
+        errors: expectedViolations,
+      },
+    ),
+  ),
 });

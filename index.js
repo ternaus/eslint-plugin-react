@@ -1,125 +1,74 @@
-'use strict';
+import allRules from './lib/rules/index.js';
 
-const fromEntries = require('object.fromentries');
-const entries = require('object.entries');
+const ERROR = 'error';
+const OFF = 'off';
 
-const allRules = require('./lib/rules');
-
-function filterRules(rules, predicate) {
-  return fromEntries(entries(rules).filter((entry) => predicate(entry[1])));
+function withoutDeprecatedRules(rules) {
+  return Object.fromEntries(Object.entries(rules).filter(([, rule]) => !rule.meta.deprecated));
 }
 
-/**
- * @param {object} rules - rules object mapping rule name to rule module
- * @returns {Record<string, SEVERITY_ERROR | 'error'>}
- */
-function configureAsError(rules) {
-  return fromEntries(Object.keys(rules).map((key) => [`react/${key}`, 2]));
+function asErrorConfig(rules) {
+  return Object.fromEntries(Object.keys(rules).map((name) => [`react/${name}`, ERROR]));
 }
 
-/** @type {Partial<typeof allRules>} */
-const activeRules = filterRules(allRules, (rule) => !rule.meta.deprecated);
-/** @type {Record<keyof typeof activeRules, 2 | 'error'>} */
-const activeRulesConfig = configureAsError(activeRules);
+const activeRules = withoutDeprecatedRules(allRules);
+const deprecatedRules = Object.fromEntries(Object.entries(allRules).filter(([, rule]) => rule.meta.deprecated));
 
-/** @type {Partial<typeof allRules>} */
-const deprecatedRules = filterRules(allRules, (rule) => rule.meta.deprecated);
-
-/** @type {['react']} */
-// for legacy config system
-const plugins = [
-  'react',
-];
-
-// TODO: with TS 4.5+, inline this
-const SEVERITY_ERROR = /** @type {2} */ (2);
-const SEVERITY_OFF = /** @type {0} */ (0);
-
-const configs = {
-  recommended: {
-    plugins,
-    parserOptions: {
-      ecmaFeatures: {
-        jsx: true,
-      },
-    },
-    rules: {
-      'react/display-name': SEVERITY_ERROR,
-      'react/jsx-key': SEVERITY_ERROR,
-      'react/jsx-no-comment-textnodes': SEVERITY_ERROR,
-      'react/jsx-no-duplicate-props': SEVERITY_ERROR,
-      'react/jsx-no-target-blank': SEVERITY_ERROR,
-      'react/jsx-no-undef': SEVERITY_ERROR,
-      'react/jsx-uses-react': SEVERITY_ERROR,
-      'react/jsx-uses-vars': SEVERITY_ERROR,
-      'react/no-children-prop': SEVERITY_ERROR,
-      'react/no-danger-with-children': SEVERITY_ERROR,
-      'react/no-deprecated': SEVERITY_ERROR,
-      'react/no-direct-mutation-state': SEVERITY_ERROR,
-      'react/no-find-dom-node': SEVERITY_ERROR,
-      'react/no-is-mounted': SEVERITY_ERROR,
-      'react/no-render-return-value': SEVERITY_ERROR,
-      'react/no-string-refs': SEVERITY_ERROR,
-      'react/no-unescaped-entities': SEVERITY_ERROR,
-      'react/no-unknown-property': SEVERITY_ERROR,
-      'react/no-unsafe': SEVERITY_OFF,
-      'react/prop-types': SEVERITY_ERROR,
-      'react/react-in-jsx-scope': SEVERITY_ERROR,
-      'react/require-render-return': SEVERITY_ERROR,
-    },
-  },
-  all: {
-    plugins,
-    parserOptions: {
-      ecmaFeatures: {
-        jsx: true,
-      },
-    },
-    rules: activeRulesConfig,
-  },
-  'jsx-runtime': {
-    plugins,
-    parserOptions: {
-      ecmaFeatures: {
-        jsx: true,
-      },
-      jsxPragma: null, // for @typescript/eslint-parser
-    },
-    rules: {
-      'react/react-in-jsx-scope': SEVERITY_OFF,
-      'react/jsx-uses-react': SEVERITY_OFF,
-    },
-  },
-  flat: /** @type {Record<string, ReactFlatConfig>} */ ({
-    __proto__: null,
-  }),
+const recommendedRules = {
+  'react/display-name': ERROR,
+  'react/jsx-key': ERROR,
+  'react/jsx-no-comment-textnodes': ERROR,
+  'react/jsx-no-duplicate-props': ERROR,
+  'react/jsx-no-target-blank': ERROR,
+  'react/jsx-no-undef': ERROR,
+  'react/jsx-uses-react': ERROR,
+  'react/jsx-uses-vars': ERROR,
+  'react/no-children-prop': ERROR,
+  'react/no-danger-with-children': ERROR,
+  'react/no-deprecated': ERROR,
+  'react/no-direct-mutation-state': ERROR,
+  'react/no-find-dom-node': ERROR,
+  'react/no-is-mounted': ERROR,
+  'react/no-render-return-value': ERROR,
+  'react/no-string-refs': ERROR,
+  'react/no-unescaped-entities': ERROR,
+  'react/no-unknown-property': ERROR,
+  'react/no-unsafe': OFF,
+  'react/prop-types': ERROR,
+  'react/react-in-jsx-scope': ERROR,
+  'react/require-render-return': ERROR,
 };
 
-/** @typedef {{ plugins: { react: typeof plugin }, rules: import('eslint').Linter.RulesRecord, languageOptions: { parserOptions: import('eslint').Linter.ParserOptions } }} ReactFlatConfig */
+const configs = { flat: Object.create(null) };
 
-/** @type {{ deprecatedRules: typeof deprecatedRules, rules: typeof allRules, configs: typeof configs & { flat: Record<string, ReactFlatConfig> }}} */
 const plugin = {
+  meta: {
+    name: '@ternaus/eslint-plugin-react',
+    version: '8.0.0-alpha.0',
+  },
   deprecatedRules,
   rules: allRules,
   configs,
 };
 
-Object.assign(configs.flat, {
-  recommended: {
+function createFlatConfig(rules) {
+  return {
     plugins: { react: plugin },
-    rules: configs.recommended.rules,
-    languageOptions: { parserOptions: configs.recommended.parserOptions },
-  },
-  all: {
-    plugins: { react: plugin },
-    rules: configs.all.rules,
-    languageOptions: { parserOptions: configs.all.parserOptions },
-  },
-  'jsx-runtime': {
-    plugins: { react: plugin },
-    rules: configs['jsx-runtime'].rules,
-    languageOptions: { parserOptions: configs['jsx-runtime'].parserOptions },
-  },
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+      },
+    },
+    rules,
+  };
+}
+
+configs.flat.recommended = createFlatConfig(recommendedRules);
+configs.flat.all = createFlatConfig(asErrorConfig(activeRules));
+configs.flat['jsx-runtime'] = createFlatConfig({
+  'react/jsx-uses-react': OFF,
+  'react/react-in-jsx-scope': OFF,
 });
 
-module.exports = plugin;
+export default plugin;
+export { plugin as 'module.exports' };

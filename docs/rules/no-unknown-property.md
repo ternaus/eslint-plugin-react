@@ -2,7 +2,7 @@
 
 📝 Disallow usage of unknown DOM property.
 
-💼 This rule is enabled in the ☑️ `recommended` [config](https://github.com/jsx-eslint/eslint-plugin-react/#shareable-configs).
+💼 This rule is enabled in the ☑️ `recommended` [config](https://github.com/ternaus/eslint-plugin-react#configs).
 
 🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 
@@ -64,7 +64,7 @@ var AtomPanel = <atom-panel class="foo"></atom-panel>;
 If you are using a library that passes something as a prop to JSX elements, it is recommended to add those props to the ignored properties.
 
 For example, if you use [emotion](https://emotion.sh/docs/introduction) and its [`css` prop](https://emotion.sh/docs/css-prop),
-add the following to your `.eslintrc` config file:
+add the following to an `eslint.config.js` entry:
 
 ```js
 ...

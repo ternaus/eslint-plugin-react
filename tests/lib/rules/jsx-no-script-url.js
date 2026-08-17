@@ -82,33 +82,25 @@ ruleTester.run('jsx-no-script-url', rule, {
     {
       code: '<Foo to="javascript:"></Foo>',
       errors: [{ messageId: 'noScriptURL' }],
-      options: [
-        [{ name: 'Foo', props: ['to', 'href'] }],
-      ],
+      options: [[{ name: 'Foo', props: ['to', 'href'] }]],
     },
     {
       code: '<Foo href="javascript:"></Foo>',
       errors: [{ messageId: 'noScriptURL' }],
-      options: [
-        [{ name: 'Foo', props: ['to', 'href'] }],
-      ],
+      options: [[{ name: 'Foo', props: ['to', 'href'] }]],
     },
-    { // make sure it still uses defaults when passed options
+    {
+      // make sure it still uses defaults when passed options
       code: '<a href="javascript:void(0)"></a>',
       errors: [{ messageId: 'noScriptURL' }],
-      options: [
-        [{ name: 'Foo', props: ['to', 'href'] }],
-      ],
+      options: [[{ name: 'Foo', props: ['to', 'href'] }]],
     },
 
     // with components passed by settings
     {
       code: '<Foo to="javascript:"></Foo>',
       errors: [{ messageId: 'noScriptURL' }],
-      options: [
-        [{ name: 'Bar', props: ['to', 'href'] }],
-        { includeFromSettings: true },
-      ],
+      options: [[{ name: 'Bar', props: ['to', 'href'] }], { includeFromSettings: true }],
       settings: {
         linkComponents: [{ name: 'Foo', linkAttribute: 'to' }],
       },
@@ -128,14 +120,8 @@ ruleTester.run('jsx-no-script-url', rule, {
         <Bar link="javascript:"></Bar>
       </div>
     `,
-      errors: [
-        { messageId: 'noScriptURL' },
-        { messageId: 'noScriptURL' },
-      ],
-      options: [
-        [{ name: 'Bar', props: ['link'] }],
-        { includeFromSettings: true },
-      ],
+      errors: [{ messageId: 'noScriptURL' }, { messageId: 'noScriptURL' }],
+      options: [[{ name: 'Bar', props: ['link'] }], { includeFromSettings: true }],
       settings: {
         linkComponents: [{ name: 'Foo', linkAttribute: ['to', 'href'] }],
       },
@@ -147,12 +133,8 @@ ruleTester.run('jsx-no-script-url', rule, {
         <Bar link="javascript:"></Bar>
       </div>
     `,
-      errors: [
-        { messageId: 'noScriptURL' },
-      ],
-      options: [
-        [{ name: 'Bar', props: ['link'] }],
-      ],
+      errors: [{ messageId: 'noScriptURL' }],
+      options: [[{ name: 'Bar', props: ['link'] }]],
       settings: {
         linkComponents: [{ name: 'Foo', linkAttribute: ['to', 'href'] }],
       },

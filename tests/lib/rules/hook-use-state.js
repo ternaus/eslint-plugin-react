@@ -165,7 +165,7 @@ const tests = {
           return [color, setColor]
         }
       `,
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
     {
       code: `
@@ -286,9 +286,11 @@ const tests = {
           const [] = useState()
         }
       `,
-      errors: [{
-        message: 'useState call is not destructured into value + setter pair',
-      }],
+      errors: [
+        {
+          message: 'useState call is not destructured into value + setter pair',
+        },
+      ],
     },
     {
       code: `
@@ -363,29 +365,31 @@ const tests = {
           const [color] = useState(initialColor)
         }
       `,
-      errors: [{
-        message: 'useState call is not destructured into value + setter pair',
-        suggestions: [
-          {
-            messageId: 'suggestMemo',
-            output: `
+      errors: [
+        {
+          message: 'useState call is not destructured into value + setter pair',
+          suggestions: [
+            {
+              messageId: 'suggestMemo',
+              output: `
         import { useState, useMemo as useMemoAlternative } from 'react'
         function useColor(initialColor) {
           const color = useMemoAlternative(() => initialColor, [])
         }
       `,
-          },
-          {
-            messageId: 'suggestPair',
-            output: `
+            },
+            {
+              messageId: 'suggestPair',
+              output: `
         import { useState, useMemo as useMemoAlternative } from 'react'
         function useColor(initialColor) {
           const [color, setColor] = useState(initialColor)
         }
       `,
-          },
-        ],
-      }],
+            },
+          ],
+        },
+      ],
     },
     {
       code: `
@@ -527,7 +531,8 @@ const tests = {
       `,
       errors: [
         {
-          message: 'useState call is not destructured into value + setter pair (you can allow destructuring by enabling "allowDestructuredState" option)',
+          message:
+            'useState call is not destructured into value + setter pair (you can allow destructuring by enabling "allowDestructuredState" option)',
         },
       ],
     },
@@ -539,7 +544,8 @@ const tests = {
       `,
       errors: [
         {
-          message: 'useState call is not destructured into value + setter pair (you can allow destructuring by enabling "allowDestructuredState" option)',
+          message:
+            'useState call is not destructured into value + setter pair (you can allow destructuring by enabling "allowDestructuredState" option)',
         },
       ],
     },
@@ -575,7 +581,7 @@ const tests = {
           ],
         },
       ],
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
     {
       code: `
@@ -602,7 +608,7 @@ const tests = {
           ],
         },
       ],
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
     {
       code: `
@@ -629,7 +635,7 @@ const tests = {
           ],
         },
       ],
-      features: ['ts', 'no-babel-old'],
+      features: ['ts'],
     },
   ]),
 };

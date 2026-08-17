@@ -121,7 +121,7 @@ ruleTester.run('react-no-constructed-context-values', rule, {
               )
           }
         `,
-      features: ['types', 'no-babel'],
+      features: ['types'],
     },
     {
       code: `
@@ -190,15 +190,17 @@ ruleTester.run('react-no-constructed-context-values', rule, {
     {
       // Invalid because object construction creates a new identity
       code: 'function Component() { const foo = {}; return (<Context.Provider value={foo}></Context.Provider>) }',
-      errors: [{
-        messageId: 'withIdentifierMsg',
-        data: {
-          variableName: 'foo',
-          type: 'object',
-          nodeLine: '1',
-          usageLine: '1',
+      errors: [
+        {
+          messageId: 'withIdentifierMsg',
+          data: {
+            variableName: 'foo',
+            type: 'object',
+            nodeLine: '1',
+            usageLine: '1',
+          },
         },
-      }],
+      ],
     },
     {
       // Invalid because array construction creates a new identity
@@ -337,17 +339,18 @@ ruleTester.run('react-no-constructed-context-values', rule, {
     },
     {
       // Invalid because the object value of the nested ternary will create a new identity
-      code:
-        'function Component() { const foo = bar ? baz ? {} : null : null; return (<Context.Provider value={foo}></Context.Provider>)}',
-      errors: [{
-        messageId: 'withIdentifierMsg',
-        data: {
-          variableName: 'foo',
-          type: 'object',
-          nodeLine: '1',
-          usageLine: '1',
+      code: 'function Component() { const foo = bar ? baz ? {} : null : null; return (<Context.Provider value={foo}></Context.Provider>)}',
+      errors: [
+        {
+          messageId: 'withIdentifierMsg',
+          data: {
+            variableName: 'foo',
+            type: 'object',
+            nodeLine: '1',
+            usageLine: '1',
+          },
         },
-      }],
+      ],
     },
     {
       // Invalid because the object value will create a new identity

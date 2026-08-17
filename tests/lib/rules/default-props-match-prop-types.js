@@ -90,9 +90,7 @@ ruleTester.run('default-props-match-prop-types', rule, {
           bar: "bar"
         };
       `,
-      options: [
-        { allowRequiredDefaults: true },
-      ],
+      options: [{ allowRequiredDefaults: true }],
     },
     {
       code: `
@@ -1620,7 +1618,7 @@ ruleTester.run('default-props-match-prop-types', rule, {
         }
         Hello.defaultProps = { foo: "foo", frob: "frob" };
       `,
-      features: ['flow'], // TODO: FIXME: change to "types" and fix failures
+      features: ['flow'],
       errors: [
         {
           messageId: 'requiredHasDefault',
