@@ -417,6 +417,29 @@ ruleTester.run('boolean-prop-naming', rule, {
       features: ['ts'],
     },
     {
+      // Nested TypeScript members are opt-in, like nested PropTypes shapes.
+      code: `
+        interface Props {
+          isReady: boolean;
+          options: { enabled: boolean };
+        }
+
+        const Button = (props: Props) => <button />;
+      `,
+      options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+' }],
+      features: ['ts'],
+    },
+    {
+      // Imported types require a type checker and are intentionally not resolved.
+      code: `
+        import type { ExternalProps } from './props';
+
+        const Button = (props: ExternalProps) => <button />;
+      `,
+      options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+' }],
+      features: ['ts'],
+    },
+    {
       code: `
         type Props = {
           isEnabled: boolean
@@ -1367,6 +1390,98 @@ ruleTester.run('boolean-prop-naming', rule, {
           data: {
             propName: 'semi',
             pattern: '^(is|has)[A-Z]([A-Za-z0-9]?)+',
+          },
+        },
+      ],
+    },
+    {
+      // `validateNested` also applies to local TypeScript object members.
+      code: `
+        interface Props {
+          options: { enabled: boolean };
+        }
+
+        const Button = (props: Props) => <button />;
+      `,
+      options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+', validateNested: true }],
+      features: ['ts'],
+      errors: [
+        {
+          messageId: 'patternMismatch',
+          data: {
+            propName: 'enabled',
+            pattern: '^is[A-Z]([A-Za-z0-9]?)+',
+          },
+        },
+      ],
+    },
+    {
+      // Reusing a local nested type checks each declared prop independently.
+      code: `
+        interface Options {
+          enabled: boolean;
+        }
+
+        interface Props {
+          primary: Options;
+          secondary: Options;
+        }
+
+        const Button = (props: Props) => <button />;
+      `,
+      options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+', validateNested: true }],
+      features: ['ts'],
+      errors: [
+        {
+          messageId: 'patternMismatch',
+          data: {
+            propName: 'enabled',
+            pattern: '^is[A-Z]([A-Za-z0-9]?)+',
+          },
+        },
+        {
+          messageId: 'patternMismatch',
+          data: {
+            propName: 'enabled',
+            pattern: '^is[A-Z]([A-Za-z0-9]?)+',
+          },
+        },
+      ],
+    },
+    {
+      // Supported and configured component wrappers keep parameter annotations.
+      code: `
+        import { forwardRef, memo } from 'react';
+
+        type Props = { enabled: boolean };
+
+        const MemoButton = memo((props: Props) => <button />);
+        const ForwardedButton = forwardRef((props: Props, ref) => <button ref={ref} />);
+        const ObservedButton = observer((props: Props) => <button />);
+      `,
+      options: [{ rule: '^is[A-Z]([A-Za-z0-9]?)+' }],
+      settings: { componentWrapperFunctions: ['observer'] },
+      features: ['ts'],
+      errors: [
+        {
+          messageId: 'patternMismatch',
+          data: {
+            propName: 'enabled',
+            pattern: '^is[A-Z]([A-Za-z0-9]?)+',
+          },
+        },
+        {
+          messageId: 'patternMismatch',
+          data: {
+            propName: 'enabled',
+            pattern: '^is[A-Z]([A-Za-z0-9]?)+',
+          },
+        },
+        {
+          messageId: 'patternMismatch',
+          data: {
+            propName: 'enabled',
+            pattern: '^is[A-Z]([A-Za-z0-9]?)+',
           },
         },
       ],

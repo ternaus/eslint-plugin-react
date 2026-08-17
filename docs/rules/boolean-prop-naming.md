@@ -48,6 +48,12 @@ type Props = {
 const Hello = (props: Props) => <div />
 ```
 
+## TypeScript resolution boundary
+
+For TypeScript, this rule checks `type` and `interface` declarations in the file being linted, inline component annotations, and `React.FC<Props>` annotations. When `validateNested` is enabled, it also checks boolean members inside local object types.
+
+The rule does not start the TypeScript type checker and does not resolve types imported from another file. Imported or otherwise unresolved types are skipped, so using this rule does not require `parserOptions.project`.
+
 ## Rule Options
 
 ```js
