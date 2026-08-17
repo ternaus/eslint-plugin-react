@@ -9,6 +9,8 @@
 // Requirements
 //------------------------------------------------------------------------------
 
+const assert = require('node:assert/strict');
+const { Linter } = require('eslint');
 const RuleTester = require('../../helpers/ruleTester');
 const rule = require('../../../lib/rules/jsx-no-leaked-render');
 
@@ -164,6 +166,31 @@ ruleTester.run('jsx-no-leaked-render', rule, {
               <div>{(!display || display === DISPLAY.WELCOME) && <span>foo</span>}</div>
             </div>
           )
+        }
+      `,
+        options: [{ validStrategies: ['coerce'] }],
+      },
+      {
+        // Expression alternates are not known leaked values in coerce-only mode.
+        code: `
+        const Component = ({ count, fallback, next, title }) => {
+          return (
+            <div>
+              {count ? title : getContent()}
+              {count ? title : fallback || <Empty />}
+              {count ? title : next ? <Primary /> : <Secondary />}
+              {count ? title : void sideEffect()}
+            </div>
+          );
+        };
+      `,
+        options: [{ validStrategies: ['coerce'] }],
+      },
+      {
+        // A locally bound identifier named undefined is not the global undefined value.
+        code: `
+        function Component({ count, title }, undefined) {
+          return <div>{count ? title : undefined}</div>;
         }
       `,
         options: [{ validStrategies: ['coerce'] }],
@@ -705,6 +732,57 @@ ruleTester.run('jsx-no-leaked-render', rule, {
       },
       {
         code: `
+        const Component = ({ count, fallback, isFoo, title }) => {
+          return (
+            <div>
+              {count ? title : undefined}
+              {count ? title : void 0}
+              {isIndeterminate ? false : <Empty />}
+              {isIndeterminate ? false : getContent()}
+              {isIndeterminate ? false : fallback || <Empty />}
+              {isIndeterminate ? false : isFoo ? <Primary /> : <Secondary />}
+            </div>
+          );
+        };
+      `,
+        options: [{ validStrategies: ['coerce'] }],
+        errors: [
+          {
+            messageId: 'noPotentialLeakedRender',
+          },
+          {
+            messageId: 'noPotentialLeakedRender',
+          },
+          {
+            messageId: 'noPotentialLeakedRender',
+          },
+          {
+            messageId: 'noPotentialLeakedRender',
+          },
+          {
+            messageId: 'noPotentialLeakedRender',
+          },
+          {
+            messageId: 'noPotentialLeakedRender',
+          },
+        ],
+        output: `
+        const Component = ({ count, fallback, isFoo, title }) => {
+          return (
+            <div>
+              {!!count && title}
+              {!!count && title}
+              {!isIndeterminate && <Empty />}
+              {!isIndeterminate && getContent()}
+              {!isIndeterminate && (fallback || <Empty />)}
+              {!isIndeterminate && (isFoo ? <Primary /> : <Secondary />)}
+            </div>
+          );
+        };
+      `,
+      },
+      {
+        code: `
         const Component = ({ count }) => {
           return <div>{count && <span>There are {count} results</span>}</div>
         }
@@ -1138,4 +1216,27 @@ ruleTester.run('jsx-no-leaked-render', rule, {
       },
     ),
   ),
+});
+
+it('keeps coerce fixes stable across subsequent fix passes', () => {
+  const source = '<div>{ready ? false : fallback || <Empty />}</div>';
+  const result = new Linter().verifyAndFix(
+    source,
+    {
+      files: ['**/*.jsx'],
+      languageOptions: {
+        ecmaVersion: 2022,
+        parserOptions: { ecmaFeatures: { jsx: true } },
+      },
+      plugins: { react: { rules: { 'jsx-no-leaked-render': rule } } },
+      rules: {
+        'react/jsx-no-leaked-render': ['error', { validStrategies: ['coerce'] }],
+      },
+    },
+    { filename: 'fixture.jsx' },
+  );
+
+  assert.strictEqual(result.fixed, true);
+  assert.strictEqual(result.output, '<div>{!ready && (fallback || <Empty />)}</div>');
+  assert.deepStrictEqual(result.messages, []);
 });
