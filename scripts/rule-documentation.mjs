@@ -54,7 +54,7 @@ export function renderConfigSummary(rows = getRuleRows()) {
     '| --- | ---: | --- |',
     `| \`recommended\` | ${recommendedCount} | You want the supported baseline for React correctness and established best practices. |`,
     `| \`all\` | ${allCount} | You want to audit every non-deprecated rule, then keep only the rules that fit your codebase. |`,
-    `| \`jsx-runtime\` | ${jsxRuntimeCount} disabled | Your project uses the automatic JSX runtime, so importing \`React\` solely for JSX is unnecessary. |`,
+    `| \`jsx-runtime\` | ${jsxRuntimeCount} disabled | Compatibility alias for existing flat configs; React 19+ always uses the automatic JSX runtime. |`,
   ].join('\n');
 }
 

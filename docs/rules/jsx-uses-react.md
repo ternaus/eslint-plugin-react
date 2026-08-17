@@ -6,51 +6,17 @@
 
 <!-- end auto-generated rule header -->
 
-JSX expands to a call to `React.createElement`, a file which includes `React`
-but only uses JSX should consider the `React` variable as used.
-
-If you are using the @jsx pragma this rule will mark the designated variable and not the `React` one.
-
-This rule has no effect if the `no-unused-vars` rule is not enabled.
-
-You can use the [shared settings](/README.md#configuration) to specify a custom pragma.
+React 19 requires the automatic JSX runtime, so this rule is a no-op. It remains
+available under its established rule ID for drop-in configuration compatibility.
 
 ## Rule Details
 
-Examples of **incorrect** code for this rule:
-
-```js
-var React = require('react');
-
-// nothing to do with React
-```
-
-```jsx
-/** @jsx Foo */
-var React = require('react');
-
-var Hello = <div>Hello {this.props.name}</div>;
-```
-
-Examples of **correct** code for this rule:
-
-```jsx
-var React = require('react');
-
-var Hello = <div>Hello {this.props.name}</div>;
-```
-
-```jsx
-/** @jsx Foo */
-var Foo = require('foo');
-
-var Hello = <div>Hello {this.props.name}</div>;
-```
+The rule validates `settings.react.version` and otherwise reports no code. React
+19+ compilers handle JSX without using a `React` binding, so ESLint's ordinary
+unused-variable rules receive the correct information without this compatibility
+rule.
 
 ## When Not To Use It
 
-If you are not using JSX, if React is declared as global variable, or if you do not use the `no-unused-vars` rule.
-
-If you use the [automatic JSX runtime](https://react.dev/learn/writing-markup-with-jsx#the-jsx-compiler), add `react.configs.flat['jsx-runtime']` after the recommended config in `eslint.config.js`.
-
-**Note**: When React >= 19.0.0 is detected, this rule is automatically disabled, since the automatic JSX transform is mandatory in React 19.
+Do not enable this rule for new configuration. Existing configuration can retain
+it without changing lint results.

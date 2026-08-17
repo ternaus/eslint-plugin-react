@@ -1,167 +1,42 @@
 /**
- * @fileoverview Tests for jsx-uses-react
- * @author Glen Mailer
+ * @fileoverview Tests for jsx-uses-react.
  */
 
 'use strict';
 
-// -----------------------------------------------------------------------------
-// Requirements
-// -----------------------------------------------------------------------------
-
-const rule = require('../../helpers/getESLintCoreRule')('no-unused-vars');
+const assert = require('node:assert/strict');
 
 const RuleTester = require('../../helpers/ruleTester');
-const getRuleDefiner = require('../../helpers/getRuleDefiner');
-
 const parsers = require('../../helpers/parsers');
-
-const parserOptions = {
-  ecmaVersion: 2018,
-  sourceType: 'module',
-  ecmaFeatures: {
-    jsx: true,
-  },
-};
-
-const settings = {
-  react: {
-    pragma: 'Foo',
-    version: '18',
-  },
-};
-
-// -----------------------------------------------------------------------------
-// Tests
-// -----------------------------------------------------------------------------
+const rule = require('../../../lib/rules/jsx-uses-react');
 
 const ruleTester = new RuleTester({
-  parserOptions,
-  settings: { react: { version: '18' } },
+  parserOptions: {
+    ecmaVersion: 2022,
+    sourceType: 'module',
+    ecmaFeatures: { jsx: true },
+  },
 });
-const ruleDefiner = getRuleDefiner(ruleTester);
-ruleDefiner.defineRule('react/jsx-uses-react', require('../../../lib/rules/jsx-uses-react'));
 
-ruleTester.run('no-unused-vars', rule, {
+ruleTester.run('jsx-uses-react', rule, {
   valid: parsers.all([
-    { code: '/*eslint react/jsx-uses-react:1*/ var React; <div />;' },
-    { code: '/*eslint react/jsx-uses-react:1*/ var React; (function () { <div /> })();' },
-    { code: '/*eslint react/jsx-uses-react:1*/ /** @jsx Foo */ var Foo; <div />;' },
     {
-      code: '/*eslint react/jsx-uses-react:1*/ var Foo; <div />;',
-      settings,
+      code: 'const App = () => <main />;',
+      settings: { react: { version: '19.0.0' } },
     },
     {
-      code: '/*eslint react/jsx-uses-react:1*/ var Frag; <></>;',
-      settings: { react: { fragment: 'Frag', version: '18' } },
-      features: ['fragment'],
-    },
-    {
-      code: '/*eslint react/jsx-uses-react:1*/ var React; <></>;',
-      features: ['fragment'],
+      code: 'const App = () => <main />;',
+      settings: { react: { version: '20.0.0' } },
     },
   ]),
-  invalid: parsers.all(
-    [
-      {
-        code: '/*eslint react/jsx-uses-react:1*/ var React; <div />;',
-        settings: { react: { version: '19.0.0' } },
-        errors: [
-          {
-            message: "'React' is defined but never used.",
-            suggestions: [
-              {
-                messageId: 'removeVar',
-                output: '/*eslint react/jsx-uses-react:1*/  <div />;',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        code: '/*eslint react/jsx-uses-react:1*/ var React;',
-        errors: [
-          {
-            message: "'React' is defined but never used.",
-            suggestions: [
-              {
-                messageId: 'removeVar',
-                output: '/*eslint react/jsx-uses-react:1*/ ',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        code: '/*eslint react/jsx-uses-react:1*/ /** @jsx Foo */ var React; <div />;',
-        errors: [
-          {
-            message: "'React' is defined but never used.",
-            suggestions: [
-              {
-                messageId: 'removeVar',
-                output: '/*eslint react/jsx-uses-react:1*/ /** @jsx Foo */  <div />;',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        code: '/*eslint react/jsx-uses-react:1*/ var React; <div />;',
-        errors: [
-          {
-            message: "'React' is defined but never used.",
-            suggestions: [
-              {
-                messageId: 'removeVar',
-                output: '/*eslint react/jsx-uses-react:1*/  <div />;',
-              },
-            ],
-          },
-        ],
-        settings,
-      },
-      {
-        code: '/*eslint react/jsx-uses-react:1*/ var Frag; <></>;',
-        errors: [
-          {
-            message: "'Frag' is defined but never used.",
-            suggestions: [
-              {
-                messageId: 'removeVar',
-                output: '/*eslint react/jsx-uses-react:1*/  <></>;',
-              },
-            ],
-          },
-        ],
-        features: ['fragment'],
-        settings: { react: { fragment: 'Fragment', version: '18' } },
-      },
-      {
-        code: '/*eslint react/jsx-uses-react:1*/ var React; <></>;',
-        features: ['fragment'],
-        errors: [
-          {
-            message: "'React' is defined but never used.",
-            suggestions: [
-              {
-                messageId: 'removeVar',
-                output: '/*eslint react/jsx-uses-react:1*/  <></>;',
-              },
-            ],
-          },
-        ],
-        settings,
-      },
-    ].map((test) => {
-      if (!rule.meta.hasSuggestions) {
-        test.errors = test.errors.map((error) => {
-          // https://github.com/eslint/eslint/pull/18352 added suggestions to no-unused-vars in eslint v9.17.0
-          delete error.suggestions;
-          return error;
-        });
-      }
-      return test;
-    }),
-  ),
+  invalid: [],
+});
+
+describe('jsx-uses-react React compatibility', () => {
+  it('rejects configured React 18 before linting', () => {
+    assert.throws(
+      () => rule.create({ settings: { react: { version: '18.3.1' } } }),
+      /React 18\.3\.1 is unsupported\. @ternaus\/eslint-plugin-react requires React 19\.0\.0 or newer\./u,
+    );
+  });
 });

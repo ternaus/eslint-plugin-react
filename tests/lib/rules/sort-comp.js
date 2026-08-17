@@ -95,7 +95,7 @@ ruleTester.run('sort-comp', rule, {
     },
     {
       code: `
-        // Must validate a full React 16.3 createReactClass class
+        // Must validate a complete createReactClass component.
         var Hello = createReactClass({
           displayName : '',
           propTypes: {},
@@ -123,7 +123,7 @@ ruleTester.run('sort-comp', rule, {
     },
     {
       code: `
-        // Must validate React 16.3 lifecycle methods with the default parser
+        // Must validate lifecycle methods with the default parser.
         class Hello extends React.Component {
           constructor() {}
           static getDerivedStateFromProps() {}
@@ -143,7 +143,7 @@ ruleTester.run('sort-comp', rule, {
     },
     {
       code: `
-        // Must validate a full React 16.3 ES6 class
+        // Must validate a complete ES6 class component.
         class Hello extends React.Component {
           static displayName = ''
           static propTypes = {}

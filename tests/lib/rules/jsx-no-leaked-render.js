@@ -267,11 +267,6 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           },
           {
             message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
-            line: 6,
-            column: 16,
-          },
-          {
-            message: 'Potential leaked value that might cause unintentionally rendered values or rendering crashes',
             line: 7,
             column: 16,
           },
@@ -281,13 +276,13 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           return (
             <>
               {0 ? <Something/> : null}
-              {'' ? <Something/> : null}
+              {'' && <Something/>}
               {NaN ? <Something/> : null}
             </>
           )
         }
       `,
-        settings: { react: { version: '17.999.999' } },
+        settings: { react: { version: '19.0.0' } },
       },
 
       {
@@ -326,7 +321,7 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-        settings: { react: { version: '18.0.0' } },
+        settings: { react: { version: '20.0.0' } },
       },
 
       // Invalid tests with both strategies enabled (default)

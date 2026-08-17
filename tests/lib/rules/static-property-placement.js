@@ -31,7 +31,7 @@ const ruleTesterConfig = {
   },
   settings: {
     react: {
-      version: '15',
+      version: '19.0.0',
     },
   },
 };

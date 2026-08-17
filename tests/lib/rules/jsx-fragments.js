@@ -24,15 +24,7 @@ const parserOptions = {
 
 const settings = {
   react: {
-    version: '16.2',
-    pragma: 'Act',
-    fragment: 'Frag',
-  },
-};
-
-const settingsOld = {
-  react: {
-    version: '16.1',
+    version: '19.0.0',
     pragma: 'Act',
     fragment: 'Frag',
   },
@@ -105,22 +97,6 @@ ruleTester.run('jsx-fragments', rule, {
   ]),
 
   invalid: parsers.all([
-    {
-      code: '<><Foo /></>',
-      features: ['fragment'],
-      settings: settingsOld,
-      errors: [{ messageId: 'fragmentsNotSupported' }],
-    },
-    {
-      code: '<Act.Frag><Foo /></Act.Frag>',
-      settings: settingsOld,
-      errors: [{ messageId: 'fragmentsNotSupported' }],
-    },
-    {
-      code: '<Act.Frag />',
-      settings: settingsOld,
-      errors: [{ messageId: 'fragmentsNotSupported' }],
-    },
     {
       code: '<><Foo /></>',
       output: '<Act.Frag><Foo /></Act.Frag>',

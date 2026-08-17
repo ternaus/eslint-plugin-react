@@ -12,7 +12,7 @@ In JSX, a React [fragment] is created either with `<React.Fragment>...</React.Fr
 
 This rule allows you to enforce one way or the other.
 
-Support for fragments was added in React v16.2, so the rule will warn on either of these forms if an older React version is specified in [shared settings][shared_settings].
+React 19+ supports both forms. This rule controls which form your codebase uses.
 
 ## Rule Options
 
@@ -63,5 +63,4 @@ Examples of **correct** code for this rule:
 ```
 
 [fragment]: https://reactjs.org/docs/fragments.html
-[shared_settings]: /README.md#configuration
 [short_syntax]: https://reactjs.org/docs/fragments.html#short-syntax

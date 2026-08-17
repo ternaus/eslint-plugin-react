@@ -4,7 +4,8 @@
 
 <!-- end auto-generated rule header -->
 
-Stateless functional components are simpler than class based components and will benefit from future React performance optimizations specific to these components.
+Use this rule to find class components that do not need class-only features and
+can be rewritten as functions.
 
 ## Rule Details
 
@@ -15,7 +16,7 @@ This rule will check your class based React components for
 - extension of `React.PureComponent` (if the `ignorePureComponents` flag is true)
 - presence of `ref` attribute in JSX
 - the use of decorators
-- `render` method that return anything but JSX: `undefined`, `null`, etc. (only in React <15.0.0, see [shared settings](https://github.com/ternaus/eslint-plugin-react#settings) for React version configuration)
+- a `render` method that returns a value other than JSX, `null`, or `false`
 
 If none of these elements are found, the rule will warn you to write this component as a pure function.
 
@@ -39,19 +40,6 @@ const Foo = function(props, context) {
 
   return <div>{props.foo}</div>;
 };
-```
-
-Examples of **correct** code for this rule, in React <15.0.0:
-
-```jsx
-class Foo extends React.Component {
-  render() {
-    if (!this.props.foo) {
-      return null
-    }
-    return <div>{this.props.foo}</div>;
-  }
-}
 ```
 
 ## Rule Options

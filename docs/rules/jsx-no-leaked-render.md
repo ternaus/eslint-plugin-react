@@ -26,9 +26,6 @@ const Example = () => {
       {/* React: renders undesired NaN */}
       {/* React Native: crashes 💥 */}
 
-      {'' && <Something />}
-      {/* React: renders nothing */}
-      {/* React Native, with React < 18: crashes 💥 */}
     </>
   )
 }

@@ -701,8 +701,7 @@ ruleTester.run('display-name', rule, {
       `,
     },
     {
-      // Nested React.forwardRef should be accepted in React versions in the following range:
-      // ^0.14.10 || ^15.7.0 || >= 16.12.0
+      // Nested React.forwardRef components do not require another display name.
       code: `
         import React from 'react'
 
@@ -714,13 +713,12 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '16.14.0',
+          version: '19.0.0',
         },
       },
     },
     {
-      // Nested React.forwardRef should be accepted in React versions in the following range:
-      // ^0.14.10 || ^15.7.0 || >= 16.12.0
+      // Nested React.forwardRef components do not require another display name.
       code: `
         import React from 'react'
 
@@ -732,13 +730,12 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '15.7.0',
+          version: '20.0.0',
         },
       },
     },
     {
-      // Nested React.forwardRef should be accepted in React versions in the following range:
-      // ^0.14.10 || ^15.7.0 || >= 16.12.0
+      // Nested React.forwardRef components do not require another display name.
       code: `
         import React from 'react'
 
@@ -750,13 +747,12 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '16.12.1',
+          version: '19.0.0',
         },
       },
     },
     {
-      // Nested React.forwardRef should be accepted in React versions in the following range:
-      // ^0.14.10 || ^15.7.0 || >= 16.12.0
+      // Nested React.forwardRef components do not require another display name.
       code: `
         export const ComponentWithForwardRef = React.memo(
           React.forwardRef(function Component({ world }) {
@@ -766,13 +762,12 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '0.14.11',
+          version: '20.0.0',
         },
       },
     },
     {
-      // Nested React.forwardRef should be accepted in React versions in the following range:
-      // ^0.14.10 || ^15.7.0 || >= 16.12.0
+      // Nested React.forwardRef components do not require another display name.
       code: `
         import React from 'react'
 
@@ -784,7 +779,7 @@ ruleTester.run('display-name', rule, {
       `,
       settings: {
         react: {
-          version: '15.7.1',
+          version: '19.0.0',
         },
       },
     },
@@ -839,21 +834,6 @@ ruleTester.run('display-name', rule, {
       `,
       options: [{ checkContextObjects: true }],
     },
-    // React.createContext should be accepted in React versions in the following range:
-    // >= 16.13.0
-    {
-      code: `
-        import { createContext } from 'react';
-
-        const Hello = createContext();
-      `,
-      settings: {
-        react: {
-          version: '16.2.0',
-        },
-      },
-      options: [{ checkContextObjects: true }],
-    },
     {
       code: `
         import { createContext } from 'react';
@@ -861,11 +841,6 @@ ruleTester.run('display-name', rule, {
         const Hello = createContext();
         Hello.displayName = "HelloContext";
       `,
-      settings: {
-        react: {
-          version: '>16.3.0',
-        },
-      },
       options: [{ checkContextObjects: true }],
     },
     {
@@ -884,11 +859,6 @@ ruleTester.run('display-name', rule, {
 
         const Hello = createContext();
       `,
-      settings: {
-        react: {
-          version: '>16.3.0',
-        },
-      },
       options: [{ checkContextObjects: false }],
     },
     {
@@ -1200,70 +1170,6 @@ ruleTester.run('display-name', rule, {
         })
       `,
       errors: [{ messageId: 'noDisplayName' }],
-    },
-    {
-      // Only trigger an error for the outer React.memo,
-      // if the React version is not in the following range:
-      // ^0.14.10 || ^15.7.0 || >= 16.12.0
-      code: `
-        import React from 'react'
-
-        const MemoizedForwardRefComponentLike = React.memo(
-          React.forwardRef(({ world }, ref) => {
-            return <div ref={ref}>Hello {world}</div>
-          })
-        )
-      `,
-      errors: [
-        {
-          messageId: 'noDisplayName',
-        },
-      ],
-      settings: {
-        react: {
-          version: '15.6.0',
-        },
-      },
-    },
-    {
-      // Only trigger an error for the outer React.memo,
-      // if the React version is not in the following range:
-      // ^0.14.10 || ^15.7.0 || >= ^16.12.0
-      code: `
-        import React from 'react'
-
-        const MemoizedForwardRefComponentLike = React.memo(
-          React.forwardRef(function({ world }, ref) {
-            return <div ref={ref}>Hello {world}</div>
-          })
-        )
-      `,
-      errors: [{ messageId: 'noDisplayName' }],
-      settings: {
-        react: {
-          version: '0.14.2',
-        },
-      },
-    },
-    {
-      // React does not handle the result of forwardRef being passed into memo
-      // ComponentWithMemoAndForwardRef gets shown as Memo(Anonymous)
-      // See https://github.com/facebook/react/issues/16722
-      code: `
-        import React from 'react'
-
-        const MemoizedForwardRefComponentLike = React.memo(
-          React.forwardRef(function ComponentLike({ world }, ref) {
-            return <div ref={ref}>Hello {world}</div>
-          })
-        )
-      `,
-      errors: [{ messageId: 'noDisplayName' }],
-      settings: {
-        react: {
-          version: '15.0.1',
-        },
-      },
     },
     {
       code: `

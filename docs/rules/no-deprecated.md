@@ -6,7 +6,8 @@
 
 <!-- end auto-generated rule header -->
 
-Several methods are deprecated between React versions. This rule will warn you if you try to use a deprecated method. Use the [shared settings](/README.md#configuration) to specify the React version.
+This plugin targets React 19+. The rule reports every API in its known
+deprecated-API list; it does not vary its result by a configured React version.
 
 ## Rule Details
 
@@ -34,12 +35,12 @@ React.DOM.div();
 
 import React, { PropTypes } from 'react';
 
-// old lifecycles (since React 16.9)
+// legacy lifecycles
 componentWillMount() { }
 componentWillReceiveProps() { }
 componentWillUpdate() { }
 
-// React 18 deprecations
+// legacy root APIs
 import { render } from 'react-dom';
 ReactDOM.render(<div></div>, container);
 
@@ -56,12 +57,6 @@ ReactDOMServer.renderToNodeStream(element);
 Examples of **correct** code for this rule:
 
 ```jsx
-// when React < 18
-ReactDOM.render(<MyComponent />, root);
-
-// when React is < 0.14
-ReactDOM.findDOMNode(this.refs.foo);
-
 import { PropTypes } from 'prop-types';
 
 UNSAFE_componentWillMount() { }

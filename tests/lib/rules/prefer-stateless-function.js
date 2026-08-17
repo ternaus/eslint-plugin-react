@@ -204,45 +204,6 @@ ruleTester.run('prefer-stateless-function', rule, {
       `,
     },
     {
-      // Can return null (ES6, React 0.14.0)
-      code: `
-        class Foo extends React.Component {
-          render() {
-            if (!this.props.foo) {
-              return null;
-            }
-            return <div>{this.props.foo}</div>;
-          }
-        }
-      `,
-      settings: { react: { version: '0.14.0' } },
-    },
-    {
-      // Can return null (ES5, React 0.14.0)
-      code: `
-        var Foo = createReactClass({
-          render: function() {
-            if (!this.props.foo) {
-              return null;
-            }
-            return <div>{this.props.foo}</div>;
-          }
-        });
-      `,
-      settings: { react: { version: '0.14.0' } },
-    },
-    {
-      // Can return null (shorthand if in return, React 0.14.0)
-      code: `
-        class Foo extends React.Component {
-          render() {
-            return true ? <div /> : null;
-          }
-        }
-      `,
-      settings: { react: { version: '0.14.0' } },
-    },
-    {
       code: `
         export default (Component) => (
           class Test extends React.Component {

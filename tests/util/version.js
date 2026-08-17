@@ -32,24 +32,24 @@ describe('Version', () => {
     it('matches detected version', () => {
       context.filename = path.resolve(base, 'detect-version', 'test.js');
 
-      assert.equal(versionUtil.testReactVersion(context, '>= 1.2.3'), true);
-      assert.equal(versionUtil.testReactVersion(context, '>= 1.2.4'), false);
+      assert.equal(versionUtil.testReactVersion(context, '>= 19.2.7'), true);
+      assert.equal(versionUtil.testReactVersion(context, '>= 19.2.8'), false);
       assert.equal(versionUtil.testFlowVersion(context, '>= 0.92.0'), true);
     });
 
     it('matches detected version in sibling project', () => {
       context.filename = path.resolve(base, 'detect-version-sibling', 'test.js');
 
-      assert.equal(versionUtil.testReactVersion(context, '>= 2.3.4'), true);
-      assert.equal(versionUtil.testReactVersion(context, '>= 2.3.5'), false);
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.0.0'), true);
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.0.1'), false);
       assert.equal(versionUtil.testFlowVersion(context, '>= 2.92.0'), true);
     });
 
     it('matches detected version in child project', () => {
       context.filename = path.resolve(base, 'detect-version', 'detect-version-child', 'test.js');
 
-      assert.equal(versionUtil.testReactVersion(context, '>= 3.4.5'), true);
-      assert.equal(versionUtil.testReactVersion(context, '>= 3.4.6'), false);
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.1.0'), true);
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.1.1'), false);
       assert.equal(versionUtil.testFlowVersion(context, '>= 3.92.0'), true);
     });
 
@@ -66,14 +66,14 @@ describe('Version', () => {
     });
 
     it('uses default version from settings if provided and react is not installed', () => {
-      context.settings.react.defaultVersion = '16.14.0';
+      context.settings.react.defaultVersion = '19.0.0';
       context.filename = path.resolve(base, 'detect-version-missing', 'test.js');
 
-      assert.equal(versionUtil.testReactVersion(context, '16.14.0'), true);
+      assert.equal(versionUtil.testReactVersion(context, '19.0.0'), true);
 
       expectedErrorArgs = [
         [
-          'Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming default React version for linting: "16.14.0".',
+          'Warning: React version was set to "detect" in eslint-plugin-react settings, but the "react" package is not installed. Assuming default React version for linting: "19.0.0".',
         ],
       ];
 
@@ -124,28 +124,35 @@ describe('Version', () => {
     it('works with virtual filename', () => {
       context.filename = path.resolve(base, 'detect-version-sibling', 'test.js/0_fake.js');
 
-      assert.equal(versionUtil.testReactVersion(context, '>= 2.3.4'), true);
-      assert.equal(versionUtil.testReactVersion(context, '>= 2.3.5'), false);
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.0.0'), true);
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.0.1'), false);
       assert.equal(versionUtil.testFlowVersion(context, '>= 2.92.0'), true);
     });
 
     it('works with recursive virtual filename', () => {
       context.filename = path.resolve(base, 'detect-version-sibling', 'test.js/0_fake.md/1_fake.js');
 
-      assert.equal(versionUtil.testReactVersion(context, '>= 2.3.4'), true);
-      assert.equal(versionUtil.testReactVersion(context, '>= 2.3.5'), false);
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.0.0'), true);
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.0.1'), false);
       assert.equal(versionUtil.testFlowVersion(context, '>= 2.92.0'), true);
     });
   });
 
   describe('string version', () => {
-    const context = { settings: { react: { version: '15.0', flowVersion: '1.2' } } };
+    const context = { settings: { react: { version: '19.0', flowVersion: '1.2' } } };
+    const unsupportedContext = { settings: { react: { version: '18.3.1', flowVersion: '1.2' } } };
     const invalidContext = { settings: { react: { version: 'latest', flowVersion: 'not semver' } } };
 
     it('works with react', () => {
-      assert.equal(versionUtil.testReactVersion(context, '>= 0.14.0'), true);
-      assert.equal(versionUtil.testReactVersion(context, '>= 15.0.0'), true);
-      assert.equal(versionUtil.testReactVersion(context, '>= 16.0.0'), false);
+      assert.equal(versionUtil.testReactVersion(context, '>= 19.0.0'), true);
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.0.0'), false);
+    });
+
+    it('rejects an unsupported configured React version', () => {
+      assert.throws(
+        () => versionUtil.testReactVersion(unsupportedContext, '>= 19.0.0'),
+        /React 18\.3\.1 is unsupported\. @ternaus\/eslint-plugin-react requires React 19\.0\.0 or newer\./u,
+      );
     });
 
     it('works with flow', () => {
@@ -155,7 +162,7 @@ describe('Version', () => {
     });
 
     it('fails nicely with an invalid react version', () => {
-      assert.equal(versionUtil.testReactVersion(invalidContext, '>= 15.0'), true);
+      assert.equal(versionUtil.testReactVersion(invalidContext, '>= 19.0'), true);
       expectedErrorArgs = [
         [
           'Warning: React version specified in eslint-plugin-react-settings must be a valid semver version, or "detect"; got “latest”',
@@ -174,15 +181,13 @@ describe('Version', () => {
   });
 
   describe('non-string version', () => {
-    const context = { settings: { react: { version: 15.0, flowVersion: 1.2 } } };
+    const context = { settings: { react: { version: 19.0, flowVersion: 1.2 } } };
 
     it('works with react', () => {
-      assert.equal(versionUtil.testReactVersion(context, '>= 0.14.0'), true, '>= 0.14.0');
-      assert.equal(versionUtil.testReactVersion(context, '>= 15.0.0'), true, '>= 15.0.0');
-      assert.equal(versionUtil.testReactVersion(context, '>= 16.0.0'), false, '>= 16.0.0');
+      assert.equal(versionUtil.testReactVersion(context, '>= 19.0.0'), true, '>= 19.0.0');
+      assert.equal(versionUtil.testReactVersion(context, '>= 20.0.0'), false, '>= 20.0.0');
 
       expectedErrorArgs = [
-        ['Warning: React version specified in eslint-plugin-react-settings must be a string; got “number”'],
         ['Warning: React version specified in eslint-plugin-react-settings must be a string; got “number”'],
         ['Warning: React version specified in eslint-plugin-react-settings must be a string; got “number”'],
       ];
@@ -199,5 +204,17 @@ describe('Version', () => {
         ['Warning: Flow version specified in eslint-plugin-react-settings must be a string; got “number”'],
       ];
     });
+  });
+
+  it('rejects an unsupported detected React version', () => {
+    const context = {
+      settings: { react: { version: 'detect' } },
+      filename: path.resolve(base, 'detect-version-unsupported', 'test.js'),
+    };
+
+    assert.throws(
+      () => versionUtil.testReactVersion(context, '>= 19.0.0'),
+      /React 18\.3\.1 is unsupported\. @ternaus\/eslint-plugin-react requires React 19\.0\.0 or newer\./u,
+    );
   });
 });

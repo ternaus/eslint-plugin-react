@@ -2240,7 +2240,7 @@ ruleTester.run('prop-types', rule, {
           foo: PropTypes.func.isRequired,
         };
       `,
-        settings: { react: { version: '16.3.0' } },
+        settings: { react: { version: '19.0.0' } },
       },
       {
         code: `
@@ -7670,7 +7670,7 @@ ruleTester.run('prop-types', rule, {
           foo: PropTypes.func.isRequired,
         };
       `,
-        settings: { react: { version: '16.3.0' } },
+        settings: { react: { version: '20.0.0' } },
         errors: [
           {
             messageId: 'missingPropType',

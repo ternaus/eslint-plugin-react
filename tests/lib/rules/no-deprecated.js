@@ -90,29 +90,6 @@ ruleTester.run('no-deprecated', rule, {
         }
       `,
     },
-    // Deprecated in a later version
-    {
-      code: 'React.renderComponent()',
-      settings: { react: { version: '0.11.0' } },
-    },
-    {
-      code: 'React.createClass()',
-      settings: { react: { version: '15.4.0' } },
-    },
-    {
-      code: 'PropTypes',
-      settings: { react: { version: '15.4.0' } },
-    },
-    {
-      code: `
-        class Foo extends React.Component {
-          componentWillMount() {}
-          componentWillReceiveProps() {}
-          componentWillUpdate() {}
-        }
-      `,
-      settings: { react: { version: '16.8.0' } },
-    },
     {
       code: `
         import React from "react";
@@ -120,18 +97,7 @@ ruleTester.run('no-deprecated', rule, {
         let { default: defaultReactExport, ...allReactExports } = React;
       `,
     },
-    // React < 18
-    {
-      code: `
-        import { render, hydrate } from 'react-dom';
-        import { renderToNodeStream } from 'react-dom/server';
-        ReactDOM.render(element, container);
-        ReactDOM.unmountComponentAtNode(container);
-        ReactDOMServer.renderToNodeStream(element);
-      `,
-      settings: { react: { version: '17.999.999' } },
-    },
-    // React 18 API
+    // Current root APIs
     {
       code: `
         import ReactDOM, { createRoot } from 'react-dom/client';

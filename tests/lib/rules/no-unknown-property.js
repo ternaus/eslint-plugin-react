@@ -87,12 +87,6 @@ ruleTester.run('no-unknown-property', rule, {
     { code: '<th abbr="abbr" />' },
     { code: '<td abbr="abbr" />' },
     { code: '<template shadowrootmode="open" shadowrootclonable shadowrootdelegatesfocus shadowrootserializable />' },
-    {
-      code: '<div allowTransparency="true" />',
-      settings: {
-        react: { version: '16.0.99' },
-      },
-    },
     // React related attributes
     { code: '<div onPointerDown={this.onDown} onPointerUp={this.onUp} />' },
     { code: '<input type="checkbox" defaultChecked={this.state.checkbox} />' },
@@ -221,9 +215,7 @@ ruleTester.run('no-unknown-property', rule, {
   invalid: parsers.all([
     {
       code: '<div allowTransparency="true" />',
-      settings: {
-        react: { version: '16.1.0' },
-      },
+      settings: { react: { version: '19.0.0' } },
       errors: [
         {
           messageId: 'unknownProp',

@@ -4,9 +4,9 @@
 
 <!-- end auto-generated rule header -->
 
-**In React 16.9** any URLs starting with `javascript:` [scheme](https://wiki.whatwg.org/wiki/URL_schemes#javascript:_URLs) log a warning.
-React considers the pattern as a dangerous attack surface, see [details](https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#deprecating-javascript-urls).
-**In a future major release**, React will throw an error if it encounters a `javascript:` URL.
+`javascript:` [URLs](https://wiki.whatwg.org/wiki/URL_schemes#javascript:_URLs)
+execute code when followed. This rule rejects literal uses in links and in the
+custom link components you configure.
 
 ## Rule Details
 
