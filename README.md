@@ -1,17 +1,22 @@
 # @ternaus/eslint-plugin-react
 
-React linting rules for ESLint 10. This is a maintained, native-ESM fork of
-[`jsx-eslint/eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react):
-it retains the `react/*` rule namespace and its rule set while removing legacy
-tooling and configuration paths.
+> [Support ongoing maintenance on PayPal](https://www.paypal.com/paypalme/ternaus)
 
-## Requirements
+React linting rules for ESLint 10. This is a maintained native-ESM fork of
+[`jsx-eslint/eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react).
+It keeps the established `react/*` rule namespace and rule set while removing
+legacy tooling and configuration paths.
 
-- ESLint 10
-- Node.js 22.13, 24, or 26
-- Flat configuration in `eslint.config.js`
+## What this package is for
 
-ESLint 9 and `.eslintrc*` files are not supported.
+Use this plugin to find React correctness problems, unsafe legacy APIs, JSX
+mistakes, and optional consistency issues. Start with the curated
+`recommended` preset. Add a specific rule when it matches a problem in your
+codebase, or use `all` once to audit the full rule set before choosing which
+checks to keep.
+
+This fork supports ESLint 10, Node.js 22.13, 24, and 26, and flat config in
+`eslint.config.js`. ESLint 9 and `.eslintrc*` files are not supported.
 
 ## Install
 
@@ -19,9 +24,9 @@ ESLint 9 and `.eslintrc*` files are not supported.
 yarn add --dev eslint@^10 @ternaus/eslint-plugin-react
 ```
 
-## Configure
+## Use it
 
-Add the recommended rules to `eslint.config.js`:
+Create `eslint.config.js` and start with the recommended React checks:
 
 ```js
 import react from '@ternaus/eslint-plugin-react';
@@ -39,8 +44,33 @@ export default [
 ];
 ```
 
-The package is native ESM. Node.js 22.13 and later can also load it with
-`require`, so existing CommonJS flat configs can use the same plugin object:
+Run the checks, then review and apply available automatic fixes:
+
+```sh
+yarn eslint .
+yarn eslint . --fix
+```
+
+If your project uses the automatic JSX runtime, append the runtime config. It
+turns off the two checks that require `React` to be in scope solely for JSX:
+
+```js
+export default [
+  {
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    ...react.configs.flat.recommended,
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+  react.configs.flat['jsx-runtime'],
+];
+```
+
+The package is native ESM, but Node.js 22.13 and later can load it with
+`require`. A CommonJS flat config uses the same plugin object:
 
 ```js
 const react = require('@ternaus/eslint-plugin-react');
@@ -49,40 +79,70 @@ module.exports = [
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     ...react.configs.flat.recommended,
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
   },
 ];
 ```
 
-The plugin is always registered as `react`; rule IDs therefore remain
-`react/rule-name` even though the package is scoped.
+The plugin is always registered as `react`, so rule IDs stay in the familiar
+`react/rule-name` form even though the package is scoped.
 
-## Configs
+## Choose the checks you need
 
-| Config | Purpose |
-| --- | --- |
-| `react.configs.flat.recommended` | React correctness and established best practices. |
-| `react.configs.flat.all` | Every non-deprecated rule as an error. Adopt incrementally. |
-| `react.configs.flat['jsx-runtime']` | Turns off `react/react-in-jsx-scope` and `react/jsx-uses-react` for the automatic JSX runtime. |
+<!-- rule-config-summary:start -->
+| Config | Active rules | Use it when |
+| --- | ---: | --- |
+| `recommended` | 21 | You want the supported baseline for React correctness and established best practices. |
+| `all` | 102 | You want to audit every non-deprecated rule, then keep only the rules that fit your codebase. |
+| `jsx-runtime` | 2 disabled | Your project uses the automatic JSX runtime, so importing `React` solely for JSX is unnecessary. |
+<!-- rule-config-summary:end -->
 
-Configs are also available as importable subpaths, for example
-`@ternaus/eslint-plugin-react/configs/recommended`.
+Use `recommended` for normal development. Treat `all` as an audit: it enables
+every active rule at error severity, including opinionated and style-oriented
+rules. After reviewing the findings, keep individual rules deliberately:
 
-## Settings
+```js
+import react from '@ternaus/eslint-plugin-react';
 
-Place shared React settings in a flat-config object’s `settings` field. The
-most common setting is `settings.react.version: 'detect'`. Rules that need
-custom components also read `componentWrapperFunctions`, `propWrapperFunctions`,
-`linkComponents`, and `formComponents` from that same object. See the relevant
-rule page for its exact setting shape.
+const recommended = react.configs.flat.recommended;
 
-## Rules
+export default [
+  {
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    ...recommended,
+    rules: {
+      ...recommended.rules,
+      'react/no-array-index-key': 'error',
+    },
+  },
+];
+```
 
-Every shipped rule has a focused reference page in
-[`docs/rules`](docs/rules). The rule metadata links to the same page from ESLint
-editors. Rule behavior is tested with Espree, `@typescript-eslint/parser`, and
-`@babel/eslint-parser` (including Flow syntax).
+The [rule catalog](docs/rules/README.md) lists every rule, what it reports,
+whether each preset enables it, and whether it supports `--fix` or an editor
+suggestion. Each rule name links to examples and options.
 
-## Development
+## React settings
+
+Set `settings.react.version` to `'detect'` unless your workspace needs a fixed
+React version. Rules with project-specific components read
+`componentWrapperFunctions`, `propWrapperFunctions`, `linkComponents`, and
+`formComponents` from the same `settings.react` object. Each rule page documents
+its exact option and setting shape.
+
+## How the fork verifies rule behavior
+
+Every rule has a focused reference page and regression tests. The test suite
+runs eligible cases with Espree, `@typescript-eslint/parser`, and
+`@babel/eslint-parser`, including Flow syntax. The complete quality command also
+enforces coverage thresholds, validates the generated rule catalog, inspects the
+published archive, and loads that archive as ESM, CommonJS, and TypeScript.
+
+## Develop the plugin
 
 ```sh
 corepack enable
@@ -92,13 +152,27 @@ yarn quality:complete
 
 Biome formats the repository and owns overlapping lint rules; its completeness
 check requires every exception to be registered with a reason. ESLint enforces
-the remaining JavaScript and plugin-authoring rules. `yarn quality:complete`
-runs formatting, both lint layers, type contracts, coverage thresholds, package
-inspection, and an external tarball consumer test.
+the remaining JavaScript and plugin-authoring rules.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for change requirements,
 [RELEASING.md](RELEASING.md) for publication, and [UPSTREAM.md](UPSTREAM.md) for
 fork provenance and synchronization policy.
+
+## Cite this project
+
+If this fork supports published work, cite the exact release you used. GitHub’s
+**Cite this repository** control reads [CITATION.cff](CITATION.cff) and provides
+ready-to-copy APA and BibTeX entries. You can also use this BibTeX entry:
+
+```bibtex
+@software{Iglovikov_eslint_plugin_react_2026,
+  author = {Iglovikov, Vladimir},
+  title = {{@ternaus/eslint-plugin-react}},
+  url = {https://github.com/ternaus/eslint-plugin-react},
+  version = {8.0.0-alpha.0},
+  year = {2026}
+}
+```
 
 ## License
 

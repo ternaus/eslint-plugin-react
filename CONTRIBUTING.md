@@ -18,7 +18,10 @@ tests on Node.js 24 and 26.
 
 Rule implementations live in `lib/rules`; their tests live in the matching
 `tests/lib/rules` path. Update a rule’s reference page in `docs/rules` whenever
-its public behavior, options, or recommendation status changes.
+its public behavior, options, or recommendation status changes. Run
+`yarn docs:rules` whenever rule metadata or a preset changes. It rebuilds the
+README preset summary and the full rule catalog; the quality gate rejects stale
+generated documentation.
 
 Every rule change needs a focused regression test. The suite runs each eligible
 case with Espree, TypeScript-ESLint, and the current Babel parser. Do not add
