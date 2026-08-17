@@ -94,6 +94,24 @@ ruleTester.run('jsx-curly-brace-presence', rule, {
       },
       {
         code: `
+        <span>
+          <span>The braces</span>
+          {""} matter here.
+        </span>
+      `,
+        options: [{ children: 'never' }],
+      },
+      {
+        code: `
+        <span>
+          <span>The braces</span>
+          {\`\`} matter here.
+        </span>
+      `,
+        options: [{ children: 'never' }],
+      },
+      {
+        code: `
         <>
           foo{' '}
           <span>bar</span>
@@ -479,6 +497,18 @@ ruleTester.run('jsx-curly-brace-presence', rule, {
 
   invalid: parsers.all(
     [].concat(
+      {
+        code: '<span><span>The braces</span>{""}matter here.</span>',
+        options: [{ children: 'never' }],
+        output: '<span><span>The braces</span>matter here.</span>',
+        errors: [{ messageId: 'unnecessaryCurly' }],
+      },
+      {
+        code: '<span><span>The braces</span>{``}matter here.</span>',
+        options: [{ children: 'never' }],
+        output: '<span><span>The braces</span>matter here.</span>',
+        errors: [{ messageId: 'unnecessaryCurly' }],
+      },
       {
         code: '<App prop={`foo`} />',
         options: [{ props: 'never' }],
