@@ -71,7 +71,7 @@ A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A 
 | [`react/no-array-index-key`](no-array-index-key.md) | Disallow usage of Array index in keys | — | ✓ | — | active |
 | [`react/no-arrow-function-lifecycle`](no-arrow-function-lifecycle.md) | Lifecycle methods should be methods on the prototype, not class fields | — | ✓ | `--fix` | active |
 | [`react/no-children-prop`](no-children-prop.md) | Disallow passing of children as props | ✓ | ✓ | — | active |
-| [`react/no-danger`](no-danger.md) | Disallow usage of dangerous JSX properties | — | ✓ | — | active |
+| [`react/no-danger`](no-danger.md) | Disallow usage of dangerous React properties | — | ✓ | — | active |
 | [`react/no-danger-with-children`](no-danger-with-children.md) | Disallow when a DOM element is using both children and dangerouslySetInnerHTML | ✓ | ✓ | — | active |
 | [`react/no-deprecated`](no-deprecated.md) | Disallow usage of deprecated methods | ✓ | ✓ | — | active |
 | [`react/no-did-mount-set-state`](no-did-mount-set-state.md) | Disallow usage of setState in componentDidMount | — | ✓ | — | active |
