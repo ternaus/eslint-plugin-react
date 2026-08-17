@@ -50,6 +50,9 @@ ruleTester.run('no-unknown-property', rule, {
     { code: '<div onMouseDown={this._onMouseDown}></div>;' },
     { code: '<div onScrollEnd={this._onScrollEnd}></div>;' },
     { code: '<div onScrollEndCapture={this._onScrollEndCapture}></div>;' },
+    {
+      code: '<div onTransitionCancel={handler} onTransitionRun={handler} onTransitionStart={handler} onTransitionCancelCapture={handler} onTransitionRunCapture={handler} onTransitionStartCapture={handler} />',
+    },
     { code: '<a href="someLink" download="foo">Read more</a>' },
     { code: '<area download="foo" />' },
     { code: '<img src="cat_keyboard.jpeg" alt="A cat sleeping on a keyboard" align="top" fetchPriority="high" />' },
@@ -213,6 +216,17 @@ ruleTester.run('no-unknown-property', rule, {
     },
   ]),
   invalid: parsers.all([
+    {
+      code: '<div onTransitionStrat={handler} />',
+      errors: [
+        {
+          messageId: 'unknownProp',
+          data: {
+            name: 'onTransitionStrat',
+          },
+        },
+      ],
+    },
     {
       code: '<div allowTransparency="true" />',
       settings: { react: { version: '19.0.0' } },
