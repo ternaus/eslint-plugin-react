@@ -177,6 +177,10 @@ var Component = createReactClass({
 
 When `true`, the sorting of prop type definitions are checked.
 
+For TypeScript property signatures, the fixer moves a comment only when its
+attachment is clear. If blank lines make a comment a possible group heading,
+the rule reports the ordering problem and leaves the source unchanged.
+
 ## When Not To Use It
 
 This rule is a formatting preference and not following it won't negatively affect the quality of your code. If alphabetizing props declarations isn't a part of your coding standards, then you can leave this rule off.

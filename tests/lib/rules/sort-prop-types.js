@@ -2400,6 +2400,78 @@ ruleTester.run('sort-prop-types', rule, {
           },
         ],
       },
+      {
+        code: `
+        type Props = {
+          onClose: () => void;
+          onSave?: () => void;
+          initialContractInfo?: ContractInfo; // used to pre-populate the form
+          contractVersionTraceId?: TraceId; // used when editing an existing contract
+          contractContainerId: TraceId;
+        };
+        function ContractVersionWizard(props: Props) {
+          return <div />;
+        }
+      `,
+        output: `
+        type Props = {
+          initialContractInfo?: ContractInfo; // used to pre-populate the form
+          contractVersionTraceId?: TraceId; // used when editing an existing contract
+          contractContainerId: TraceId;
+          onClose: () => void;
+          onSave?: () => void;
+        };
+        function ContractVersionWizard(props: Props) {
+          return <div />;
+        }
+      `,
+        features: ['types'],
+        options: [{ callbacksLast: true, noSortAlphabetically: true, checkTypes: true }],
+        errors: [{ messageId: 'callbackPropsLast' }],
+      },
+      {
+        code: `
+        type Props = {
+          onClose: () => void;
+          // Identifies the dialog.
+          id: string;
+        };
+        function Dialog(props: Props) {
+          return <div />;
+        }
+      `,
+        output: `
+        type Props = {
+          // Identifies the dialog.
+          id: string;
+          onClose: () => void;
+        };
+        function Dialog(props: Props) {
+          return <div />;
+        }
+      `,
+        features: ['types'],
+        options: [{ callbacksLast: true, noSortAlphabetically: true, checkTypes: true }],
+        errors: [{ messageId: 'callbackPropsLast' }],
+      },
+      {
+        code: `
+        type Props = {
+          onClose: () => void;
+
+          // This comment may describe a group rather than the property below.
+
+          id: string;
+        };
+        function Dialog(props: Props) {
+          return <div />;
+        }
+      `,
+        output: null,
+        features: ['types'],
+        options: [{ callbacksLast: true, noSortAlphabetically: true, checkTypes: true }],
+        errors: [{ messageId: 'callbackPropsLast' }],
+      },
     ),
   ),
 });
