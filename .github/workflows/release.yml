@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
+          package-manager-cache: false
       - run: corepack enable
       - run: yarn install --immutable
       - run: node scripts/assert-release-tag.mjs '${{ github.event.release.tag_name }}'
