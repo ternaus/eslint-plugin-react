@@ -77,6 +77,11 @@ export default defineConfig(
     extends: ['react/flat/all'],
     settings: { react: { version: '19.0' } },
   },
+  {
+    files: ['undefined-return.jsx'],
+    plugins: { react },
+    rules: { 'react/no-render-return-undefined': 'error' },
+  },
 );
 `,
   );
@@ -86,6 +91,10 @@ export default defineConfig(
   );
   await writeFile(join(consumerDirectory, 'all.jsx'), 'const Component = () => <div class="broken">text</div>;\n');
   await writeFile(join(consumerDirectory, 'direct.jsx'), 'const Component = () => <div class="broken">text</div>;\n');
+  await writeFile(
+    join(consumerDirectory, 'undefined-return.jsx'),
+    "import { useEffect } from 'react'; const Component = () => { useEffect(() => {}); return undefined; };\n",
+  );
   await writeFile(
     join(consumerDirectory, 'eslint.direct.config.js'),
     `import react from '${packageName}';
@@ -119,6 +128,12 @@ for (const result of results) {
   const ruleIds = result.messages.map(({ ruleId }) => ruleId);
   assert.ok(ruleIds.includes('react/no-unknown-property'), JSON.stringify(result.messages));
 }
+
+const [undefinedReturnResult] = await eslint.lintFiles(['undefined-return.jsx']);
+assert.ok(
+  undefinedReturnResult.messages.some(({ ruleId }) => ruleId === 'react/no-render-return-undefined'),
+  JSON.stringify(undefinedReturnResult.messages),
+);
 
 const directEslint = new ESLint({ overrideConfigFile: 'eslint.direct.config.js' });
 const [directResult] = await directEslint.lintFiles(['direct.jsx']);

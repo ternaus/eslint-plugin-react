@@ -122,7 +122,7 @@ The plugin is always registered as `react`, so rule IDs stay in the familiar
 | Config | Active rules | Use it when |
 | --- | ---: | --- |
 | `recommended` | 21 | You want the supported baseline for React correctness and established best practices. |
-| `all` | 102 | You want to audit every non-deprecated rule, then keep only the rules that fit your codebase. |
+| `all` | 103 | You want to audit every non-deprecated rule, then keep only the rules that fit your codebase. |
 | `jsx-runtime` | 2 disabled | Your project uses the automatic JSX runtime, so importing `React` solely for JSX is unnecessary. |
 <!-- rule-config-summary:end -->
 

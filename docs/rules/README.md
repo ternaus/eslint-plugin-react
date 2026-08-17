@@ -2,7 +2,7 @@
 
 Start with the setup in the [repository README](../../README.md). Use this page when you need to choose an additional rule or inspect whether a rule can apply an automatic fix.
 
-The plugin exports 102 active rules and 2 deprecated rules. The `all` preset enables every active rule as an error. Deprecated rules remain available for an explicit configuration but are not enabled by a preset.
+The plugin exports 103 active rules and 2 deprecated rules. The `all` preset enables every active rule as an error. Deprecated rules remain available for an explicit configuration but are not enabled by a preset.
 
 A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A `suggestion` entry means the rule can offer an editor suggestion; it is not changed by the normal automatic-fix pass.
 
@@ -84,6 +84,7 @@ A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A 
 | [`react/no-namespace`](no-namespace.md) | Enforce that namespaces are not used in React elements | — | ✓ | — | active |
 | [`react/no-object-type-as-default-prop`](no-object-type-as-default-prop.md) | Disallow usage of referential-type variables as default param in functional component | — | ✓ | — | active |
 | [`react/no-redundant-should-component-update`](no-redundant-should-component-update.md) | Disallow usage of shouldComponentUpdate when extending React.PureComponent | — | ✓ | — | active |
+| [`react/no-render-return-undefined`](no-render-return-undefined.md) | Disallow React components from returning undefined | — | ✓ | — | active |
 | [`react/no-render-return-value`](no-render-return-value.md) | Disallow usage of the return value of ReactDOM.render | ✓ | ✓ | — | active |
 | [`react/no-set-state`](no-set-state.md) | Disallow usage of setState | — | ✓ | — | active |
 | [`react/no-string-refs`](no-string-refs.md) | Disallow using string references | ✓ | ✓ | — | active |
