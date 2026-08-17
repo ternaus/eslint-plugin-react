@@ -9,6 +9,8 @@
 // Requirements
 // -----------------------------------------------------------------------------
 
+const assert = require('assert');
+const { Linter } = require('eslint');
 const RuleTester = require('../../helpers/ruleTester');
 const rule = require('../../../lib/rules/no-danger');
 
@@ -102,6 +104,20 @@ ruleTester.run('no-danger', rule, {
 
         createElement('div', { dangerouslySetInnerHTML: { __html: '' } });
       `,
+      errors: [
+        {
+          messageId: 'dangerousProp',
+          data: { name: 'dangerouslySetInnerHTML' },
+        },
+      ],
+    },
+    {
+      code: `
+        import { createElement } from 'fooi';
+
+        createElement('div', { dangerouslySetInnerHTML: { __html: '' } });
+      `,
+      settings: { react: { pragma: 'FooI' } },
       errors: [
         {
           messageId: 'dangerousProp',
@@ -230,4 +246,51 @@ ruleTester.run('no-danger', rule, {
       ],
     },
   ]),
+});
+
+describe('destructured pragma imports', () => {
+  it('matches ASCII module specifiers when a Turkish locale would lowercase I differently', () => {
+    const originalToLocaleLowerCase = String.prototype.toLocaleLowerCase;
+    String.prototype.toLocaleLowerCase = function toLocaleLowerCase() {
+      return String(this) === 'ReactI' ? 'reactı' : originalToLocaleLowerCase.call(this);
+    };
+
+    try {
+      const linter = new Linter();
+      [
+        `
+          import { createElement } from 'reacti';
+
+          createElement('div', { dangerouslySetInnerHTML: { __html: '' } });
+        `,
+        `
+          const { createElement } = require('reacti');
+
+          createElement('div', { dangerouslySetInnerHTML: { __html: '' } });
+        `,
+      ].forEach((code) => {
+        const messages = linter.verify(
+          code,
+          {
+            files: ['**/*.js'],
+            languageOptions: {
+              parserOptions: {
+                ecmaFeatures: { jsx: true },
+              },
+            },
+            plugins: { react: { rules: { 'no-danger': rule } } },
+            rules: { 'react/no-danger': 'error' },
+            settings: { react: { pragma: 'ReactI' } },
+          },
+          'component.js',
+        );
+
+        assert.equal(messages.length, 1);
+        assert.equal(messages[0].ruleId, 'react/no-danger');
+        assert.equal(messages[0].messageId, 'dangerousProp');
+      });
+    } finally {
+      String.prototype.toLocaleLowerCase = originalToLocaleLowerCase;
+    }
+  });
 });
