@@ -2,10 +2,10 @@
 
 > [Support ongoing maintenance on PayPal](https://www.paypal.com/paypalme/ternaus)
 
-React linting rules for ESLint 10. This is a maintained native-ESM fork of
-[`jsx-eslint/eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react).
-It keeps the established `react/*` rule namespace and rule set while removing
-legacy tooling and configuration paths.
+React linting rules for ESLint 10. This is an independent native-ESM
+continuation of [`jsx-eslint/eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react).
+It preserves the established `react/*` rule namespace, upstream Git history,
+and MIT attribution while removing legacy tooling and configuration paths.
 
 ## What this package is for
 
@@ -15,7 +15,7 @@ mistakes, and optional consistency issues. Start with the curated
 codebase, or use `all` once to audit the full rule set before choosing which
 checks to keep.
 
-This fork supports ESLint 10, Node.js 22.13, 24, and 26, and flat config in
+This project supports ESLint 10, Node.js 22.13, 24, and 26, and flat config in
 `eslint.config.js`. ESLint 9 and `.eslintrc*` files are not supported.
 
 ## Install
@@ -134,7 +134,7 @@ React version. Rules with project-specific components read
 `formComponents` from the same `settings.react` object. Each rule page documents
 its exact option and setting shape.
 
-## How the fork verifies rule behavior
+## How the project verifies rule behavior
 
 Every rule has a focused reference page and regression tests. The test suite
 runs eligible cases with Espree, `@typescript-eslint/parser`, and
@@ -156,11 +156,11 @@ the remaining JavaScript and plugin-authoring rules.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for change requirements,
 [RELEASING.md](RELEASING.md) for publication, and [UPSTREAM.md](UPSTREAM.md) for
-fork provenance and synchronization policy.
+the project's provenance and independent-maintenance policy.
 
 ## Cite this project
 
-If this fork supports published work, cite the exact release you used. GitHub’s
+If this project supports published work, cite the exact release you used. GitHub’s
 **Cite this repository** control reads [CITATION.cff](CITATION.cff) and provides
 ready-to-copy APA and BibTeX entries. You can also use this BibTeX entry:
 
