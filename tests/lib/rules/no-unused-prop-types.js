@@ -3976,6 +3976,29 @@ ruleTester.run('no-unused-prop-types', rule, {
     [].concat(
       {
         code: `
+        function Component({ items }) {
+          return (
+            <List
+              data={items}
+              renderItem={(props) => (props.isError ? null : props)}
+            />
+          );
+        }
+
+        Component.propTypes = {
+          items: PropTypes.array,
+          isError: PropTypes.bool,
+        };
+      `,
+        errors: [
+          {
+            messageId: 'unusedPropType',
+            data: { name: 'isError' },
+          },
+        ],
+      },
+      {
+        code: `
         var Hello = createReactClass({
           propTypes: {
             unused: PropTypes.string

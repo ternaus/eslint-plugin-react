@@ -5016,11 +5016,85 @@ ruleTester.run('prop-types', rule, {
       `,
         features: ['types'],
       },
+      {
+        code: `
+        function Component({ episodeId }) {
+          const query = useQuery(
+            { id: episodeId },
+            { select: (props) => (props.isError ? null : props) },
+          );
+          return <div>{query}</div>;
+        }
+
+        Component.propTypes = {
+          episodeId: PropTypes.string,
+        };
+      `,
+      },
+      {
+        code: `
+        function Component({ items }) {
+          return (
+            <List
+              data={items}
+              renderItem={(props) => {
+                const { label } = props;
+                return <div>{label}</div>;
+              }}
+            />
+          );
+        }
+
+        Component.propTypes = {
+          items: PropTypes.array,
+        };
+      `,
+      },
+      {
+        code: `
+        function Component({ ids }) {
+          return <>{ids.map((props) => props.value)}</>;
+        }
+
+        Component.propTypes = {
+          ids: PropTypes.array,
+        };
+      `,
+      },
     ),
   ),
 
   invalid: parsers.all(
     [].concat(
+      {
+        code: `
+        function Component(props) {
+          const onClick = () => props.missing;
+          return <button onClick={onClick} />;
+        }
+
+        Component.propTypes = {};
+      `,
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'missing' },
+          },
+        ],
+      },
+      {
+        code: `
+        const Component = React.memo((props) => <div>{props.missing}</div>);
+
+        Component.propTypes = {};
+      `,
+        errors: [
+          {
+            messageId: 'missingPropType',
+            data: { name: 'missing' },
+          },
+        ],
+      },
       {
         code: `
         type Props = {
