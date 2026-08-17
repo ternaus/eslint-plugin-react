@@ -172,6 +172,40 @@ ruleTester.run('no-children-prop', rule, {
       code: 'React.createElement(MyComponent, {children: function* () {}});',
       options: [{ allowFunctions: true }],
     },
+    {
+      // Inline spaces are JSX text and keep the function from being the sole child.
+      code: '<MyComponent> {() => {}} </MyComponent>;',
+      options: [{ allowFunctions: true }],
+    },
+    {
+      code: `
+        <MyComponent>
+          {data}
+        </MyComponent>;
+      `,
+      options: [{ allowFunctions: true }],
+    },
+    {
+      code: '<MyComponent>label{() => {}}</MyComponent>;',
+      options: [{ allowFunctions: true }],
+    },
+    {
+      code: `
+        <MyComponent>
+          {() => {}}
+          {() => {}}
+        </MyComponent>;
+      `,
+      options: [{ allowFunctions: true }],
+    },
+    {
+      // Without allowFunctions, nesting function children remains outside this rule's scope.
+      code: `
+        <MyComponent>
+          {() => {}}
+        </MyComponent>;
+      `,
+    },
   ]),
   invalid: parsers.all([
     {
@@ -236,6 +270,40 @@ ruleTester.run('no-children-prop', rule, {
     },
     {
       code: '<MyComponent>{() => {}}</MyComponent>;',
+      options: [{ allowFunctions: true }],
+      errors: [{ messageId: 'nestFunction' }],
+    },
+    {
+      code: `
+        <MyComponent>
+          {() => {}}
+        </MyComponent>;
+      `,
+      options: [{ allowFunctions: true }],
+      errors: [{ messageId: 'nestFunction' }],
+    },
+    {
+      code: `
+        <MyComponent>
+          {() => {}}</MyComponent>;
+      `,
+      options: [{ allowFunctions: true }],
+      errors: [{ messageId: 'nestFunction' }],
+    },
+    {
+      code: `
+        <MyComponent>{() => {}}
+        </MyComponent>;
+      `,
+      options: [{ allowFunctions: true }],
+      errors: [{ messageId: 'nestFunction' }],
+    },
+    {
+      code: `
+        <MyComponent>
+          {function() {}}
+        </MyComponent>;
+      `,
       options: [{ allowFunctions: true }],
       errors: [{ messageId: 'nestFunction' }],
     },
