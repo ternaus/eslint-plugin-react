@@ -44,6 +44,31 @@ export default [
 ];
 ```
 
+### Use `defineConfig`
+
+`defineConfig` can resolve the plugin's flat presets by name. Register the
+plugin under `react`, then extend the matching `react/flat/*` alias:
+
+```js
+import { defineConfig } from 'eslint/config';
+import react from '@ternaus/eslint-plugin-react';
+
+export default defineConfig({
+  files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+  plugins: { react },
+  extends: ['react/flat/recommended'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+});
+```
+
+The available aliases are `react/flat/recommended`, `react/flat/all`, and
+`react/flat/jsx-runtime`. The existing `react.configs.flat.*` objects remain
+available for direct composition.
+
 Run the checks, then review and apply available automatic fixes:
 
 ```sh

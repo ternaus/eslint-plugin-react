@@ -61,20 +61,43 @@ try {
   await writeFile(join(consumerDirectory, 'package.json'), '{"type":"module"}\n');
   await writeFile(
     join(consumerDirectory, 'eslint.config.js'),
-    `import react from '${packageName}';
+    `import { defineConfig } from 'eslint/config';
+import react from '${packageName}';
 
-export default [
+export default defineConfig(
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
-    ...react.configs.flat.recommended,
+    files: ['component.jsx'],
+    plugins: { react },
+    extends: ['react/flat/recommended', 'react/flat/jsx-runtime'],
     settings: { react: { version: '19.0' } },
   },
-];
+  {
+    files: ['all.jsx'],
+    plugins: { react },
+    extends: ['react/flat/all'],
+    settings: { react: { version: '19.0' } },
+  },
+);
 `,
   );
   await writeFile(
     join(consumerDirectory, 'component.jsx'),
     'const Component = () => <div class="broken">text</div>;\n',
+  );
+  await writeFile(join(consumerDirectory, 'all.jsx'), 'const Component = () => <div class="broken">text</div>;\n');
+  await writeFile(join(consumerDirectory, 'direct.jsx'), 'const Component = () => <div class="broken">text</div>;\n');
+  await writeFile(
+    join(consumerDirectory, 'eslint.direct.config.js'),
+    `import react from '${packageName}';
+
+export default [
+  {
+    files: ['direct.jsx'],
+    ...react.configs.flat.recommended,
+    settings: { react: { version: '19.0' } },
+  },
+];
+`,
   );
   await writeFile(
     join(consumerDirectory, 'consumer.mjs'),
@@ -86,11 +109,23 @@ import recommended from '${packageName}/configs/recommended';
 assert.equal(react.meta.name, '${packageName}');
 assert.equal(recommended, react.configs.flat.recommended);
 assert.equal(react.configs.flat.recommended.plugins.react, react);
+assert.equal(react.configs['flat/all'], react.configs.flat.all);
+assert.equal(react.configs['flat/jsx-runtime'], react.configs.flat['jsx-runtime']);
+assert.equal(react.configs['flat/recommended'], react.configs.flat.recommended);
 
 const eslint = new ESLint();
-const [result] = await eslint.lintFiles(['component.jsx']);
-const ruleIds = result.messages.map(({ ruleId }) => ruleId);
-assert.ok(ruleIds.includes('react/no-unknown-property'), JSON.stringify(result.messages));
+const results = await eslint.lintFiles(['component.jsx', 'all.jsx']);
+for (const result of results) {
+  const ruleIds = result.messages.map(({ ruleId }) => ruleId);
+  assert.ok(ruleIds.includes('react/no-unknown-property'), JSON.stringify(result.messages));
+}
+
+const directEslint = new ESLint({ overrideConfigFile: 'eslint.direct.config.js' });
+const [directResult] = await directEslint.lintFiles(['direct.jsx']);
+assert.ok(
+  directResult.messages.some(({ ruleId }) => ruleId === 'react/no-unknown-property'),
+  JSON.stringify(directResult.messages),
+);
 `,
   );
   await writeFile(
@@ -102,15 +137,29 @@ const recommended = require('${packageName}/configs/recommended');
 assert.equal(react.meta.name, '${packageName}');
 assert.equal(recommended, react.configs.flat.recommended);
 assert.equal(react.configs.flat.recommended.plugins.react, react);
+assert.equal(react.configs['flat/recommended'], react.configs.flat.recommended);
 `,
   );
   await writeFile(
     join(consumerDirectory, 'consumer.ts'),
-    `import react from '${packageName}';
+    `import { defineConfig } from 'eslint/config';
+import react from '${packageName}';
 import recommended from '${packageName}/configs/recommended';
 
 const configs = [react.configs.flat.recommended, recommended];
+const aliases = [
+  react.configs['flat/all'],
+  react.configs['flat/jsx-runtime'],
+  react.configs['flat/recommended'],
+];
+const config = defineConfig({
+  files: ['**/*.jsx'],
+  plugins: { react },
+  extends: ['react/flat/recommended'],
+});
 void configs;
+void aliases;
+void config;
 `,
   );
   run(process.execPath, ['consumer.mjs']);

@@ -70,5 +70,9 @@ configs.flat['jsx-runtime'] = createFlatConfig({
   'react/react-in-jsx-scope': OFF,
 });
 
+configs['flat/recommended'] = configs.flat.recommended;
+configs['flat/all'] = configs.flat.all;
+configs['flat/jsx-runtime'] = configs.flat['jsx-runtime'];
+
 export default plugin;
 export { plugin as 'module.exports' };

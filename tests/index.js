@@ -40,6 +40,12 @@ describe('deprecated rules', () => {
 });
 
 describe('configurations', () => {
+  it('should export ESLint flat config aliases', () => {
+    ['all', 'recommended', 'jsx-runtime'].forEach((configName) => {
+      assert.equal(plugin.configs[`flat/${configName}`], plugin.configs.flat[configName]);
+    });
+  });
+
   it('should export a ‘recommended’ configuration', () => {
     const configName = 'recommended';
     const config = plugin.configs.flat[configName];
