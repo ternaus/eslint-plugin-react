@@ -30,14 +30,18 @@ contracts differ materially.
 
 Keep the exported `react/*` namespace stable. New configuration must be flat
 config, and new runtime files must be ESM with explicit `.js` import extensions.
+Before adding or changing a rule, compare its complete contract with the pinned
+Biome version. If Biome owns that check, remove the local rule instead of
+maintaining two versions. Keep the README and rule catalog limited to the
+current package contract.
 
 ## Quality ownership
 
-Biome formats all supported files and enforces the lint rules it owns. Its
-completeness check requires every disabled rule to have a reviewed reason.
-ESLint enforces the residual Node.js, JavaScript, and ESLint-plugin authoring
-rules. `scripts/check-eslint-residual.mjs` verifies that no rule is enforced by
-both tools and that residual plugin registrations are real.
+Biome formats all supported files and enforces its JavaScript, JSX, DOM, and
+React rules. Its completeness check requires every disabled rule to have a
+reviewed reason. ESLint enforces residual Node.js and ESLint-plugin authoring
+rules. `scripts/check-eslint-residual.mjs` verifies that the residual plugin
+registrations are real.
 
 Run these narrower checks while iterating:
 

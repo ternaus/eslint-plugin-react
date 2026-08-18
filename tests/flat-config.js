@@ -18,32 +18,13 @@ describe('eslint-plugin-react in flat config', () => {
 
       assert.strictEqual(result.messages.length, 1);
       assert.strictEqual(result.messages[0].severity, 1);
-      assert.strictEqual(result.messages[0].ruleId, 'react/jsx-no-literals');
-      assert.strictEqual(result.messages[0].messageId, 'literalNotInJSXExpression');
+      assert.strictEqual(result.messages[0].ruleId, 'react/no-invalid-html-attribute');
+      assert.strictEqual(result.messages[0].messageId, 'invalidAttribute');
     });
   });
 
   ['root', 'deep'].forEach((configAccess) => {
     const overrideConfigFile = `eslint.config-${configAccess}.js`;
-
-    it(`should work when the plugin is used with "all" config (${configAccess})`, () => {
-      const eslint = new ESLint({
-        cwd: path.resolve(fixturesdDir, 'config-all'),
-        overrideConfigFile,
-      });
-
-      return eslint.lintFiles(['test.jsx']).then((results) => {
-        const result = results[0];
-
-        assert.strictEqual(result.messages.length, 2);
-        assert.strictEqual(result.messages[0].severity, 2);
-        assert.strictEqual(result.messages[0].ruleId, 'react/no-unknown-property');
-        assert.strictEqual(result.messages[0].messageId, 'unknownProp');
-        assert.strictEqual(result.messages[1].severity, 2);
-        assert.strictEqual(result.messages[1].ruleId, 'react/jsx-no-literals');
-        assert.strictEqual(result.messages[1].messageId, 'literalNotInJSXExpression');
-      });
-    });
 
     it(`should work when the plugin is used with "recommended" config (${configAccess})`, () => {
       const eslint = new ESLint({
@@ -56,24 +37,8 @@ describe('eslint-plugin-react in flat config', () => {
 
         assert.strictEqual(result.messages.length, 1);
         assert.strictEqual(result.messages[0].severity, 2);
-        assert.strictEqual(result.messages[0].ruleId, 'react/no-unknown-property');
-        assert.strictEqual(result.messages[0].messageId, 'unknownProp');
-      });
-    });
-
-    it(`should work when the plugin is used with "recommended" and "jsx-runtime" configs (${configAccess})`, () => {
-      const eslint = new ESLint({
-        cwd: path.resolve(fixturesdDir, 'config-jsx-runtime'),
-        overrideConfigFile,
-      });
-
-      return eslint.lintFiles(['test.jsx']).then((results) => {
-        const result = results[0];
-
-        assert.strictEqual(result.messages.length, 1);
-        assert.strictEqual(result.messages[0].severity, 2);
-        assert.strictEqual(result.messages[0].ruleId, 'react/no-unknown-property');
-        assert.strictEqual(result.messages[0].messageId, 'unknownProp');
+        assert.strictEqual(result.messages[0].ruleId, 'react/no-invalid-html-attribute');
+        assert.strictEqual(result.messages[0].messageId, 'invalidAttribute');
       });
     });
 
@@ -89,8 +54,8 @@ describe('eslint-plugin-react in flat config', () => {
 
         assert.strictEqual(result.messages.length, 1);
         assert.strictEqual(result.messages[0].severity, 2);
-        assert.strictEqual(result.messages[0].ruleId, 'react/no-unknown-property');
-        assert.strictEqual(result.messages[0].messageId, 'unknownProp');
+        assert.strictEqual(result.messages[0].ruleId, 'react/no-invalid-html-attribute');
+        assert.strictEqual(result.messages[0].messageId, 'invalidAttribute');
       });
     });
   });

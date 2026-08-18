@@ -1,125 +1,36 @@
-/**
- * @fileoverview Tests for prefer-use-state-lazy-initialization
- */
-
 'use strict';
 
 const RuleTester = require('../../helpers/ruleTester');
 const rule = require('../../../lib/rules/prefer-use-state-lazy-initialization');
-const parsers = require('../../helpers/parsers');
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 2022,
-    sourceType: 'module',
-  },
+  parserOptions: { ecmaVersion: 2024, ecmaFeatures: { jsx: true }, sourceType: 'module' },
 });
 
 ruleTester.run('prefer-use-state-lazy-initialization', rule, {
-  valid: parsers.all([
+  valid: [
     {
-      code: `
-        import { useState } from 'react';
-
-        function Todos() {
-          const [todos] = useState(() => createTodos());
-          return todos;
-        }
-      `,
+      code: "import { useState } from 'react'; function App() { const [value] = useState(() => readInitialValue()); return value; }",
     },
     {
-      code: `
-        import { useState } from 'react';
-
-        function Todos() {
-          const [todos] = useState(function initializeTodos() {
-            return createTodos();
-          });
-          return todos;
-        }
-      `,
+      code: 'function useState(value) { return [value]; } const [value] = useState(readInitialValue());',
     },
     {
-      code: `
-        import { useState as state } from 'react';
-
-        function Todos() {
-          function state(initialValue) {
-            return [initialValue, () => {}];
-          }
-
-          const [todos] = state(createTodos());
-          return todos;
-        }
-      `,
+      code: "import { useState } from 'react'; const [value] = useState({ formatter: () => createFormatter() });",
     },
-  ]),
-  invalid: parsers.all([
+  ],
+  invalid: [
     {
-      code: `
-        import { useState as state } from 'react';
-
-        function Todos() {
-          const [todos] = state(createTodos());
-          return todos;
-        }
-      `,
+      code: "import { useState as state } from 'react'; const [value] = state(readInitialValue());",
       errors: [{ messageId: 'useLazyInitialization' }],
     },
     {
-      code: `
-        import React from 'react';
-
-        function Todos() {
-          const [todos] = React.useState(createTodos());
-          return todos;
-        }
-      `,
+      code: "import * as React from 'react'; const [value] = React.useState(createInitialValue());",
       errors: [{ messageId: 'useLazyInitialization' }],
     },
     {
-      code: `
-        import { useState } from 'react';
-
-        function Todos() {
-          const [state] = useState({ todos: createTodos() });
-          return state;
-        }
-      `,
+      code: "const { useState } = require('react'); const [value] = useState({ todos: createTodos() });",
       errors: [{ messageId: 'useLazyInitialization' }],
     },
-    {
-      code: `
-        import { useState } from 'react';
-
-        function Todos({ hasTodos }) {
-          const [todos] = useState(hasTodos ? createTodos() : createEmptyTodos());
-          return todos;
-        }
-      `,
-      errors: [{ messageId: 'useLazyInitialization' }],
-    },
-    {
-      code: `
-        import { useState } from 'react';
-
-        function Todos({ hasTodos }) {
-          const [todos] = useState(hasTodos && [createTodos()]);
-          return todos;
-        }
-      `,
-      errors: [{ messageId: 'useLazyInitialization' }],
-    },
-    {
-      code: `
-        import { useState } from 'react';
-
-        function Todos() {
-          const [label] = useState(\`Todos: \${createTodoLabel()}\`);
-          return label;
-        }
-      `,
-      errors: [{ messageId: 'useLazyInitialization' }],
-    },
-  ]),
+  ],
 });

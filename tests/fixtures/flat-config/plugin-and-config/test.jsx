@@ -1,1 +1,1 @@
-<div foo="hello">test</div>;
+<div href="/docs" />;

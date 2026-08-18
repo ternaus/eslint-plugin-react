@@ -7,14 +7,13 @@ function createRuleConfig(filter) {
 }
 
 const recommendedRules = createRuleConfig(({ recommended }) => recommended !== 'off');
-const allRuleConfig = createRuleConfig(() => true);
 
 const configs = { flat: Object.create(null) };
 
 const plugin = {
   meta: {
     name: '@ternaus/eslint-plugin-react',
-    version: '8.0.0-rc.0',
+    version: '8.0.0-rc.1',
   },
   rules: allRules,
   configs,
@@ -33,12 +32,8 @@ function createFlatConfig(rules) {
 }
 
 configs.flat.recommended = createFlatConfig(recommendedRules);
-configs.flat.all = createFlatConfig(Object.fromEntries(Object.keys(allRuleConfig).map((name) => [name, 'error'])));
-configs.flat['jsx-runtime'] = createFlatConfig({});
 
 configs['flat/recommended'] = configs.flat.recommended;
-configs['flat/all'] = configs.flat.all;
-configs['flat/jsx-runtime'] = configs.flat['jsx-runtime'];
 
 export default plugin;
 export { plugin as 'module.exports' };

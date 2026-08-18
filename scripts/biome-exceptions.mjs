@@ -6,22 +6,14 @@ const AST_IMPLEMENTATION_RULES = [
   'complexity/noForEach',
   'complexity/noImplicitCoercions',
   'complexity/noRedundantDefaultExport',
-  'complexity/noUselessCatchBinding',
-  'complexity/noUselessEmptyExport',
-  'complexity/noUselessSwitchCase',
   'complexity/noUselessUndefined',
-  'complexity/useLiteralKeys',
   'complexity/useMaxParams',
   'complexity/useOptionalChain',
   'complexity/useSimplifiedLogicExpression',
-  'performance/noAccumulatingSpread',
   'performance/noAwaitInLoops',
-  'performance/noBarrelFile',
   'performance/noDelete',
-  'performance/noNamespaceImport',
   'performance/useTopLevelRegex',
   'suspicious/noControlCharactersInRegex',
-  'suspicious/noImportCycles',
   'suspicious/noUnnecessaryConditions',
   'suspicious/useIterableCallbackReturn',
 ];
@@ -66,7 +58,6 @@ const FIXTURE_AND_RULE_SEMANTICS = [
   'style/useSelfClosingElements',
   'style/useSingleVarDeclarator',
   'style/useThrowNewError',
-  'style/useThrowOnlyError',
   'suspicious/noArrayIndexKey',
   'suspicious/noBitwiseOperators',
   'suspicious/noConsole',
@@ -74,8 +65,6 @@ const FIXTURE_AND_RULE_SEMANTICS = [
   'suspicious/noEqualsToNull',
   'suspicious/noExplicitAny',
   'suspicious/noMisplacedAssertion',
-  'suspicious/noRedundantUseStrict',
-  'suspicious/noThenProperty',
   'suspicious/noTemplateCurlyInString',
   'suspicious/noUnknownAttribute',
   'suspicious/noUnusedExpressions',
@@ -88,11 +77,10 @@ const TOOLING_AND_DEPENDENCY_RULES = [
   'correctness/noUndeclaredDependencies',
   'correctness/noUnresolvedImports',
   'correctness/useImportExtensions',
-  'correctness/useJsonImportAttributes',
-  'correctness/useParseIntRadix',
   'correctness/useQwikValidLexicalScope',
-  'security/noSecrets',
 ];
+
+const REPOSITORY_BOUNDARY_RULES = ['security/noSecrets'];
 
 /** Every Biome exception is explicit and reviewed by the completeness check. */
 export const BIOME_RULE_EXCEPTIONS = Object.freeze([
@@ -108,6 +96,11 @@ export const BIOME_RULE_EXCEPTIONS = Object.freeze([
   ...TOOLING_AND_DEPENDENCY_RULES.map((rule) => ({
     reason:
       'This is Node.js package tooling or a dependency-resolution concern owned by residual ESLint and package tests.',
+    rule,
+  })),
+  ...REPOSITORY_BOUNDARY_RULES.map((rule) => ({
+    reason:
+      'The rule is valuable in application code but would constrain the implementation, generated metadata, or test fixtures of this lint-plugin repository.',
     rule,
   })),
 ]);

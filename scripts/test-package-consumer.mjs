@@ -12,7 +12,6 @@ const packageDirectory = join(temporaryDirectory, 'package');
 const consumerDirectory = join(temporaryDirectory, 'consumer');
 const npmCache = join(temporaryDirectory, 'npm-cache');
 const packageName = '@ternaus/eslint-plugin-react';
-const runtimeDependencies = ['eslint', 'estraverse', 'jsx-ast-utils', 'minimatch'];
 
 function run(command, arguments_, options = {}) {
   return execFileSync(command, arguments_, {
@@ -40,16 +39,6 @@ try {
   await mkdir(packageDirectory);
   execFileSync('tar', ['-xzf', archive, '-C', packageDirectory]);
 
-  await mkdir(join(packageDirectory, 'package', 'node_modules'));
-  await Promise.all(
-    runtimeDependencies.map((dependency) =>
-      symlink(
-        join(repository, 'node_modules', dependency),
-        join(packageDirectory, 'package', 'node_modules', dependency),
-        'dir',
-      ),
-    ),
-  );
   await mkdir(join(consumerDirectory, 'node_modules', '@ternaus'), { recursive: true });
   await symlink(join(repository, 'node_modules', 'eslint'), join(consumerDirectory, 'node_modules', 'eslint'), 'dir');
   await symlink(
@@ -68,31 +57,13 @@ export default defineConfig(
   {
     files: ['component.jsx'],
     plugins: { react },
-    extends: ['react/flat/recommended', 'react/flat/jsx-runtime'],
-  },
-  {
-    files: ['all.jsx'],
-    plugins: { react },
-    extends: ['react/flat/all'],
-  },
-  {
-    files: ['undefined-return.jsx'],
-    plugins: { react },
-    rules: { 'react/no-render-return-undefined': 'error' },
+    extends: ['react/flat/recommended'],
   },
 );
 `,
   );
-  await writeFile(
-    join(consumerDirectory, 'component.jsx'),
-    'const Component = () => <div class="broken">text</div>;\n',
-  );
-  await writeFile(join(consumerDirectory, 'all.jsx'), 'const Component = () => <div class="broken">text</div>;\n');
-  await writeFile(join(consumerDirectory, 'direct.jsx'), 'const Component = () => <div class="broken">text</div>;\n');
-  await writeFile(
-    join(consumerDirectory, 'undefined-return.jsx'),
-    "import { useEffect } from 'react'; const Component = () => { useEffect(() => {}); return undefined; };\n",
-  );
+  await writeFile(join(consumerDirectory, 'component.jsx'), 'const Component = () => <div href="/docs" />;\n');
+  await writeFile(join(consumerDirectory, 'direct.jsx'), 'const Component = () => <div href="/docs" />;\n');
   await writeFile(
     join(consumerDirectory, 'eslint.direct.config.js'),
     `import react from '${packageName}';
@@ -115,27 +86,19 @@ import recommended from '${packageName}/configs/recommended';
 assert.equal(react.meta.name, '${packageName}');
 assert.equal(recommended, react.configs.flat.recommended);
 assert.equal(react.configs.flat.recommended.plugins.react, react);
-assert.equal(react.configs['flat/all'], react.configs.flat.all);
-assert.equal(react.configs['flat/jsx-runtime'], react.configs.flat['jsx-runtime']);
 assert.equal(react.configs['flat/recommended'], react.configs.flat.recommended);
 
 const eslint = new ESLint();
-const results = await eslint.lintFiles(['component.jsx', 'all.jsx']);
+const results = await eslint.lintFiles(['component.jsx']);
 for (const result of results) {
   const ruleIds = result.messages.map(({ ruleId }) => ruleId);
-  assert.ok(ruleIds.includes('react/no-unknown-property'), JSON.stringify(result.messages));
+  assert.ok(ruleIds.includes('react/no-invalid-html-attribute'), JSON.stringify(result.messages));
 }
-
-const [undefinedReturnResult] = await eslint.lintFiles(['undefined-return.jsx']);
-assert.ok(
-  undefinedReturnResult.messages.some(({ ruleId }) => ruleId === 'react/no-render-return-undefined'),
-  JSON.stringify(undefinedReturnResult.messages),
-);
 
 const directEslint = new ESLint({ overrideConfigFile: 'eslint.direct.config.js' });
 const [directResult] = await directEslint.lintFiles(['direct.jsx']);
 assert.ok(
-  directResult.messages.some(({ ruleId }) => ruleId === 'react/no-unknown-property'),
+  directResult.messages.some(({ ruleId }) => ruleId === 'react/no-invalid-html-attribute'),
   JSON.stringify(directResult.messages),
 );
 `,
@@ -160,8 +123,6 @@ import recommended from '${packageName}/configs/recommended';
 
 const configs = [react.configs.flat.recommended, recommended];
 const aliases = [
-  react.configs['flat/all'],
-  react.configs['flat/jsx-runtime'],
   react.configs['flat/recommended'],
 ];
 const config = defineConfig({

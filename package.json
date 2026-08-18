@@ -1,6 +1,6 @@
 {
   "name": "@ternaus/eslint-plugin-react",
-  "version": "8.0.0-rc.0",
+  "version": "8.0.0-rc.1",
   "description": "React linting rules for ESLint 10 flat config",
   "license": "MIT",
   "type": "module",
@@ -20,26 +20,6 @@
         "default": "./index.js"
       },
       "default": "./index.js"
-    },
-    "./configs/all": {
-      "import": {
-        "types": "./configs/all.d.mts",
-        "default": "./configs/all.js"
-      },
-      "require": {
-        "types": "./configs/all.d.mts",
-        "default": "./configs/all.js"
-      }
-    },
-    "./configs/jsx-runtime": {
-      "import": {
-        "types": "./configs/jsx-runtime.d.mts",
-        "default": "./configs/jsx-runtime.js"
-      },
-      "require": {
-        "types": "./configs/jsx-runtime.d.mts",
-        "default": "./configs/jsx-runtime.js"
-      }
     },
     "./configs/recommended": {
       "import": {
@@ -83,8 +63,8 @@
     "prepack": "yarn quality:publish",
     "quality:complete": "yarn quality:publish && yarn pack:check && yarn test:package",
     "quality:publish": "yarn format:check && yarn check:citation && yarn check:html-metadata && yarn check:rule-documentation && yarn lint && yarn typecheck && yarn test:coverage",
-    "test": "mocha --reporter min \"tests/lib/**/*.js\" \"tests/util/**/*.js\" tests/index.js tests/flat-config.js",
-    "test:coverage": "c8 --all --extension .js --include index.js --include 'lib/**/*.js' --reporter text-summary --check-coverage --branches 90 --functions 95 --lines 95 --statements 95 mocha --reporter min \"tests/lib/**/*.js\" \"tests/util/**/*.js\" tests/index.js tests/flat-config.js",
+    "test": "mocha --reporter min \"tests/lib/**/*.js\" tests/index.js tests/flat-config.js",
+    "test:coverage": "c8 --all --extension .js --include index.js --include 'lib/**/*.js' --reporter text-summary --check-coverage --branches 90 --functions 95 --lines 95 --statements 95 mocha --reporter min \"tests/lib/**/*.js\" tests/index.js tests/flat-config.js",
     "test:package": "node scripts/test-package-consumer.mjs",
     "typecheck": "tsc --noEmit --project tsconfig.json"
   },
@@ -108,21 +88,14 @@
   "peerDependencies": {
     "eslint": "^10.0.0"
   },
-  "dependencies": {
-    "estraverse": "^5.3.0",
-    "jsx-ast-utils": "^3.3.5",
-    "minimatch": "^10.2.6"
-  },
   "devDependencies": {
     "@babel/core": "8.0.1",
     "@babel/eslint-parser": "8.0.1",
     "@biomejs/biome": "2.5.8",
-    "@eslint/js": "10.0.1",
     "@types/node": "^26.2.0",
     "@typescript-eslint/parser": "8.67.0",
     "c8": "^12.0.0",
     "eslint": "10.8.0",
-    "eslint-config-biome": "^2.1.3",
     "eslint-plugin-eslint-plugin": "7.6.0",
     "eslint-plugin-n": "18.2.2",
     "globals": "^16.5.0",

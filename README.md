@@ -2,32 +2,45 @@
 
 > [Support ongoing maintenance on PayPal](https://www.paypal.com/paypalme/ternaus)
 
-React 19+ linting rules for ESLint 10. This is an independent native-ESM
-continuation of [`jsx-eslint/eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react).
-It preserves the established `react/*` rule namespace, upstream Git history,
-and MIT attribution while removing legacy tooling and configuration paths.
+React 19+ rules for ESLint 10 that Biome does not provide. Use it alongside
+Biome 2.5.8, which owns general JavaScript, JSX, DOM, and React
+checks. This independent native-ESM continuation of
+[`jsx-eslint/eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react)
+preserves the `react/*` namespace, upstream Git history, and MIT attribution.
 
 ## What this package is for
 
-Use this plugin to find React correctness problems, unsafe legacy APIs, JSX
-mistakes, and optional consistency issues. Start with the curated
-`recommended` preset. Add a specific rule when it matches a problem in your
-codebase, or use `all` once to audit the full rule set before choosing which
-checks to keep.
+Start with Biome's `all` preset. Add this plugin for React 19 contracts that
+Biome does not yet expose, such as invalid HTML attribute values, controlled
+form handlers, and React APIs removed in version 19. The `recommended` preset
+contains the entire supported package contract.
 
-This project supports React 19 and newer, ESLint 10, Node.js 22.13, 24, and 26,
-and flat config in `eslint.config.js`. React 18 and earlier, ESLint 9, and
+This project supports React 19 and newer, ESLint 10, Node.js 22.13, 24, and
+26, and flat config in `eslint.config.js`. The repository verifies its Biome
+ownership boundary with Biome 2.5.8. React 18 and earlier, ESLint 9, and
 `.eslintrc*` files are not supported.
 
 ## Install
 
 ```sh
-yarn add --dev eslint@^10 @ternaus/eslint-plugin-react
+yarn add --dev @biomejs/biome@2.5.8 eslint@^10 @ternaus/eslint-plugin-react
 ```
 
-## Use it
+## Use it with Biome
 
-Create `eslint.config.js` and start with the recommended React checks:
+Enable Biome's recommended and additional stable rules, including the React
+domain:
+
+```json
+{
+  "linter": {
+    "domains": { "react": "all" },
+    "rules": { "preset": "all" }
+  }
+}
+```
+
+Then add this package's residual React checks to `eslint.config.js`:
 
 ```js
 import react from '@ternaus/eslint-plugin-react';
@@ -61,20 +74,17 @@ export default defineConfig({
 });
 ```
 
-The available aliases are `react/flat/recommended`, `react/flat/all`, and
-`react/flat/jsx-runtime`. The existing `react.configs.flat.*` objects remain
-available for direct composition.
+The available alias is `react/flat/recommended`. The same config is available
+for direct composition through `react.configs.flat.recommended`.
 
-Run the checks, then review and apply available automatic fixes:
+Run both tools, then review and apply available automatic fixes:
 
 ```sh
+yarn biome check .
+yarn biome check . --write
 yarn eslint .
 yarn eslint . --fix
 ```
-
-React 19 uses the automatic JSX runtime. `react.configs.flat['jsx-runtime']`
-is an empty compatibility config for existing flat configs; new configs do not
-need it or the removed classic-runtime rule IDs.
 
 The package is native ESM, but Node.js 22.13 and later can load it with
 `require`. A CommonJS flat config uses the same plugin object:
@@ -98,14 +108,12 @@ The plugin is always registered as `react`, so rule IDs stay in the familiar
 <!-- rule-config-summary:start -->
 | Config | Active rules | Use it when |
 | --- | ---: | --- |
-| `recommended` | 24 | You want the supported baseline for React correctness and established best practices. |
-| `all` | 73 | You want to audit every non-deprecated rule, then keep only the rules that fit your codebase. |
-| `jsx-runtime` | 0 disabled | Compatibility alias for existing flat configs; React 19+ always uses the automatic JSX runtime. |
+| `recommended` | 11 | You want the supported baseline of React 19 contracts that Biome does not provide. |
 <!-- rule-config-summary:end -->
 
-Use `recommended` for normal development. Treat `all` as an audit: it enables
-every active rule at error severity, including opinionated and style-oriented
-rules. After reviewing the findings, keep individual rules deliberately:
+Use `recommended` for normal development. It contains every rule this package
+owns. You can raise the two performance signals to errors when that fits your
+project:
 
 ```js
 import react from '@ternaus/eslint-plugin-react';
@@ -118,7 +126,7 @@ export default [
     ...recommended,
     rules: {
       ...recommended.rules,
-      'react/no-array-index-key': 'error',
+      'react/jsx-no-constructed-context-values': 'error',
     },
   },
 ];
@@ -126,8 +134,7 @@ export default [
 
 The [rule catalog](docs/rules/README.md) lists every rule, what it reports,
 whether each preset enables it, and whether it supports `--fix` or an editor
-suggestion. Each rule name links to examples and options. For removed and
-renamed upstream rule IDs, see the [migration guide](docs/migration.md).
+suggestion. Each rule name links to examples and options.
 
 ## Platform boundary
 
@@ -137,14 +144,12 @@ preset. Rules about HTML and React DOM form behavior operate only on proven
 lowercase HTML elements; they skip `View`, `Text`, custom elements, SVG,
 MathML, and dynamic host elements.
 
-## Optional component settings
+## React version and settings
 
 React version detection is not part of this package: every rule has one React
-19+ behavior path and never reads `react/package.json`. Most projects need no
-settings. Rules that support project-specific component names read their setting
-directly from the ESLint config, not from `settings.react`; for example,
-`jsx-no-script-url` can opt into configured links with `settings.linkComponents`.
-Each rule page documents its own options and settings.
+19+ behavior path and never reads `react/package.json`. Biome owns the
+overlapping React and JSX checks. Each remaining rule page documents its own
+options and settings.
 
 ## How the project verifies rule behavior
 
@@ -162,9 +167,9 @@ yarn install --immutable
 yarn quality:complete
 ```
 
-Biome formats the repository and owns overlapping lint rules; its completeness
-check requires every exception to be registered with a reason. ESLint enforces
-the remaining JavaScript and plugin-authoring rules.
+Biome formats the repository and owns general JavaScript, JSX, DOM, and React
+rules; its completeness check requires every exception to be registered with a
+reason. ESLint enforces the residual Node.js and ESLint-plugin authoring rules.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for change requirements,
 [RELEASING.md](RELEASING.md) for publication, and [UPSTREAM.md](UPSTREAM.md) for
@@ -181,7 +186,7 @@ ready-to-copy APA and BibTeX entries. You can also use this BibTeX entry:
   author = {Iglovikov, Vladimir},
   title = {{@ternaus/eslint-plugin-react}},
   url = {https://github.com/ternaus/eslint-plugin-react},
-  version = {8.0.0-rc.0},
+  version = {8.0.0-rc.1},
   year = {2026}
 }
 ```

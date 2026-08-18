@@ -29,6 +29,9 @@ if (biomeConfig.$schema !== `https://biomejs.dev/schemas/${biomeVersion}/schema.
 if (biomeConfig.linter?.rules?.preset !== 'all') {
   issues.push('Biome linter.rules.preset must be "all".');
 }
+if ('recommended' in (biomeConfig.linter?.rules ?? {})) {
+  issues.push('Biome linter.rules.recommended is deprecated; preset "all" includes the recommended rules.');
+}
 for (const domain of ['react', 'test']) {
   if (biomeConfig.linter?.domains?.[domain] !== 'all') {
     issues.push(`Biome domain ${domain} must be set to "all".`);

@@ -1,18 +1,9 @@
-import plugin from '../index.js';
 import ruleRegistry from '../lib/rule-registry.js';
 
 export const README_PATH = 'README.md';
 export const CATALOG_PATH = 'docs/rules/README.md';
 export const SUMMARY_START = '<!-- rule-config-summary:start -->';
 export const SUMMARY_END = '<!-- rule-config-summary:end -->';
-
-function isEnabled(setting) {
-  if (setting === undefined) {
-    return false;
-  }
-  const severity = Array.isArray(setting) ? setting[0] : setting;
-  return severity !== 0 && severity !== 'off';
-}
 
 function escapeTableCell(value) {
   return value.replaceAll('|', '\\|').replaceAll('\n', ' ');
@@ -32,7 +23,6 @@ function formatFixSupport(rule) {
 export function getRuleRows() {
   return ruleRegistry
     .map(({ category, implementation, name, recommended, requiresTypeInformation }) => ({
-      all: isEnabled(plugin.configs.flat.all.rules[`react/${name}`]),
       category,
       description: implementation.meta.docs.description,
       fixSupport: formatFixSupport(implementation),
@@ -45,15 +35,10 @@ export function getRuleRows() {
 
 export function renderConfigSummary(rows = getRuleRows()) {
   const recommendedCount = rows.filter((row) => row.recommended !== 'off').length;
-  const allCount = rows.filter((row) => row.all).length;
-  const jsxRuntimeCount = Object.keys(plugin.configs.flat['jsx-runtime'].rules).length;
-
   return [
     '| Config | Active rules | Use it when |',
     '| --- | ---: | --- |',
-    `| \`recommended\` | ${recommendedCount} | You want the supported baseline for React correctness and established best practices. |`,
-    `| \`all\` | ${allCount} | You want to audit every non-deprecated rule, then keep only the rules that fit your codebase. |`,
-    `| \`jsx-runtime\` | ${jsxRuntimeCount} disabled | Compatibility alias for existing flat configs; React 19+ always uses the automatic JSX runtime. |`,
+    `| \`recommended\` | ${recommendedCount} | You want the supported baseline of React 19 contracts that Biome does not provide. |`,
   ].join('\n');
 }
 
@@ -62,7 +47,7 @@ export function renderRuleCatalog(rows = getRuleRows()) {
 
   const table = rows.map((row) => {
     const rule = `[\`react/${row.name}\`](${row.name}.md)`;
-    return `| ${rule} | ${escapeTableCell(row.description)} | ${row.recommended === 'off' ? '—' : row.recommended} | ${row.all ? '✓' : '—'} | ${row.category} | ${row.fixSupport} | ${row.requiresTypeInformation ? 'yes' : 'no'} |`;
+    return `| ${rule} | ${escapeTableCell(row.description)} | ${row.recommended} | ${row.category} | ${row.fixSupport} | ${row.requiresTypeInformation ? 'yes' : 'no'} |`;
   });
 
   return [
@@ -70,14 +55,14 @@ export function renderRuleCatalog(rows = getRuleRows()) {
     '',
     'Start with the setup in the [repository README](../../README.md). Use this page when you need to choose an additional rule or inspect whether a rule can apply an automatic fix.',
     '',
-    `The plugin exports ${activeCount} active rules. The \`all\` preset enables every rule as an error.`,
+    `The plugin exports ${activeCount} active rules, all included in \`recommended\`.`,
     '',
     'A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A `suggestion` entry means the rule can offer an editor suggestion; it is not changed by the normal automatic-fix pass.',
     '',
     '## Rules',
     '',
-    '| Rule | What it reports | `recommended` | `all` | Category | Fix support | Type info |',
-    '| --- | --- | :---: | :---: | --- | --- | :---: |',
+    '| Rule | What it reports | `recommended` | Category | Fix support | Type info |',
+    '| --- | --- | :---: | --- | --- | :---: |',
     ...table,
   ].join('\n');
 }

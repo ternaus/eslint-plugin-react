@@ -5,8 +5,6 @@
     "baseUrl": ".",
     "paths": {
       "@ternaus/eslint-plugin-react": ["./index.d.mts"],
-      "@ternaus/eslint-plugin-react/configs/all": ["./configs/all.d.mts"],
-      "@ternaus/eslint-plugin-react/configs/jsx-runtime": ["./configs/jsx-runtime.d.mts"],
       "@ternaus/eslint-plugin-react/configs/recommended": ["./configs/recommended.d.mts"]
     },
     "noEmit": true,

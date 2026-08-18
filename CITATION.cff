@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "@ternaus/eslint-plugin-react"
-version: 8.0.0-rc.0
+version: 8.0.0-rc.1
 date-released: 2026-08-18
 authors:
   - family-names: Iglovikov

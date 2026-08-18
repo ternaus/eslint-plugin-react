@@ -16,7 +16,7 @@ module.exports = [
       react,
     },
     rules: {
-      'react/jsx-no-literals': 1,
+      'react/no-invalid-html-attribute': 1,
     },
   },
 ];

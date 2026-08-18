@@ -1,65 +1,53 @@
 # react/no-direct-mutation-state
 
-📝 Disallow direct mutation of this.state.
+Reports direct mutation of `this.state` in a React class component. It is
+enabled in `recommended`.
 
-💼 This rule is enabled in the ☑️ `recommended` [config](https://github.com/ternaus/eslint-plugin-react#configs).
+## Why this matters
 
-<!-- end auto-generated rule header -->
+React schedules state updates through `setState`. Mutating a state object
+yourself can leave the rendered output out of sync with the value your code
+expects. Initializing `this.state` in a constructor is the one exception.
 
-NEVER mutate `this.state` directly, as calling `setState()` afterwards may replace
-the mutation you made. Treat `this.state` as if it were immutable.
-
-The only place that's acceptable to assign this.state is in a ES6 `class` component constructor.
-
-## Rule Details
-
-This rule is aimed to forbid the use of mutating `this.state` directly.
-
-Examples of **incorrect** code for this rule:
+## Incorrect
 
 ```jsx
-var Hello = createReactClass({
-  componentDidMount: function() {
-    this.state.name = this.props.name.toUpperCase();
-  },
-  render: function() {
-    return <div>Hello {this.state.name}</div>;
+import { Component } from 'react';
+
+class Counter extends Component {
+  increment() {
+    this.state.count += 1;
   }
-});
 
-class Hello extends React.Component {
-  constructor(props) {
-    super(props)
-
-    // Assign at instance creation time, not on a callback
-    doSomethingAsync(() => {
-      this.state = 'bad';
-    });
+  render() {
+    return <button onClick={() => this.increment()}>{this.state.count}</button>;
   }
 }
 ```
 
-Examples of **correct** code for this rule:
+## Correct
 
 ```jsx
-var Hello = createReactClass({
-  componentDidMount: function() {
-    this.setState({
-      name: this.props.name.toUpperCase();
-    });
-  },
-  render: function() {
-    return <div>Hello {this.state.name}</div>;
-  }
-});
+import { Component } from 'react';
 
-class Hello extends React.Component {
+class Counter extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.state = { count: 0 };
+  }
 
-    this.state = {
-      foo: 'bar',
-    }
+  increment() {
+    this.setState(({ count }) => ({ count: count + 1 }));
+  }
+
+  render() {
+    return <button onClick={() => this.increment()}>{this.state.count}</button>;
   }
 }
 ```
+
+## Boundary
+
+The rule reports only a mutation whose enclosing class is proven to extend
+`Component` or `PureComponent` imported from `react`. It skips constructors,
+unrelated classes, and unproven base classes.

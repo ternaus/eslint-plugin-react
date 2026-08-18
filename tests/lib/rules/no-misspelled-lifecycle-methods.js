@@ -16,6 +16,7 @@ ruleTester.run('no-misspelled-lifecycle-methods', rule, {
     "import { Component } from 'react'; class Button extends Component { static getDerivedStateFromProps() {} }",
     'class Button { componentDidMout() {} static componentDidMount() {} }',
     'const React = {}; class Button extends React.Component { componentDidMout() {} }',
+    "import { Component } from 'react'; class Button extends Component { ['componentDidMout']() {} }",
   ],
   invalid: [
     {
@@ -35,6 +36,10 @@ ruleTester.run('no-misspelled-lifecycle-methods', rule, {
       errors: [
         { data: { actual: 'shouldComponentUpate', expected: 'shouldComponentUpdate' }, messageId: 'misspelledMethod' },
       ],
+    },
+    {
+      code: "import { Component } from 'react'; class Button extends Component { static 'componentDidMount'() {} }",
+      errors: [{ data: { method: 'componentDidMount' }, messageId: 'instanceMethod' }],
     },
   ],
 });

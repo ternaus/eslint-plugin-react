@@ -1,7 +1,7 @@
 import type { Linter, Rule } from 'eslint';
 
 export type FlatConfig = Linter.Config;
-export type FlatConfigName = 'all' | 'jsx-runtime' | 'recommended';
+export type FlatConfigName = 'recommended';
 export type FlatConfigAliasName = `flat/${FlatConfigName}`;
 
 export type ReactPluginConfigs = NonNullable<Linter.Plugin['configs']> & {
@@ -14,7 +14,6 @@ export interface ReactPlugin {
     readonly version: string;
   };
   readonly rules: Readonly<Record<string, Rule.RuleModule>>;
-  readonly deprecatedRules: Readonly<Record<string, Rule.RuleModule>>;
   readonly configs: ReactPluginConfigs;
 }
 

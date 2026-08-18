@@ -43,7 +43,7 @@ The rule analyzes lowercase HTML elements in JSX and statically proven
 `React.createElement` calls. PascalCase components, custom elements, React
 Native host components, SVG and MathML are skipped. Dynamic values, unknown
 spreads, and unknown attribute spellings are skipped as well: spelling belongs
-to `react/no-unknown-property`, and this rule avoids duplicating it.
+to Biome's `suspicious/noUnknownAttribute`, and this rule avoids duplicating it.
 
 No automatic fix is offered because removing or changing an attribute can alter
 application behavior.

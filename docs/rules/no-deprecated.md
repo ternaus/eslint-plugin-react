@@ -5,9 +5,9 @@ origin from an import or a static CommonJS `require`.
 
 The rule reports `ReactDOM.render`, `hydrate`, `unmountComponentAtNode`,
 `findDOMNode`, `createFactory`, removed server stream renderers,
-`useFormState`, and legacy context declarations on a React class component.
-It does not report `react-dom/test-utils` `act` or `react-test-renderer`:
-those APIs still run and need a separate migration rule.
+`useFormState`, and context declarations removed from React class components.
+It does not report `react-dom/test-utils` `act` or `react-test-renderer`, which
+remain supported APIs.
 
 ## Incorrect
 
@@ -26,7 +26,7 @@ findDOMNode(instance);
 ```jsx
 import React from 'react';
 
-class Legacy extends React.Component {
+class App extends React.Component {
   static contextTypes = {};
 }
 ```

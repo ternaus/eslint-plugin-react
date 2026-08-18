@@ -1,16 +1,33 @@
 import { ESLint } from 'eslint';
 
-import { BIOME_OWNED_ESLINT_RULES } from './rule-ownership.mjs';
-
 const eslint = new ESLint({ overrideConfigFile: 'eslint.config.js' });
 const files = [
   'index.js',
   'lib/rules/display-name.js',
   'lib/util/eslint.js',
   'tests/index.js',
-  'scripts/rule-ownership.mjs',
+  'scripts/check-eslint-residual.mjs',
 ];
-const ownedRules = new Set(BIOME_OWNED_ESLINT_RULES);
+const RESIDUAL_ESLINT_RULES = new Set([
+  'eslint-plugin/require-meta-docs-url',
+  'eslint-plugin/require-meta-schema',
+  'n/hashbang',
+  'n/no-deprecated-api',
+  'n/no-exports-assign',
+  'n/no-extraneous-import',
+  'n/no-extraneous-require',
+  'n/no-missing-import',
+  'n/no-missing-require',
+  'n/no-process-exit',
+  'n/no-unpublished-import',
+  'n/no-unpublished-require',
+  'n/no-unsupported-features/es-builtins',
+  'n/no-unsupported-features/es-syntax',
+  'n/no-unsupported-features/node-builtins',
+  'n/process-exit-as-throw',
+  'no-warning-comments',
+  'preserve-caught-error',
+]);
 const issues = [];
 
 function getPluginName(rule) {
@@ -25,8 +42,8 @@ for (const file of files) {
 
   for (const [rule, setting] of Object.entries(config.rules ?? {})) {
     const severity = Array.isArray(setting) ? setting[0] : setting;
-    if (ownedRules.has(rule) && severity !== 0 && severity !== 'off') {
-      issues.push(`${file}: Biome-owned ESLint rule ${rule} is enabled`);
+    if (severity !== 0 && severity !== 'off' && !RESIDUAL_ESLINT_RULES.has(rule)) {
+      issues.push(`${file}: ESLint rule ${rule} is not a documented residual check`);
     }
     if (severity === 'warn' || severity === 'warning' || severity === 1) {
       issues.push(`${file}: ESLint rule ${rule} uses warning severity`);

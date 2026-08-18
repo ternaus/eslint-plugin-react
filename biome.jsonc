@@ -34,11 +34,7 @@
         "noForEach": "off",
         "noImplicitCoercions": "off",
         "noRedundantDefaultExport": "off",
-        "noUselessCatchBinding": "off",
-        "noUselessEmptyExport": "off",
-        "noUselessSwitchCase": "off",
         "noUselessUndefined": "off",
-        "useLiteralKeys": "off",
         "useMaxParams": "off",
         "useOptionalChain": "off",
         "useSimplifiedLogicExpression": "off"
@@ -48,17 +44,12 @@
         "noProcessGlobal": "off",
         "noUndeclaredDependencies": "off",
         "useImportExtensions": "off",
-        "useJsonImportAttributes": "off",
-        "useParseIntRadix": "off",
         "useQwikValidLexicalScope": "off",
         "noUnresolvedImports": "off"
       },
       "performance": {
-        "noAccumulatingSpread": "off",
         "noAwaitInLoops": "off",
-        "noBarrelFile": "off",
         "noDelete": "off",
-        "noNamespaceImport": "off",
         "useTopLevelRegex": "off"
       },
       "security": {
@@ -77,6 +68,26 @@
         "noParameterAssign": "off",
         "noParameterProperties": "off",
         "noRestrictedGlobals": "off",
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "patterns": [
+              {
+                "group": [
+                  "array-includes",
+                  "array.prototype.*",
+                  "es-iterator-helpers/**",
+                  "hasown",
+                  "object.entries",
+                  "object.fromentries",
+                  "object.values",
+                  "string.prototype.*"
+                ],
+                "message": "Node 22+ provides this API natively; do not add compatibility polyfills."
+              }
+            ]
+          }
+        },
         "noTernary": "off",
         "noUnusedTemplateLiteral": "off",
         "noUselessElse": "off",
@@ -102,7 +113,6 @@
         "useSelfClosingElements": "off",
         "useSingleVarDeclarator": "off",
         "useThrowNewError": "off",
-        "useThrowOnlyError": "off",
         "useDestructuring": "off"
       },
       "suspicious": {
@@ -113,9 +123,6 @@
         "noEmptyBlockStatements": "off",
         "noEqualsToNull": "off",
         "noExplicitAny": "off",
-        "noImportCycles": "off",
-        "noRedundantUseStrict": "off",
-        "noThenProperty": "off",
         "noTemplateCurlyInString": "off",
         "noUnknownAttribute": "off",
         "noUnnecessaryConditions": "off",
