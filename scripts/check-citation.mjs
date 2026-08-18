@@ -1,23 +1,16 @@
 import { readFile } from 'node:fs/promises';
 
-const [citation, packageText, readme] = await Promise.all([
-  readFile('CITATION.cff', 'utf8'),
-  readFile('package.json', 'utf8'),
-  readFile('README.md', 'utf8'),
-]);
-const packageJson = JSON.parse(packageText);
-const expectedVersion = packageJson.version;
-const version = citation.match(/^version: (.+)$/m)?.[1];
+const [citation, readme] = await Promise.all([readFile('CITATION.cff', 'utf8'), readFile('README.md', 'utf8')]);
 const issues = [];
 
 if (!citation.startsWith('cff-version: 1.2.0\n')) {
   issues.push('CITATION.cff must use CFF 1.2.0.');
 }
-if (version !== expectedVersion) {
-  issues.push(`CITATION.cff version must match package.json (${expectedVersion}).`);
+if (/^version:/m.test(citation)) {
+  issues.push('CITATION.cff must not pin a package version.');
 }
-if (!readme.includes(`version = {${expectedVersion}}`)) {
-  issues.push(`README citation must use the package version (${expectedVersion}).`);
+if (readme.includes('version = {')) {
+  issues.push('README citation must not pin a package version.');
 }
 
 if (issues.length > 0) {

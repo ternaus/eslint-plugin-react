@@ -4,9 +4,8 @@ import { readFile } from 'node:fs/promises';
 
 import { BIOME_RULE_EXCEPTIONS } from './biome-exceptions.mjs';
 
-const [biomeText, packageText] = await Promise.all([readFile('biome.jsonc', 'utf8'), readFile('package.json', 'utf8')]);
+const biomeText = await readFile('biome.jsonc', 'utf8');
 const biomeConfig = JSON.parse(biomeText);
-const packageJson = JSON.parse(packageText);
 const issues = [];
 
 function disabledBiomeRules(config) {
@@ -22,10 +21,6 @@ function disabledBiomeRules(config) {
     .sort((left, right) => left.localeCompare(right));
 }
 
-const biomeVersion = packageJson.devDependencies['@biomejs/biome'].replace(/^\^/, '');
-if (biomeConfig.$schema !== `https://biomejs.dev/schemas/${biomeVersion}/schema.json`) {
-  issues.push('Biome schema version must match the pinned @biomejs/biome version.');
-}
 if (biomeConfig.linter?.rules?.preset !== 'all') {
   issues.push('Biome linter.rules.preset must be "all".');
 }

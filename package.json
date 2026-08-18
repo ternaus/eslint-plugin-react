@@ -62,7 +62,8 @@
     "pack:check": "node scripts/pack-check.mjs",
     "prepack": "yarn quality:publish",
     "quality:complete": "yarn quality:publish && yarn pack:check && yarn test:package",
-    "quality:publish": "yarn format:check && yarn check:citation && yarn check:html-metadata && yarn check:rule-documentation && yarn lint && yarn typecheck && yarn test:coverage",
+    "quality:precommit": "yarn format:check && yarn check:citation && yarn check:html-metadata && yarn check:rule-documentation && yarn lint && yarn typecheck",
+    "quality:publish": "yarn quality:precommit && yarn test:coverage",
     "test": "mocha --reporter min \"tests/lib/**/*.js\" tests/index.js tests/flat-config.js",
     "test:coverage": "c8 --all --extension .js --include index.js --include 'lib/**/*.js' --reporter text-summary --check-coverage --branches 90 --functions 95 --lines 95 --statements 95 mocha --reporter min \"tests/lib/**/*.js\" tests/index.js tests/flat-config.js",
     "test:package": "node scripts/test-package-consumer.mjs",
@@ -89,7 +90,7 @@
     "eslint": "^10.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.8",
+    "@biomejs/biome": ">=2.5.8",
     "@types/node": "^26.2.0",
     "c8": "^12.0.0",
     "eslint": "10.8.0",

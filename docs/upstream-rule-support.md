@@ -7,12 +7,12 @@ configuration and expect a compatibility alias.
 
 ## Biome owns the check
 
-This package removes a rule when the pinned Biome version provides the same
+This package removes a rule when Biome 2.5.8 or later provides the same
 user-visible diagnostic. Run Biome with `rules.preset: "all"`; keeping both
 implementations would make users review duplicate diagnostics and would split
 maintenance of one behavior.
 
-These upstream IDs were removed because Biome 2.5.8 owns the check:
+These upstream IDs were removed because Biome 2.5.8 or later owns the check:
 
 | Upstream rule | Biome rule |
 | --- | --- |
@@ -69,7 +69,7 @@ part of this API.
 Before proposing an upstream rule, establish all three facts:
 
 1. The rule protects a concrete React 19+ behavior rather than a project convention.
-2. The pinned Biome version does not already provide the same behavior and fix policy.
+2. Biome 2.5.8 or later does not already provide the same behavior and fix policy.
 3. ESLint 10 can prove the diagnostic with a bounded false-positive policy.
 
 If the rule passes those checks, add its focused tests, a rule page, registry

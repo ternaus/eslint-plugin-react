@@ -8,8 +8,14 @@ ES modules and flat configuration exclusively.
 ```sh
 corepack enable
 yarn install --immutable
+python3 -m pip install --user pre-commit
+pre-commit install --install-hooks
 yarn quality:complete
 ```
+
+The pre-commit hook runs the repository checks that are fast enough for every
+commit, including `yarn quality:precommit`. Run `pre-commit run --all-files`
+after changing hook configuration or when you want to validate the full tree.
 
 Use Node.js 22.13 for the complete quality suite. The CI also runs the product
 tests on Node.js 24 and 26.
@@ -28,8 +34,8 @@ syntax and do not add parser-version exceptions or alternate-parser harnesses.
 
 Keep the exported `react/*` namespace stable. New configuration must be flat
 config, and new runtime files must be ESM with explicit `.js` import extensions.
-Before adding or changing a rule, compare its complete contract with the pinned
-Biome version. If Biome owns that check, remove the local rule instead of
+Before adding or changing a rule, compare its complete contract with Biome
+2.5.8 or later. If Biome owns that check, remove the local rule instead of
 maintaining two versions. Keep the README and rule catalog limited to the
 current package contract. Explain an intentionally unsupported upstream rule
 through the categories in `docs/upstream-rule-support.md` rather than adding a

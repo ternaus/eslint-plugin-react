@@ -12,7 +12,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@biomejs/biome@npm:2.5.8":
+"@biomejs/biome@npm:>=2.5.8":
   version: 2.5.8
   resolution: "@biomejs/biome@npm:2.5.8"
   dependencies:
@@ -321,7 +321,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ternaus/eslint-plugin-react@workspace:."
   dependencies:
-    "@biomejs/biome": "npm:2.5.8"
+    "@biomejs/biome": "npm:>=2.5.8"
     "@types/node": "npm:^26.2.0"
     c8: "npm:^12.0.0"
     eslint: "npm:10.8.0"

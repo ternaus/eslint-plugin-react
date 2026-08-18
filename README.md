@@ -1,9 +1,9 @@
 # @ternaus/eslint-plugin-react
 
-> [Support ongoing maintenance on PayPal](https://www.paypal.com/paypalme/ternaus)
+> [Sponsor ongoing maintenance on GitHub](https://github.com/sponsors/ternaus)
 
 React 19+ rules for ESLint 10 that Biome does not provide. Use it alongside
-Biome 2.5.8, which owns general JavaScript, JSX, DOM, and React
+Biome 2.5.8 or later, which owns general JavaScript, JSX, DOM, and React
 checks. This independent native-ESM continuation of
 [`jsx-eslint/eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react)
 preserves the `react/*` namespace, upstream Git history, and MIT attribution.
@@ -17,13 +17,13 @@ contains the entire supported package contract.
 
 This project supports React 19 and newer, ESLint 10, Node.js 22.13, 24, and
 26, and flat config in `eslint.config.js`. The repository verifies its Biome
-ownership boundary with Biome 2.5.8. React 18 and earlier, ESLint 9, and
+ownership boundary with Biome 2.5.8 or later. React 18 and earlier, ESLint 9, and
 `.eslintrc*` files are not supported.
 
 ## Install
 
 ```sh
-yarn add --dev @biomejs/biome@2.5.8 eslint@^10 @ternaus/eslint-plugin-react
+yarn add --dev @biomejs/biome@'>=2.5.8' eslint@^10 @ternaus/eslint-plugin-react
 ```
 
 ## Use it with Biome
@@ -180,16 +180,15 @@ the project's provenance and independent-maintenance policy.
 
 ## Cite this project
 
-If this project supports published work, cite the exact release you used. GitHub’s
-**Cite this repository** control reads [CITATION.cff](CITATION.cff) and provides
-ready-to-copy APA and BibTeX entries. You can also use this BibTeX entry:
+If this project supports published work, cite the project. GitHub’s **Cite this
+repository** control reads [CITATION.cff](CITATION.cff) and provides ready-to-copy
+APA and BibTeX entries. You can also use this BibTeX entry:
 
 ```bibtex
 @software{Iglovikov_eslint_plugin_react_2026,
   author = {Iglovikov, Vladimir},
   title = {{@ternaus/eslint-plugin-react}},
   url = {https://github.com/ternaus/eslint-plugin-react},
-  version = {8.0.0-rc.3},
   year = {2026}
 }
 ```
