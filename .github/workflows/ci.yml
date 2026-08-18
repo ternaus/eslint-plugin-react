@@ -30,6 +30,12 @@ jobs:
         run: /tmp/eslint-plugin-react-pre-commit/bin/python -m pip install --disable-pip-version-check pre-commit
       - name: Run pre-commit hooks
         run: /tmp/eslint-plugin-react-pre-commit/bin/pre-commit run --all-files
+      - name: Check commit message
+        run: |
+          git log -1 --pretty=%B > /tmp/eslint-plugin-react-commit-message.txt
+          /tmp/eslint-plugin-react-pre-commit/bin/pre-commit run conventional-pre-commit \
+            --hook-stage commit-msg \
+            --commit-msg-filename /tmp/eslint-plugin-react-commit-message.txt
       - run: yarn quality:complete
 
   runtime:
