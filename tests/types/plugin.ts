@@ -18,3 +18,4 @@ export const configs: readonly Linter.Config[] = [
 
 export const jsxKeyRule = plugin.rules['jsx-key'];
 export const noRenderReturnUndefinedRule = plugin.rules['no-render-return-undefined'];
+export const preferUseStateLazyInitializationRule = plugin.rules['prefer-use-state-lazy-initialization'];

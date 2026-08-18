@@ -2,7 +2,7 @@
 
 Start with the setup in the [repository README](../../README.md). Use this page when you need to choose an additional rule or inspect whether a rule can apply an automatic fix.
 
-The plugin exports 103 active rules and 2 deprecated rules. The `all` preset enables every active rule as an error. Deprecated rules remain available for an explicit configuration but are not enabled by a preset.
+The plugin exports 104 active rules and 2 deprecated rules. The `all` preset enables every active rule as an error. Deprecated rules remain available for an explicit configuration but are not enabled by a preset.
 
 A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A `suggestion` entry means the rule can offer an editor suggestion; it is not changed by the normal automatic-fix pass.
 
@@ -102,6 +102,7 @@ A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A 
 | [`react/prefer-exact-props`](prefer-exact-props.md) | Prefer exact proptype definitions | — | ✓ | — | active |
 | [`react/prefer-read-only-props`](prefer-read-only-props.md) | Enforce that props are read-only | — | ✓ | `--fix` | active |
 | [`react/prefer-stateless-function`](prefer-stateless-function.md) | Enforce stateless components to be written as a pure function | — | ✓ | — | active |
+| [`react/prefer-use-state-lazy-initialization`](prefer-use-state-lazy-initialization.md) | Prefer lazy initialization for React useState values that call a function | — | ✓ | — | active |
 | [`react/prop-types`](prop-types.md) | Disallow missing props validation in a React component definition | ✓ | ✓ | — | active |
 | [`react/react-in-jsx-scope`](react-in-jsx-scope.md) | Disallow missing React when using JSX | ✓ | ✓ | — | active |
 | [`react/require-default-props`](require-default-props.md) | Enforce a defaultProps definition for every prop that is not a required prop | — | ✓ | — | active |
