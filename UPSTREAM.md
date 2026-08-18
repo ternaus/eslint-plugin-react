@@ -11,6 +11,9 @@ flat-config-only package. Its deliberate differences are native ESM source and
 exports, a maintained Node.js matrix, current parser coverage, and a
 Biome-plus-residual-ESLint quality boundary.
 
+The [upstream rule support policy](docs/upstream-rule-support.md) explains why
+an original rule ID may be absent from the supported catalog.
+
 Changes in the original project are reference material, not an automatic
 synchronization source. Before adopting a change, compare its public rule
 behavior and tests, adapt it to the current architecture, and run

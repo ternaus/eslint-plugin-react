@@ -4,6 +4,8 @@ Start with the setup in the [repository README](../../README.md). Use this page 
 
 The plugin exports 11 active rules, all included in `recommended`.
 
+This table is exhaustive. For an upstream rule ID that is absent here, see [why this package does not support it](../upstream-rule-support.md).
+
 A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A `suggestion` entry means the rule can offer an editor suggestion; it is not changed by the normal automatic-fix pass.
 
 ## Rules

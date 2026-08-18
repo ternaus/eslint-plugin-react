@@ -31,7 +31,9 @@ config, and new runtime files must be ESM with explicit `.js` import extensions.
 Before adding or changing a rule, compare its complete contract with the pinned
 Biome version. If Biome owns that check, remove the local rule instead of
 maintaining two versions. Keep the README and rule catalog limited to the
-current package contract.
+current package contract. Explain an intentionally unsupported upstream rule
+through the categories in `docs/upstream-rule-support.md` rather than adding a
+compatibility alias.
 
 ## Quality ownership
 

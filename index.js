@@ -13,7 +13,7 @@ const configs = { flat: Object.create(null) };
 const plugin = {
   meta: {
     name: '@ternaus/eslint-plugin-react',
-    version: '8.0.0-rc.2',
+    version: '8.0.0-rc.3',
   },
   rules: allRules,
   configs,

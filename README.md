@@ -136,6 +136,10 @@ The [rule catalog](docs/rules/README.md) lists every rule, what it reports, and
 whether it supports `--fix` or an editor suggestion. Each rule name links to
 examples and its analysis boundary.
 
+The catalog is exhaustive. For an upstream rule ID that is absent here, read
+[why this package does not support it](docs/upstream-rule-support.md) before
+adding a compatibility request.
+
 ## Platform boundary
 
 Platform-neutral JSX and React-core checks can analyze React Native source, but
@@ -185,7 +189,7 @@ ready-to-copy APA and BibTeX entries. You can also use this BibTeX entry:
   author = {Iglovikov, Vladimir},
   title = {{@ternaus/eslint-plugin-react}},
   url = {https://github.com/ternaus/eslint-plugin-react},
-  version = {8.0.0-rc.2},
+  version = {8.0.0-rc.3},
   year = {2026}
 }
 ```

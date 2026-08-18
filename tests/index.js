@@ -7,6 +7,9 @@ const path = require('path');
 const plugin = require('..');
 const index = require('../lib/rules');
 const ruleRegistry = require('../lib/rule-registry');
+const upstreamRuleSupportPath = path.resolve(__dirname, '../docs/upstream-rule-support.md');
+const readmePath = path.resolve(__dirname, '../README.md');
+const ruleCatalogPath = path.resolve(__dirname, '../docs/rules/README.md');
 
 const ACTIVE_RULE_NAMES = [
   'controlled-form-requires-handler',
@@ -66,6 +69,19 @@ describe('React 19 rule surface', () => {
       'react/no-prop-types': 'error',
       'react/prefer-use-state-lazy-initialization': 'warn',
     });
+  });
+
+  it('documents why absent upstream rules are unsupported', () => {
+    assert.ok(fs.existsSync(upstreamRuleSupportPath));
+    const upstreamRuleSupport = fs.readFileSync(upstreamRuleSupportPath, 'utf8');
+    const readme = fs.readFileSync(readmePath, 'utf8');
+    const ruleCatalog = fs.readFileSync(ruleCatalogPath, 'utf8');
+
+    assert.match(upstreamRuleSupport, /The \[rule catalog\]\(rules\/README\.md\) is the complete supported API/u);
+    assert.match(upstreamRuleSupport, /Biome owns the check/u);
+    assert.match(upstreamRuleSupport, /outside the React 19 contract/u);
+    assert.match(readme, /docs\/upstream-rule-support\.md/u);
+    assert.match(ruleCatalog, /\.\.\/upstream-rule-support\.md/u);
   });
 });
 
