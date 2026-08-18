@@ -121,6 +121,19 @@ const tests = {
       `,
     },
     {
+      code: `
+        import { useState as state } from 'react'
+        function useColor() {
+          function state() {
+            return null
+          }
+
+          const result = state()
+          return result
+        }
+      `,
+    },
+    {
       code: 'const result = React.useState()',
     },
     {
@@ -217,6 +230,16 @@ const tests = {
         import { useState as useStateAlternativeName } from 'react'
         function useColor() {
           const result = useStateAlternativeName()
+          return result
+        }
+      `,
+      errors: [{ message: 'useState call is not destructured into value + setter pair' }],
+    },
+    {
+      code: `
+        import { useState as state } from 'react'
+        function useColor() {
+          const result = state()
           return result
         }
       `,
