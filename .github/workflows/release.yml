@@ -27,4 +27,4 @@ jobs:
       - run: corepack enable
       - run: yarn install --immutable
       - run: node scripts/assert-release-tag.mjs '${{ github.event.release.tag_name }}'
-      - run: npm publish --provenance --tag "${{ github.event.release.prerelease && 'next' || 'latest' }}"
+      - run: npm publish --provenance --access public --tag "${{ github.event.release.prerelease && 'next' || 'latest' }}"
