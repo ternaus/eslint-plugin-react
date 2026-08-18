@@ -24,6 +24,12 @@ jobs:
           package-manager-cache: false
       - run: corepack enable
       - run: yarn install --immutable
+      - name: Set up pre-commit
+        run: python3 -m venv /tmp/eslint-plugin-react-pre-commit
+      - name: Install pre-commit
+        run: /tmp/eslint-plugin-react-pre-commit/bin/python -m pip install --disable-pip-version-check pre-commit
+      - name: Run pre-commit hooks
+        run: /tmp/eslint-plugin-react-pre-commit/bin/pre-commit run --all-files
       - run: yarn quality:complete
 
   runtime:
