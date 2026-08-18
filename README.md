@@ -132,9 +132,9 @@ export default [
 ];
 ```
 
-The [rule catalog](docs/rules/README.md) lists every rule, what it reports,
-whether each preset enables it, and whether it supports `--fix` or an editor
-suggestion. Each rule name links to examples and options.
+The [rule catalog](docs/rules/README.md) lists every rule, what it reports, and
+whether it supports `--fix` or an editor suggestion. Each rule name links to
+examples and its analysis boundary.
 
 ## Platform boundary
 
@@ -144,20 +144,19 @@ preset. Rules about HTML and React DOM form behavior operate only on proven
 lowercase HTML elements; they skip `View`, `Text`, custom elements, SVG,
 MathML, and dynamic host elements.
 
-## React version and settings
+## React version behavior
 
 React version detection is not part of this package: every rule has one React
 19+ behavior path and never reads `react/package.json`. Biome owns the
 overlapping React and JSX checks. Each remaining rule page documents its own
-options and settings.
+analysis boundary.
 
 ## How the project verifies rule behavior
 
-Every rule has a focused reference page and regression tests. The test suite
-runs eligible cases with Espree, `@typescript-eslint/parser`, and
-`@babel/eslint-parser`, including Flow syntax. The complete quality command also
-enforces coverage thresholds, validates the generated rule catalog, inspects the
-published archive, and loads that archive as ESM, CommonJS, and TypeScript.
+Every rule has a focused reference page and regression tests with ESLint's
+current parser. The complete quality command also enforces coverage thresholds,
+validates the generated rule catalog, inspects the published archive, and loads
+that archive as ESM, CommonJS, and TypeScript.
 
 ## Develop the plugin
 
@@ -186,7 +185,7 @@ ready-to-copy APA and BibTeX entries. You can also use this BibTeX entry:
   author = {Iglovikov, Vladimir},
   title = {{@ternaus/eslint-plugin-react}},
   url = {https://github.com/ternaus/eslint-plugin-react},
-  version = {8.0.0-rc.1},
+  version = {8.0.0-rc.2},
   year = {2026}
 }
 ```

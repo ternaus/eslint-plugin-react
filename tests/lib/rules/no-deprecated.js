@@ -38,7 +38,7 @@ ruleTester.run('no-deprecated', rule, {
       errors: [{ messageId: 'removed', data: { api: 'ReactDOM.render', replacement: 'createRoot' } }],
     },
     {
-      code: "import { hydrate as hydrateLegacy } from 'react-dom'; hydrateLegacy(<App />, root);",
+      code: "import { hydrate as hydrateRemoved } from 'react-dom'; hydrateRemoved(<App />, root);",
       errors: [{ messageId: 'removed', data: { api: 'ReactDOM.hydrate', replacement: 'hydrateRoot' } }],
     },
     {
@@ -70,8 +70,8 @@ ruleTester.run('no-deprecated', rule, {
         }
       `,
       errors: [
-        { messageId: 'legacyContext', data: { name: 'contextTypes' } },
-        { messageId: 'legacyContext', data: { name: 'childContextTypes' } },
+        { messageId: 'removedContext', data: { name: 'contextTypes' } },
+        { messageId: 'removedContext', data: { name: 'childContextTypes' } },
       ],
     },
   ],

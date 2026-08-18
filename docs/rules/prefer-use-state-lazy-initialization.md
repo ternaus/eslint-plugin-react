@@ -2,8 +2,6 @@
 
 📝 Prefer lazy initialization for React useState values that call a function.
 
-<!-- end auto-generated rule header -->
-
 `useState(createTodos())` evaluates `createTodos()` before every render that
 reaches the call, even though React uses that value only for initialization.
 Pass an initializer function instead when computing the initial state does

@@ -23,10 +23,8 @@ its public behavior, options, or recommendation status changes. Run
 README preset summary and the full rule catalog; the quality gate rejects stale
 generated documentation.
 
-Every rule change needs a focused regression test. The suite runs each eligible
-case with Espree, TypeScript-ESLint, and the current Babel parser. Do not add
-parser-version exceptions: change the rule or test only when the current parser
-contracts differ materially.
+Every rule change needs a focused regression test. Use current ESLint parser
+syntax and do not add parser-version exceptions or alternate-parser harnesses.
 
 Keep the exported `react/*` namespace stable. New configuration must be flat
 config, and new runtime files must be ESM with explicit `.js` import extensions.

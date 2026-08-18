@@ -43,6 +43,7 @@ describe('React 19 rule surface', () => {
     ruleRegistry.forEach(
       ({ documentationPath, implementation, name, recommended, requiresTypeInformation, testPath }) => {
         assert.strictEqual(plugin.rules[name], implementation);
+        assert.strictEqual(implementation.meta.docs.recommended, true);
         assert.equal(recommended === 'error' || recommended === 'warn', true);
         assert.strictEqual(requiresTypeInformation, false);
         assert.ok(fs.existsSync(path.resolve(documentationPath)), `${name} must have documentation`);

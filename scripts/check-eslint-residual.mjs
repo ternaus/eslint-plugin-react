@@ -3,8 +3,8 @@ import { ESLint } from 'eslint';
 const eslint = new ESLint({ overrideConfigFile: 'eslint.config.js' });
 const files = [
   'index.js',
-  'lib/rules/display-name.js',
-  'lib/util/eslint.js',
+  'lib/rules/no-invalid-html-attribute.js',
+  'lib/util/reactImports.js',
   'tests/index.js',
   'scripts/check-eslint-residual.mjs',
 ];

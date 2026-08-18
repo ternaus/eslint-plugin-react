@@ -85,7 +85,7 @@ const REPOSITORY_BOUNDARY_RULES = ['security/noSecrets'];
 /** Every Biome exception is explicit and reviewed by the completeness check. */
 export const BIOME_RULE_EXCEPTIONS = Object.freeze([
   ...AST_IMPLEMENTATION_RULES.map((rule) => ({
-    reason: 'AST traversal and compatibility logic needs this construct; behavior is protected by rule tests.',
+    reason: 'AST traversal and React source-binding analysis need this construct; behavior is protected by rule tests.',
     rule,
   })),
   ...FIXTURE_AND_RULE_SEMANTICS.map((rule) => ({
