@@ -12,7 +12,7 @@ const packageDirectory = join(temporaryDirectory, 'package');
 const consumerDirectory = join(temporaryDirectory, 'consumer');
 const npmCache = join(temporaryDirectory, 'npm-cache');
 const packageName = '@ternaus/eslint-plugin-react';
-const runtimeDependencies = ['eslint', 'estraverse', 'jsx-ast-utils', 'minimatch', 'prop-types', 'resolve', 'semver'];
+const runtimeDependencies = ['eslint', 'estraverse', 'jsx-ast-utils', 'minimatch'];
 
 function run(command, arguments_, options = {}) {
   return execFileSync(command, arguments_, {
@@ -69,13 +69,11 @@ export default defineConfig(
     files: ['component.jsx'],
     plugins: { react },
     extends: ['react/flat/recommended', 'react/flat/jsx-runtime'],
-    settings: { react: { version: '19.0' } },
   },
   {
     files: ['all.jsx'],
     plugins: { react },
     extends: ['react/flat/all'],
-    settings: { react: { version: '19.0' } },
   },
   {
     files: ['undefined-return.jsx'],
@@ -103,7 +101,6 @@ export default [
   {
     files: ['direct.jsx'],
     ...react.configs.flat.recommended,
-    settings: { react: { version: '19.0' } },
   },
 ];
 `,

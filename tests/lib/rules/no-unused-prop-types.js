@@ -2966,7 +2966,6 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.52' } },
       features: ['flow'],
     },
     {
@@ -2993,7 +2992,6 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { flowVersion: '0.53' } },
       features: ['flow'],
     },
     {
@@ -3124,7 +3122,6 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { version: '19.0.0' } },
       features: ['class fields'],
     },
     {
@@ -3140,7 +3137,6 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { version: '20.0.0' } },
       features: ['class fields'],
     },
     {
@@ -3166,7 +3162,6 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { version: '19.0.0' } },
       features: ['class fields'],
     },
     {
@@ -3187,7 +3182,6 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-      settings: { react: { version: '20.0.0' } },
       features: ['class fields'],
     },
     {
@@ -5629,7 +5623,6 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-        settings: { react: { flowVersion: '0.52' } },
         features: ['flow'],
         errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
       },
@@ -5691,7 +5684,6 @@ ruleTester.run('no-unused-prop-types', rule, {
         }
       `,
         features: ['flow'],
-        settings: { react: { flowVersion: '0.53' } },
         errors: [{ message: "'person' PropType is defined but prop is never used" }],
       },
       {
@@ -5703,7 +5695,6 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-        settings: { react: { flowVersion: '0.52' } },
         errors: [{ message: "'person' PropType is defined but prop is never used" }],
         features: ['flow'],
       },
@@ -5776,7 +5767,6 @@ ruleTester.run('no-unused-prop-types', rule, {
           }
         }
       `,
-        settings: { react: { flowVersion: '0.53' } },
         features: ['flow'],
         errors: [{ message: "'lastname' PropType is defined but prop is never used" }],
       },

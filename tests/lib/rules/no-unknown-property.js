@@ -98,9 +98,6 @@ ruleTester.run('no-unknown-property', rule, {
     },
     {
       code: '<link precedence="medium" href="https://foo.bar" rel="canonical" />',
-      settings: {
-        react: { version: '19.0.0' },
-      },
     },
     // Case ignored attributes, for `charset` discussion see https://github.com/jsx-eslint/eslint-plugin-react/pull/1863
     { code: '<meta charset="utf-8" />;' },
@@ -229,7 +226,6 @@ ruleTester.run('no-unknown-property', rule, {
     },
     {
       code: '<div allowTransparency="true" />',
-      settings: { react: { version: '19.0.0' } },
       errors: [
         {
           messageId: 'unknownProp',

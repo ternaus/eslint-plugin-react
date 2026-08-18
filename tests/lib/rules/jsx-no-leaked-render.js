@@ -282,7 +282,6 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-        settings: { react: { version: '19.0.0' } },
       },
 
       {
@@ -321,7 +320,6 @@ ruleTester.run('jsx-no-leaked-render', rule, {
           )
         }
       `,
-        settings: { react: { version: '20.0.0' } },
       },
 
       // Invalid tests with both strategies enabled (default)

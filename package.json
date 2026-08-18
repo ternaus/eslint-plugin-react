@@ -1,6 +1,6 @@
 {
   "name": "@ternaus/eslint-plugin-react",
-  "version": "8.0.0-alpha.0",
+  "version": "8.0.0-rc.0",
   "description": "React linting rules for ESLint 10 flat config",
   "license": "MIT",
   "type": "module",
@@ -68,10 +68,12 @@
   "sideEffects": false,
   "scripts": {
     "check:citation": "node scripts/check-citation.mjs",
+    "check:html-metadata": "node scripts/check-html-attribute-metadata.mjs",
     "check:eslint-residual": "node scripts/check-eslint-residual.mjs",
     "check:biome-completeness": "node scripts/check-biome-completeness.mjs",
     "check:rule-documentation": "node scripts/check-rule-documentation.mjs",
     "docs:rules": "node scripts/update-rule-documentation.mjs",
+    "generate:html-metadata": "node scripts/generate-html-attribute-metadata.mjs",
     "format": "biome check --write --linter-enabled=false .",
     "format:check": "biome check --linter-enabled=false .",
     "lint": "yarn check:biome-completeness && yarn lint:biome && yarn check:eslint-residual && yarn lint:eslint",
@@ -80,7 +82,7 @@
     "pack:check": "node scripts/pack-check.mjs",
     "prepack": "yarn quality:publish",
     "quality:complete": "yarn quality:publish && yarn pack:check && yarn test:package",
-    "quality:publish": "yarn format:check && yarn check:citation && yarn check:rule-documentation && yarn lint && yarn typecheck && yarn test:coverage",
+    "quality:publish": "yarn format:check && yarn check:citation && yarn check:html-metadata && yarn check:rule-documentation && yarn lint && yarn typecheck && yarn test:coverage",
     "test": "mocha --reporter min \"tests/lib/**/*.js\" \"tests/util/**/*.js\" tests/index.js tests/flat-config.js",
     "test:coverage": "c8 --all --extension .js --include index.js --include 'lib/**/*.js' --reporter text-summary --check-coverage --branches 90 --functions 95 --lines 95 --statements 95 mocha --reporter min \"tests/lib/**/*.js\" \"tests/util/**/*.js\" tests/index.js tests/flat-config.js",
     "test:package": "node scripts/test-package-consumer.mjs",
@@ -109,10 +111,7 @@
   "dependencies": {
     "estraverse": "^5.3.0",
     "jsx-ast-utils": "^3.3.5",
-    "minimatch": "^10.2.6",
-    "prop-types": "^15.8.1",
-    "resolve": "^1.22.12",
-    "semver": "^7.8.5"
+    "minimatch": "^10.2.6"
   },
   "devDependencies": {
     "@babel/core": "8.0.1",
@@ -127,6 +126,7 @@
     "eslint-plugin-eslint-plugin": "7.6.0",
     "eslint-plugin-n": "18.2.2",
     "globals": "^16.5.0",
+    "html-validate": "9.7.1",
     "mocha": "^11.8.0",
     "publint": "^0.3.23",
     "sinon": "^21.0.0",

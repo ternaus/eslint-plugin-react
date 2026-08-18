@@ -36,11 +36,6 @@ export default [
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     ...react.configs.flat.recommended,
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
   },
 ];
 ```
@@ -63,11 +58,6 @@ export default defineConfig({
   files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
   plugins: { react },
   extends: ['react/flat/recommended'],
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
 });
 ```
 
@@ -82,11 +72,9 @@ yarn eslint .
 yarn eslint . --fix
 ```
 
-React 19 requires the automatic JSX runtime. The historical
-`react-in-jsx-scope` and `jsx-uses-react` rule IDs are retained as no-ops for
-drop-in configuration compatibility, so `react.configs.flat['jsx-runtime']` is
-not needed. The alias remains available for configurations that already extend
-it.
+React 19 uses the automatic JSX runtime. `react.configs.flat['jsx-runtime']`
+is an empty compatibility config for existing flat configs; new configs do not
+need it or the removed classic-runtime rule IDs.
 
 The package is native ESM, but Node.js 22.13 and later can load it with
 `require`. A CommonJS flat config uses the same plugin object:
@@ -98,11 +86,6 @@ module.exports = [
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     ...react.configs.flat.recommended,
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
   },
 ];
 ```
@@ -115,9 +98,9 @@ The plugin is always registered as `react`, so rule IDs stay in the familiar
 <!-- rule-config-summary:start -->
 | Config | Active rules | Use it when |
 | --- | ---: | --- |
-| `recommended` | 21 | You want the supported baseline for React correctness and established best practices. |
-| `all` | 104 | You want to audit every non-deprecated rule, then keep only the rules that fit your codebase. |
-| `jsx-runtime` | 2 disabled | Compatibility alias for existing flat configs; React 19+ always uses the automatic JSX runtime. |
+| `recommended` | 24 | You want the supported baseline for React correctness and established best practices. |
+| `all` | 73 | You want to audit every non-deprecated rule, then keep only the rules that fit your codebase. |
+| `jsx-runtime` | 0 disabled | Compatibility alias for existing flat configs; React 19+ always uses the automatic JSX runtime. |
 <!-- rule-config-summary:end -->
 
 Use `recommended` for normal development. Treat `all` as an audit: it enables
@@ -143,29 +126,25 @@ export default [
 
 The [rule catalog](docs/rules/README.md) lists every rule, what it reports,
 whether each preset enables it, and whether it supports `--fix` or an editor
-suggestion. Each rule name links to examples and options.
+suggestion. Each rule name links to examples and options. For removed and
+renamed upstream rule IDs, see the [migration guide](docs/migration.md).
 
-## React settings
+## Platform boundary
 
-The minimum supported version is React 19. Set `settings.react.version` to
-`'detect'` when React is installed in the linted workspace, or to a fixed
-version such as `'19.0.0'` when it is not. Any resolved version below 19 is a
-configuration error.
+Platform-neutral JSX and React-core checks can analyze React Native source, but
+this package has no React Native compatibility contract or native-specific
+preset. Rules about HTML and React DOM form behavior operate only on proven
+lowercase HTML elements; they skip `View`, `Text`, custom elements, SVG,
+MathML, and dynamic host elements.
 
-The plugin has no React runtime or peer dependency. With `'detect'`, it resolves
-React from the file being linted; if React is unavailable, it warns and assumes
-the latest version. A fixed version avoids that warning in tooling-only
-repositories. Rules with project-specific components read
-`componentWrapperFunctions`, `propWrapperFunctions`, `linkComponents`, and
-`formComponents` from the same `settings.react` object. Each rule page documents
-its exact option and setting shape.
+## Optional component settings
 
-### Migrating to React 19+
-
-Update a fixed `settings.react.version` below 19 to `'19.0.0'` or newer. Existing
-`'detect'` configurations need no change once the workspace resolves React 19+.
-The two classic-JSX scope rules remain in configurations but perform no checks,
-because React 19 requires the automatic JSX runtime.
+React version detection is not part of this package: every rule has one React
+19+ behavior path and never reads `react/package.json`. Most projects need no
+settings. Rules that support project-specific component names read their setting
+directly from the ESLint config, not from `settings.react`; for example,
+`jsx-no-script-url` can opt into configured links with `settings.linkComponents`.
+Each rule page documents its own options and settings.
 
 ## How the project verifies rule behavior
 
@@ -202,7 +181,7 @@ ready-to-copy APA and BibTeX entries. You can also use this BibTeX entry:
   author = {Iglovikov, Vladimir},
   title = {{@ternaus/eslint-plugin-react}},
   url = {https://github.com/ternaus/eslint-plugin-react},
-  version = {8.0.0-alpha.0},
+  version = {8.0.0-rc.0},
   year = {2026}
 }
 ```

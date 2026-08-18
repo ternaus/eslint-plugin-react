@@ -711,11 +711,6 @@ ruleTester.run('display-name', rule, {
         })
         )
       `,
-      settings: {
-        react: {
-          version: '19.0.0',
-        },
-      },
     },
     {
       // Nested React.forwardRef components do not require another display name.
@@ -728,11 +723,6 @@ ruleTester.run('display-name', rule, {
           })
         )
       `,
-      settings: {
-        react: {
-          version: '20.0.0',
-        },
-      },
     },
     {
       // Nested React.forwardRef components do not require another display name.
@@ -745,11 +735,6 @@ ruleTester.run('display-name', rule, {
           })
         )
       `,
-      settings: {
-        react: {
-          version: '19.0.0',
-        },
-      },
     },
     {
       // Nested React.forwardRef components do not require another display name.
@@ -760,11 +745,6 @@ ruleTester.run('display-name', rule, {
           })
         )
       `,
-      settings: {
-        react: {
-          version: '20.0.0',
-        },
-      },
     },
     {
       // Nested React.forwardRef components do not require another display name.
@@ -777,11 +757,6 @@ ruleTester.run('display-name', rule, {
           })
         )
       `,
-      settings: {
-        react: {
-          version: '19.0.0',
-        },
-      },
     },
     {
       code: `

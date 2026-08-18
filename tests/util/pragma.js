@@ -96,7 +96,7 @@ describe('pragma', () => {
                 },
               },
               rules: { 'react/no-array-index-key': 'error' },
-              settings: { react: { pragma: 'Configured', version: '19.0.0' } },
+              settings: { react: { pragma: 'Configured' } },
             },
           ],
         );

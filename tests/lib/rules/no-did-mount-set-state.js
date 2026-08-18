@@ -13,11 +13,6 @@ ruleTester.run('no-did-mount-set-state', rule, {
   valid: parsers.all([
     {
       code: 'class Component extends React.Component { componentDidMount() { this.setState({ ready: true }); } }',
-      settings: { react: { version: '19.0.0' } },
-    },
-    {
-      code: 'class Component extends React.Component { componentDidMount() { this.setState({ ready: true }); } }',
-      settings: { react: { version: '20.0.0' } },
     },
   ]),
   invalid: [],

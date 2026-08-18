@@ -1,74 +1,56 @@
 # react/no-deprecated
 
-📝 Disallow usage of deprecated methods.
+Reports React APIs that are removed in React 19 when the rule can prove their
+origin from an import or a static CommonJS `require`.
 
-💼 This rule is enabled in the ☑️ `recommended` [config](https://github.com/ternaus/eslint-plugin-react#configs).
+The rule reports `ReactDOM.render`, `hydrate`, `unmountComponentAtNode`,
+`findDOMNode`, `createFactory`, removed server stream renderers,
+`useFormState`, and legacy context declarations on a React class component.
+It does not report `react-dom/test-utils` `act` or `react-test-renderer`:
+those APIs still run and need a separate migration rule.
 
-<!-- end auto-generated rule header -->
-
-This plugin targets React 19+. The rule reports every API in its known
-deprecated-API list; it does not vary its result by a configured React version.
-
-## Rule Details
-
-Examples of **incorrect** code for this rule:
+## Incorrect
 
 ```jsx
-React.render(<MyComponent />, root);
+import * as ReactDOM from 'react-dom';
 
-React.unmountComponentAtNode(root);
-
-React.findDOMNode(this.refs.foo);
-
-React.renderToString(<MyComponent />);
-
-React.renderToStaticMarkup(<MyComponent />);
-
-React.createClass({ /* Class object */ });
-
-const propTypes = {
-  foo: PropTypes.bar,
-};
-
-//Any factories under React.DOM
-React.DOM.div();
-
-import React, { PropTypes } from 'react';
-
-// legacy lifecycles
-componentWillMount() { }
-componentWillReceiveProps() { }
-componentWillUpdate() { }
-
-// legacy root APIs
-import { render } from 'react-dom';
-ReactDOM.render(<div></div>, container);
-
-import { hydrate } from 'react-dom';
-ReactDOM.hydrate(<div></div>, container);
-
-import {unmountComponentAtNode} from 'react-dom';
-ReactDOM.unmountComponentAtNode(container);
-
-import { renderToNodeStream } from 'react-dom/server';
-ReactDOMServer.renderToNodeStream(element);
+ReactDOM.render(<App />, root);
 ```
 
-Examples of **correct** code for this rule:
+```jsx
+import { findDOMNode } from 'react-dom';
+
+findDOMNode(instance);
+```
 
 ```jsx
-import { PropTypes } from 'prop-types';
+import React from 'react';
 
-UNSAFE_componentWillMount() { }
-UNSAFE_componentWillReceiveProps() { }
-UNSAFE_componentWillUpdate() { }
+class Legacy extends React.Component {
+  static contextTypes = {};
+}
+```
 
-ReactDOM.createPortal(child, container);
+## Correct
 
+```jsx
 import { createRoot } from 'react-dom/client';
-const root = createRoot(container);
-root.unmount();
 
-import { hydrateRoot } from 'react-dom/client';
-const root = hydrateRoot(container, <App/>);
+createRoot(root).render(<App />);
 ```
+
+```jsx
+const ReactDOM = { render() {} };
+
+ReactDOM.render(<App />, root);
+```
+
+The second example is not a React import, so the rule deliberately stays
+silent. It also resolves the lexical binding at each use, so a function
+parameter that shadows an imported name is not reported.
+
+## Limitations
+
+Only statically identifiable ES module imports and direct
+`require('react…')` declarations are analyzed. Dynamic imports, re-exports,
+and values passed through another module are skipped rather than guessed.

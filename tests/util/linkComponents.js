@@ -38,39 +38,4 @@ describe('linkComponentsFunctions', () => {
       );
     });
   });
-
-  describe('getFormComponents', () => {
-    it('returns a default map of components', () => {
-      const context = {};
-      assert.deepStrictEqual(linkComponentsUtil.getFormComponents(context), new Map([['form', ['action']]]));
-    });
-
-    it('returns a map of components', () => {
-      const formComponents = [
-        'Form',
-        {
-          name: 'MyForm',
-          formAttribute: 'endpoint',
-        },
-        {
-          name: 'MyForm2',
-          formAttribute: ['endpoint1', 'endpoint2'],
-        },
-      ];
-      const context = {
-        settings: {
-          formComponents,
-        },
-      };
-      assert.deepStrictEqual(
-        linkComponentsUtil.getFormComponents(context),
-        new Map([
-          ['form', ['action']],
-          ['Form', ['action']],
-          ['MyForm', ['endpoint']],
-          ['MyForm2', ['endpoint1', 'endpoint2']],
-        ]),
-      );
-    });
-  });
 });

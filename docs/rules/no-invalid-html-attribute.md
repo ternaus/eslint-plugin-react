@@ -1,24 +1,49 @@
 # react/no-invalid-html-attribute
 
-📝 Disallow usage of invalid attributes.
+Reports static HTML attributes and literal values that HTML5 metadata forbids
+for a React DOM intrinsic element. It is enabled in `recommended`.
 
-💡 This rule is manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).
+The rule uses generated data from `html-validate@9.7.1`. The generated module
+is published with this package, so linting does not read the filesystem or load
+`html-validate` at runtime. To update the metadata, change the exact dev
+dependency, run `yarn generate:html-metadata`, inspect the data diff, and run
+`yarn quality:complete`.
 
-<!-- end auto-generated rule header -->
+## Incorrect
 
-Some HTML elements have a specific set of valid values for some attributes.
-For instance the elements: `a`, `area`, `link`, or `form` all have an attribute called `rel`.
-There is a fixed list of values that have any meaning for this attribute on these tags (see [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel)).
-To help with minimizing confusion while reading code, only the appropriate values should be on each attribute.
+```jsx
+<div href="/docs" />
 
-## Rule Details
+<button type="link" />
 
-This rule aims to remove invalid attribute values.
+<input type="telephone" />
+```
 
-## Rule Options
+```jsx
+import React from 'react';
 
-The options is a list of attributes to check. Defaults to `["rel"]`.
+React.createElement('form', { method: 'put' });
+```
 
-## When Not To Use It
+## Correct
 
-When you don't want to enforce attribute value correctness.
+```jsx
+<button type="submit" data-variant="compact" aria-label="Save" />
+
+<div align="center" />
+```
+
+Obsolete-but-valid HTML is intentionally not reported. `data-*` and `aria-*`
+attributes are also outside this rule; use an accessibility-focused tool for
+ARIA semantics.
+
+## Boundaries
+
+The rule analyzes lowercase HTML elements in JSX and statically proven
+`React.createElement` calls. PascalCase components, custom elements, React
+Native host components, SVG and MathML are skipped. Dynamic values, unknown
+spreads, and unknown attribute spellings are skipped as well: spelling belongs
+to `react/no-unknown-property`, and this rule avoids duplicating it.
+
+No automatic fix is offered because removing or changing an attribute can alter
+application behavior.

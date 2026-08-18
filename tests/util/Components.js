@@ -51,15 +51,7 @@ describe('Components', () => {
       };
 
       const tests = {
-        valid: parsers.all([
-          Object.assign({}, test, {
-            settings: {
-              react: {
-                version: 'detect',
-              },
-            },
-          }),
-        ]),
+        valid: parsers.all([Object.assign({}, test, {})]),
         invalid: [],
       };
 

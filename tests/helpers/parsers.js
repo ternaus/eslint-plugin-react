@@ -98,13 +98,10 @@ const parsers = {
       const cannotUseTypeScript =
         ['no-typescript', 'flow', 'jsx namespace', 'bind operator', 'do expressions'].some((feature) =>
           features.has(feature),
-        ) ||
-        test.code.includes('/*eslint no-undef:1*/') ||
-        test.code.includes('/*eslint react/jsx-uses-react:1*/');
+        ) || test.code.includes('/*eslint no-undef:1*/');
       const cannotUseBabel =
         ['ts', 'types', 'bind operator', 'do expressions'].some((feature) => features.has(feature)) ||
-        test.code.includes('/*eslint no-undef:1*/') ||
-        test.code.includes('/*eslint react/jsx-uses-react:1*/');
+        test.code.includes('/*eslint no-undef:1*/');
 
       return [
         ...(cannotUseEspree

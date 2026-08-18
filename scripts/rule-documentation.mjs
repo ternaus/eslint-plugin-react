@@ -1,4 +1,5 @@
 import plugin from '../index.js';
+import ruleRegistry from '../lib/rule-registry.js';
 
 export const README_PATH = 'README.md';
 export const CATALOG_PATH = 'docs/rules/README.md';
@@ -29,23 +30,21 @@ function formatFixSupport(rule) {
 }
 
 export function getRuleRows() {
-  const recommendedRules = plugin.configs.flat.recommended.rules;
-  const allRules = plugin.configs.flat.all.rules;
-
-  return Object.entries(plugin.rules)
-    .map(([name, rule]) => ({
-      all: isEnabled(allRules[`react/${name}`]),
-      deprecated: Boolean(rule.meta.deprecated),
-      description: rule.meta.docs.description,
-      fixSupport: formatFixSupport(rule),
+  return ruleRegistry
+    .map(({ category, implementation, name, recommended, requiresTypeInformation }) => ({
+      all: isEnabled(plugin.configs.flat.all.rules[`react/${name}`]),
+      category,
+      description: implementation.meta.docs.description,
+      fixSupport: formatFixSupport(implementation),
       name,
-      recommended: isEnabled(recommendedRules[`react/${name}`]),
+      recommended,
+      requiresTypeInformation,
     }))
     .sort((left, right) => left.name.localeCompare(right.name));
 }
 
 export function renderConfigSummary(rows = getRuleRows()) {
-  const recommendedCount = rows.filter((row) => row.recommended).length;
+  const recommendedCount = rows.filter((row) => row.recommended !== 'off').length;
   const allCount = rows.filter((row) => row.all).length;
   const jsxRuntimeCount = Object.keys(plugin.configs.flat['jsx-runtime'].rules).length;
 
@@ -59,13 +58,11 @@ export function renderConfigSummary(rows = getRuleRows()) {
 }
 
 export function renderRuleCatalog(rows = getRuleRows()) {
-  const activeCount = rows.filter((row) => !row.deprecated).length;
-  const deprecatedCount = rows.filter((row) => row.deprecated).length;
+  const activeCount = rows.length;
 
   const table = rows.map((row) => {
     const rule = `[\`react/${row.name}\`](${row.name}.md)`;
-    const status = row.deprecated ? 'deprecated' : 'active';
-    return `| ${rule} | ${escapeTableCell(row.description)} | ${row.recommended ? '✓' : '—'} | ${row.all ? '✓' : '—'} | ${row.fixSupport} | ${status} |`;
+    return `| ${rule} | ${escapeTableCell(row.description)} | ${row.recommended === 'off' ? '—' : row.recommended} | ${row.all ? '✓' : '—'} | ${row.category} | ${row.fixSupport} | ${row.requiresTypeInformation ? 'yes' : 'no'} |`;
   });
 
   return [
@@ -73,14 +70,14 @@ export function renderRuleCatalog(rows = getRuleRows()) {
     '',
     'Start with the setup in the [repository README](../../README.md). Use this page when you need to choose an additional rule or inspect whether a rule can apply an automatic fix.',
     '',
-    `The plugin exports ${activeCount} active rules and ${deprecatedCount} deprecated rules. The \`all\` preset enables every active rule as an error. Deprecated rules remain available for an explicit configuration but are not enabled by a preset.`,
+    `The plugin exports ${activeCount} active rules. The \`all\` preset enables every rule as an error.`,
     '',
     'A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A `suggestion` entry means the rule can offer an editor suggestion; it is not changed by the normal automatic-fix pass.',
     '',
     '## Rules',
     '',
-    '| Rule | What it reports | `recommended` | `all` | Fix support | Status |',
-    '| --- | --- | :---: | :---: | --- | --- |',
+    '| Rule | What it reports | `recommended` | `all` | Category | Fix support | Type info |',
+    '| --- | --- | :---: | :---: | --- | --- | :---: |',
     ...table,
   ].join('\n');
 }

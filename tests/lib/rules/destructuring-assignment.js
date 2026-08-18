@@ -366,7 +366,6 @@ ruleTester.run('destructuring-assignment', rule, {
         };
       `,
       options: ['always'],
-      settings: { react: { version: '19.0.0' } },
     },
     {
       code: `
@@ -378,7 +377,6 @@ ruleTester.run('destructuring-assignment', rule, {
         };
       `,
       options: ['never'],
-      settings: { react: { version: '20.0.0' } },
     },
     {
       code: `
@@ -390,7 +388,6 @@ ruleTester.run('destructuring-assignment', rule, {
         };
       `,
       options: ['always'],
-      settings: { react: { version: '19.0.0' } },
     },
     {
       code: `
@@ -400,7 +397,6 @@ ruleTester.run('destructuring-assignment', rule, {
         };
       `,
       options: ['always'],
-      settings: { react: { version: '20.0.0' } },
     },
     {
       code: `
@@ -410,7 +406,6 @@ ruleTester.run('destructuring-assignment', rule, {
         };
       `,
       options: ['never'],
-      settings: { react: { version: '19.0.0' } },
     },
     {
       code: `
@@ -420,7 +415,6 @@ ruleTester.run('destructuring-assignment', rule, {
         };
       `,
       options: ['always'],
-      settings: { react: { version: '20.0.0' } },
     },
     {
       code: `
@@ -430,7 +424,6 @@ ruleTester.run('destructuring-assignment', rule, {
         };
       `,
       options: ['never'],
-      settings: { react: { version: '19.0.0' } },
     },
     {
       code: `

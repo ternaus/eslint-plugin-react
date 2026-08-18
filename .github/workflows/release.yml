@@ -14,7 +14,6 @@ concurrency:
 
 jobs:
   publish:
-    if: ${{ !github.event.release.prerelease }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -28,4 +27,4 @@ jobs:
       - run: corepack enable
       - run: yarn install --immutable
       - run: node scripts/assert-release-tag.mjs '${{ github.event.release.tag_name }}'
-      - run: npm publish --provenance
+      - run: npm publish --provenance --tag "${{ github.event.release.prerelease && 'next' || 'latest' }}"
