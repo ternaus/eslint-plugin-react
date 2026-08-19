@@ -3,11 +3,17 @@
 Reports static HTML attributes and literal values that HTML5 metadata forbids
 for a React DOM intrinsic element. It is enabled in `recommended`.
 
-The rule uses generated data from `html-validate@9.7.1`. The generated module
-is published with this package, so linting does not read the filesystem or load
-`html-validate` at runtime. To update the metadata, change the exact dev
-dependency, run `yarn generate:html-metadata`, inspect the data diff, and run
-`yarn quality:complete`.
+The rule uses the checked-in HTML metadata contract in
+[`lib/html5-attributes.js`](../../lib/html5-attributes.js). The module is
+published with this package, so linting does not read the filesystem or load an
+external validator at runtime. To update the metadata, verify the change
+against the relevant WHATWG section, record the source link, inspect the data
+diff, and run `yarn quality:complete`.
+
+Read [HTML and React attribute contract](../html-react-attribute-contract.md)
+before changing the metadata or adding a manual exception. It defines the
+authoritative sources, the HTML-versus-React boundary, and the required review
+matrix.
 
 ## Incorrect
 
