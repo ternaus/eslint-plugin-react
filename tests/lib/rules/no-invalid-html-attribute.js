@@ -17,7 +17,14 @@ ruleTester.run('no-invalid-html-attribute', rule, {
     '<input type="email" defaultValue="address@example.com" />',
     '<img alt="Profile photo" src="/profile.webp" />',
     '<input accept="image/*" name="avatar" />',
+    '<input autoComplete="email" maxLength={254} />',
     '<script type="application/ld+json">{"{}"}</script>',
+    '<select name="usageStatus" />',
+    '<textarea name="message" maxLength={4000} />',
+    '<video src="/video.mp4"><track src="/captions.vtt" /></video>',
+    '<form target="popupwindow" />',
+    '<button formTarget="popupwindow" />',
+    '<a href="/docs" target="_BLANK" />',
     '<div align="center" />',
     '<a rel="custom-token" href="/docs" />',
     '<Button href="/docs" type="not-an-html-button-type" />',
@@ -49,6 +56,10 @@ ruleTester.run('no-invalid-html-attribute', rule, {
     {
       code: "import React from 'react'; React.createElement('form', { method: 'put' });",
       errors: [{ messageId: 'invalidValue', data: { attribute: 'method', element: 'form', value: 'put' } }],
+    },
+    {
+      code: '<form target="_popupwindow" />',
+      errors: [{ messageId: 'invalidValue', data: { attribute: 'target', element: 'form', value: '_popupwindow' } }],
     },
   ],
 });
