@@ -7,6 +7,12 @@ const htmlValidatePackage = require('html-validate/package.json');
 export const GENERATED_METADATA_PATH = 'lib/generated/html5-attributes.js';
 export const HTML_ATTRIBUTE_METADATA_SOURCE = `html-validate@${htmlValidatePackage.version}`;
 
+const REACT_DOM_ATTRIBUTE_OVERRIDES = Object.freeze({
+  img: { alt: null },
+  input: { accept: null, name: null },
+  script: { type: null },
+});
+
 function normalizeAttribute(attribute) {
   return attribute.toLowerCase();
 }
@@ -20,20 +26,25 @@ function staticValues(definition) {
   return values.length > 0 ? values : null;
 }
 
-function attributesFor(element) {
-  return Object.fromEntries(
+function attributesFor(element, elementName) {
+  const attributes = Object.fromEntries(
     Object.entries(element.attributes ?? {}).map(([name, definition]) => [
       normalizeAttribute(name),
       staticValues(definition),
     ]),
   );
+
+  return {
+    ...attributes,
+    ...(REACT_DOM_ATTRIBUTE_OVERRIDES[elementName] ?? {}),
+  };
 }
 
 export function getHtmlAttributeMetadata() {
   const elements = Object.fromEntries(
     Object.entries(html5)
       .filter(([name]) => name !== '*')
-      .map(([name, definition]) => [name, attributesFor(definition)]),
+      .map(([name, definition]) => [name, attributesFor(definition, name)]),
   );
   const globalAttributes = attributesFor(html5['*']);
 
