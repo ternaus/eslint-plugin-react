@@ -26,6 +26,31 @@ ownership boundary with Biome 2.5.8 or later. React 18 and earlier, ESLint 9, an
 yarn add --dev @biomejs/biome@'>=2.5.8' eslint@^10 @ternaus/eslint-plugin-react
 ```
 
+### Use it with `eslint-config-next`
+
+`eslint-config-next` imports the React plugin under the package name
+`eslint-plugin-react`. Add `@ternaus/eslint-plugin-react` as the direct
+development dependency, then map that transitive package name to the same
+published package with Yarn:
+
+```sh
+yarn add --dev eslint@^10 @ternaus/eslint-plugin-react@8.0.0-rc.5
+```
+
+```json
+{
+  "resolutions": {
+    "eslint-plugin-react": "npm:@ternaus/eslint-plugin-react@8.0.0-rc.5"
+  }
+}
+```
+
+Keep the version in `devDependencies` and `resolutions` synchronized. This
+prevents `eslint-config-next` from installing the ESLint 9-only native React
+plugin alongside the ESLint 10 package. `eslint-config-next` registers the
+resolved plugin under the `react` namespace, so no second React plugin
+registration is needed in your flat config.
+
 ## Use it with Biome
 
 Enable Biome's recommended and additional stable rules, including the React
