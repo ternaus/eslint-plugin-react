@@ -9,16 +9,16 @@ The short decision is:
   values.
 - React's official DOM documentation and React DOM implementation are the
   authority for React props and React-specific attribute behavior.
-- `html-validate` is an optional metadata importer. It is not the authority for
-  this rule and it cannot describe the complete React DOM contract.
-- The generated table is a build artifact. Generation does not make incomplete
-  input authoritative.
+- The checked-in HTML table is this rule's reviewed HTML contract. It is based
+  on WHATWG and is not generated from a third-party validator.
+- The table is published as package data. Keeping it in the repository makes
+  changes reviewable and keeps linting independent of the build environment.
 
 Issue [#29](https://github.com/ternaus/eslint-plugin-react/issues/29) exposed
 the boundary this document governs: `value` is valid on `<option>` as an HTML
 attribute, and React supports controlled `value` props on `<select>` and
 `<textarea>`. Before the contract was split into HTML and React layers, the
-generated metadata only included `input.value`, so the other valid uses were
+HTML metadata only included `input.value`, so the other valid uses were
 reported.
 
 ## What this rule is checking
@@ -121,39 +121,26 @@ values, use the [WAI-ARIA specification](https://www.w3.org/TR/wai-aria/) and
 the applicable ARIA in HTML mapping specification. Do not add ARIA semantics to
 the HTML attribute table as an unrelated exception.
 
-### 5. `html-validate` as an importer
+### 5. The checked-in HTML table
 
-`html-validate` provides useful structured element metadata and can seed a
-generated HTML table. It is not a complete source for this rule because:
+[`lib/html5-attributes.js`](../lib/html5-attributes.js) is the package's
+reviewed HTML metadata contract. It is maintained directly in the repository,
+not generated during installation or publication.
 
-- its metadata is designed for an HTML validator, not for React JSX props;
-- its element definitions can lag the living HTML Standard;
-- its representation may omit attributes, omit React properties, or encode
-  regular-expression values that this rule cannot safely turn into a finite
-  enum;
-- its release version does not determine the React version supported by this
-  package.
+For every change:
 
-The repository currently pins `html-validate@9.7.1` in `package.json` and
-generates [`lib/generated/html5-attributes.js`](../lib/generated/html5-attributes.js)
-from it. As of 2026-08-19, the [npm package page](https://www.npmjs.com/package/html-validate?activeTab=versions)
-lists `11.6.2` as the latest release;
-the official [changelog](https://html-validate.org/changelog/index.html) shows
-that 9.7.1 was published on 2025-06-28 and that later releases continued to
-change HTML metadata. The [release and support plan](https://html-validate.org/dev/releases.html)
-also classifies 9.x as a maintained older major, not the current major.
+- start from the relevant WHATWG element or global-attribute section;
+- preserve the distinction between content attributes and DOM properties;
+- store finite keyword sets only when WHATWG defines a closed set;
+- store an attribute without a finite value list when its value is arbitrary or
+  cannot be decided safely by this rule;
+- record the primary source and rationale in the change description;
+- add a valid case and an invalid near-miss to the rule tests when behavior
+  changes.
 
-The latest release cannot be adopted as a silent dependency bump. Its npm
-metadata requires Node `^22.22.0 || >=24.8.0`, while this package supports Node
-`^22.13.0 || ^24.0.0 || ^26.0.0`. Even `html-validate@10.17.0` requires Node
-`^22.16.0` on the Node 22 line. Updating the importer therefore requires a
-separate Node-support decision or a compatible version selection. It must not
-be mixed into a narrow fix for React attribute semantics.
-
-This does not mean that the dependency should be upgraded blindly. A version
-upgrade can change the generated table and therefore the rule's public
-behavior. Each upgrade requires a reviewed generated diff and a comparison with
-the primary sources above.
+Third-party HTML validators may still be useful for independent investigation,
+but they are not package dependencies and their metadata must not silently
+change this contract.
 
 ## The decision model
 
@@ -204,32 +191,26 @@ These cases are different:
 <option value="queued" />     // allow the HTML content attribute
 ```
 
-A regular expression in an importer must not silently become an incomplete
-finite list. If the rule cannot preserve the source semantics, it should allow
-the attribute's value and leave broader validation to a different rule.
+A source representation must not silently become an incomplete finite list. If
+the rule cannot preserve the source semantics, it should allow the attribute's
+value and leave broader validation to a different rule.
 
 ## What the current implementation actually does
 
-The current implementation is a transitional design:
+The current implementation has explicit, checked-in layers:
 
-1. `scripts/html-attribute-metadata.mjs` imports `html-validate/elements/html5`.
-2. It applies a handwritten `HTML_STANDARD_ATTRIBUTE_OVERRIDES` object.
-3. It writes the result to the generated module.
-4. `no-invalid-html-attribute` merges the generated HTML tables with the
+1. `lib/html5-attributes.js` stores the reviewed HTML contract.
+2. `no-invalid-html-attribute` merges the HTML tables with the
    explicit React DOM attribute layer, then applies global attributes, universal
    attributes, aliases, and the `REACT_ONLY_ATTRIBUTES` set.
-5. If an attribute is known somewhere in the generated data but absent on the
+3. If an attribute is known somewhere in the HTML data but absent on the
    current element, the rule reports it. If the spelling is completely unknown,
    the rule skips it.
 
-Before the HTML and React layers were split, the generated data contained
+Before the HTML and React layers were split, the HTML data contained
 `input.value`, so `value` was a known attribute. The element entries for
 `option`, `select`, and `textarea` did not contain the corresponding contract.
 The rule therefore interpreted valid uses as known-but-invalid attributes.
-
-The generated-data consistency check only proves that the committed file equals
-the current importer output. It does not prove that the importer covers every
-React host element or that its source data is complete.
 
 ## Recommended implementation direction
 
@@ -237,16 +218,15 @@ Do not solve future gaps by adding an endless list of overrides to one HTML
 table. The preferred design is now established for the #29 `value` case and
 should be followed for future gaps:
 
-1. Keep a checked-in, generated HTML layer whose provenance points to WHATWG
-   sections and, where useful, an importer such as `html-validate`.
+1. Keep a checked-in HTML layer whose provenance points to the relevant WHATWG
+   sections.
 2. Add a separate checked-in React DOM contract for supported host props and
    normalized names.
 3. Make the merge explicit in the rule: HTML attributes plus applicable React
    props plus shared attributes.
 4. Record a primary source and a short rationale for every manual exception.
-5. Treat `html-validate` updates as reviewed input changes, not automatic truth.
-6. Keep the published package self-contained. Linting must continue to use the
-   generated contract and must not load metadata from the network or filesystem.
+5. Keep the published package self-contained. Linting must continue to use the
+   checked-in contract and must not load metadata from the network or filesystem.
 
 The #29 regression matrix covers `value` on `input`, `option`, `select`, and
 `textarea`, including JSX and `React.createElement` entry points. Future changes
@@ -268,7 +248,7 @@ Before merging a change to this contract, answer every question below:
 - Does the change affect `input`, `option`, `select`, or `textarea` together?
 - Does it add a valid case and preserve an invalid near-miss?
 - Is the source URL and rationale recorded beside the manual exception?
-- Has the generated diff been inspected rather than only regenerated?
+- Has the checked-in metadata diff been inspected against the primary source?
 - Does the combined `recommended` configuration pass the new regression?
 
 If the source cannot answer the question with a bounded false-positive policy,
