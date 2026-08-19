@@ -86,9 +86,13 @@ describe('React 19 rule surface', () => {
 });
 
 describe('configurations', () => {
-  it('exports only the recommended flat config', () => {
+  it('exposes recommended rules for transitive legacy-config consumers', () => {
+    assert.deepStrictEqual(plugin.configs.recommended.rules, plugin.configs.flat.recommended.rules);
+  });
+
+  it('keeps the recommended flat config aliases', () => {
     assert.equal(plugin.configs['flat/recommended'], plugin.configs.flat.recommended);
-    assert.deepStrictEqual(Object.keys(plugin.configs).sort(), ['flat', 'flat/recommended']);
+    assert.deepStrictEqual(Object.keys(plugin.configs).sort(), ['flat', 'flat/recommended', 'recommended']);
     assert.deepStrictEqual(Object.keys(plugin.configs.flat), ['recommended']);
   });
 });
