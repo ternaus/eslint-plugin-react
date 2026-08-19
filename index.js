@@ -8,7 +8,11 @@ function createRuleConfig(filter) {
 
 const recommendedRules = createRuleConfig(({ recommended }) => recommended !== 'off');
 
-const configs = { flat: Object.create(null) };
+const configs = {
+  // eslint-config-next reads this legacy field while building its flat config.
+  recommended: { rules: recommendedRules },
+  flat: Object.create(null),
+};
 
 const plugin = {
   meta: {
