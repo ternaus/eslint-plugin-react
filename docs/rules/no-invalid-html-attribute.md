@@ -9,6 +9,11 @@ is published with this package, so linting does not read the filesystem or load
 dependency, run `yarn generate:html-metadata`, inspect the data diff, and run
 `yarn quality:complete`.
 
+Read [HTML and React attribute contract](../html-react-attribute-contract.md)
+before changing the metadata or adding a manual exception. It defines the
+authoritative sources, the HTML-versus-React boundary, and the required review
+matrix.
+
 ## Incorrect
 
 ```jsx

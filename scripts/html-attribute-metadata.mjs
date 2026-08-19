@@ -51,7 +51,7 @@ const HTML_STANDARD_ATTRIBUTE_OVERRIDES = Object.freeze({
   },
   object: { form: null },
   optgroup: { label: null },
-  option: { label: null },
+  option: { label: null, value: null },
   output: { form: null },
   select: { autocomplete: null, form: null, name: null },
   script: { type: null },
