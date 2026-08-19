@@ -10,21 +10,57 @@ preserves the `react/*` namespace, upstream Git history, and MIT attribution.
 
 ## What this package is for
 
+This package is designed for projects using:
+
+- ESLint 10
+- Biome 2.5.8+
+- Node.js 22.13, 24, and 26
+- flat config in `eslint.config.js`
+
 Start with Biome's `all` preset. Add this plugin for React 19 contracts that
 Biome does not yet expose, such as invalid HTML attribute values, controlled
 form handlers, and React APIs removed in version 19. The `recommended` preset
 contains the entire supported package contract.
 
-This project supports React 19 and newer, ESLint 10, Node.js 22.13, 24, and
-26, and flat config in `eslint.config.js`. The repository verifies its Biome
-ownership boundary with Biome 2.5.8 or later. React 18 and earlier, ESLint 9, and
-`.eslintrc*` files are not supported.
+React 18 and earlier, ESLint 9, and `.eslintrc*` files are not supported.
 
 ## Install
 
 ```sh
 yarn add --dev @biomejs/biome@'>=2.5.8' eslint@^10 @ternaus/eslint-plugin-react
 ```
+
+### Use it with `eslint-config-next`
+
+`eslint-config-next` imports the React plugin under the package name
+`eslint-plugin-react`. This example targets Yarn Classic and Yarn Berry. For
+npm or pnpm, use that package manager's equivalent dependency override
+mechanism; this README does not provide a separate syntax example.
+
+Install Biome, ESLint, and `@ternaus/eslint-plugin-react` as direct
+development dependencies:
+
+```sh
+yarn add --dev @biomejs/biome@'>=2.5.8' eslint@^10 @ternaus/eslint-plugin-react@8.0.0-rc.5
+```
+
+Enable Biome's `all` preset, including its React domain, as shown in [Use it
+with Biome](#use-it-with-biome). Then map the transitive package name to the
+same published package with Yarn:
+
+```json
+{
+  "resolutions": {
+    "eslint-plugin-react": "npm:@ternaus/eslint-plugin-react@8.0.0-rc.5"
+  }
+}
+```
+
+Keep the version in `devDependencies` and `resolutions` synchronized. This
+prevents `eslint-config-next` from installing the ESLint 9-only native React
+plugin alongside the ESLint 10 package. `eslint-config-next` registers the
+resolved plugin under the `react` namespace, so no second React plugin
+registration is needed in your flat config.
 
 ## Use it with Biome
 
