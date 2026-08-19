@@ -7,10 +7,72 @@ const htmlValidatePackage = require('html-validate/package.json');
 export const GENERATED_METADATA_PATH = 'lib/generated/html5-attributes.js';
 export const HTML_ATTRIBUTE_METADATA_SOURCE = `html-validate@${htmlValidatePackage.version}`;
 
-const REACT_DOM_ATTRIBUTE_OVERRIDES = Object.freeze({
-  img: { alt: null },
-  input: { accept: null, name: null },
+const HTML_STANDARD_ATTRIBUTE_OVERRIDES = Object.freeze({
+  audio: {
+    autoplay: null,
+    controls: null,
+    loading: ['eager', 'lazy'],
+    loop: null,
+    muted: null,
+    src: null,
+  },
+  button: {
+    form: null,
+    popovertarget: null,
+    popovertargetaction: null,
+  },
+  fieldset: { form: null },
+  iframe: { loading: ['eager', 'lazy'] },
+  img: { alt: null, loading: ['eager', 'lazy'] },
+  input: {
+    accept: null,
+    alpha: null,
+    alt: null,
+    autocomplete: null,
+    colorspace: null,
+    dirname: null,
+    form: null,
+    height: null,
+    list: null,
+    max: null,
+    maxlength: null,
+    min: null,
+    minlength: null,
+    name: null,
+    pattern: null,
+    placeholder: null,
+    popovertarget: null,
+    popovertargetaction: null,
+    size: null,
+    src: null,
+    step: null,
+    value: null,
+    width: null,
+  },
+  object: { form: null },
+  optgroup: { label: null },
+  option: { label: null },
+  output: { form: null },
+  select: { autocomplete: null, form: null, name: null },
   script: { type: null },
+  textarea: { dirname: null, form: null, name: null, placeholder: null },
+  track: {
+    default: null,
+    kind: ['subtitles', 'captions', 'descriptions', 'chapters', 'metadata'],
+    label: null,
+    src: null,
+    srclang: null,
+  },
+  video: {
+    autoplay: null,
+    controls: null,
+    loading: ['eager', 'lazy'],
+    loop: null,
+    muted: null,
+    playsinline: null,
+    poster: null,
+    src: null,
+  },
 });
 
 function normalizeAttribute(attribute) {
@@ -19,6 +81,10 @@ function normalizeAttribute(attribute) {
 
 function staticValues(definition) {
   if (!Array.isArray(definition.enum)) {
+    return null;
+  }
+
+  if (definition.enum.some((value) => typeof value === 'string' && /^\/.*\/$/u.test(value))) {
     return null;
   }
 
@@ -36,7 +102,7 @@ function attributesFor(element, elementName) {
 
   return {
     ...attributes,
-    ...(REACT_DOM_ATTRIBUTE_OVERRIDES[elementName] ?? {}),
+    ...(HTML_STANDARD_ATTRIBUTE_OVERRIDES[elementName] ?? {}),
   };
 }
 
