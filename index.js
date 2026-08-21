@@ -17,7 +17,7 @@ const configs = {
 const plugin = {
   meta: {
     name: '@ternaus/eslint-plugin-react',
-    version: '8.0.0-rc.3',
+    version: '8.0.0',
   },
   rules: allRules,
   configs,
