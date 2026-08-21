@@ -1,4 +1,8 @@
+import { createRequire } from 'node:module';
+
 import ruleRegistry from './lib/rule-registry.js';
+
+const packageJson = createRequire(import.meta.url)('./package.json');
 
 const allRules = Object.fromEntries(ruleRegistry.map(({ implementation, name }) => [name, implementation]));
 
@@ -17,7 +21,7 @@ const configs = {
 const plugin = {
   meta: {
     name: '@ternaus/eslint-plugin-react',
-    version: '8.0.0',
+    version: packageJson.version,
   },
   rules: allRules,
   configs,
