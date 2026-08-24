@@ -33,9 +33,9 @@ yarn add --dev @biomejs/biome@'>=2.5.8' eslint@^10 @ternaus/eslint-plugin-react
 ### Use it with `eslint-config-next`
 
 `eslint-config-next` imports the React plugin under the package name
-`eslint-plugin-react`. This example targets Yarn Classic and Yarn Berry. For
-npm or pnpm, use that package manager's equivalent dependency override
-mechanism; this README does not provide a separate syntax example.
+`eslint-plugin-react`. The integration below is tested with Yarn 4. npm, pnpm,
+and Yarn Classic provide dependency override mechanisms too, but those paths
+are outside the current consumer test matrix.
 
 Install Biome, ESLint, and `@ternaus/eslint-plugin-react` as direct
 development dependencies:
