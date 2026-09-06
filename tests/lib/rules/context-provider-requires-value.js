@@ -33,32 +33,14 @@ ruleTester.run('context-provider-requires-value', rule, {
     `${context} React.createElement(Theme, null);`,
   ],
   invalid: [
-    {
-      code: `${context} import { createElement } from "react"; createElement(Theme, undefined, child);`,
-      errors: [{ messageId: 'missingValue' }],
-    },
-    {
-      code: `${context} import * as React from "react"; React.createElement(Theme.Provider, undefined, child);`,
-      errors: [{ messageId: 'missingValue' }],
-    },
-    { code: `${context} <Theme />;`, errors: [{ messageId: 'missingValue' }] },
-    { code: `${context} <Theme theme="dark" />;`, errors: [{ messageId: 'missingValue' }] },
-    { code: `${context} <Theme.Provider />;`, errors: [{ messageId: 'missingValue' }] },
-    {
-      code: 'import React from "react"; const Theme = React.createContext(null); <Theme />;',
-      errors: [{ messageId: 'missingValue' }],
-    },
-    {
-      code: 'const { createContext: context, createElement } = require("react"); const Theme = context(null); createElement(Theme);',
-      errors: [{ messageId: 'missingValue' }],
-    },
-    {
-      code: `${context} import { createElement } from "react"; createElement(Theme.Provider, null, child);`,
-      errors: [{ messageId: 'missingValue' }],
-    },
-    {
-      code: `${context} import * as React from "react"; React.createElement(Theme, { children: child });`,
-      errors: [{ messageId: 'missingValue' }],
-    },
-  ],
+    `${context} import { createElement } from "react"; createElement(Theme, undefined, child);`,
+    `${context} import * as React from "react"; React.createElement(Theme.Provider, undefined, child);`,
+    `${context} <Theme />;`,
+    `${context} <Theme theme="dark" />;`,
+    `${context} <Theme.Provider />;`,
+    'import React from "react"; const Theme = React.createContext(null); <Theme />;',
+    'const { createContext: context, createElement } = require("react"); const Theme = context(null); createElement(Theme);',
+    `${context} import { createElement } from "react"; createElement(Theme.Provider, null, child);`,
+    `${context} import * as React from "react"; React.createElement(Theme, { children: child });`,
+  ].map((code) => ({ code, errors: [{ messageId: 'missingValue' }] })),
 });
