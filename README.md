@@ -144,7 +144,7 @@ The plugin is always registered as `react`, so rule IDs stay in the familiar
 <!-- rule-config-summary:start -->
 | Config | Active rules | Use it when |
 | --- | ---: | --- |
-| `recommended` | 11 | You want the supported baseline of React 19 contracts that Biome does not provide. |
+| `recommended` | 16 | You want the supported baseline of React 19 contracts that Biome does not provide. |
 <!-- rule-config-summary:end -->
 
 Use `recommended` for normal development. It contains every rule this package

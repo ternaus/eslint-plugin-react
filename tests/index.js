@@ -3,6 +3,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+const { Linter } = require('eslint');
 
 const plugin = require('..');
 const index = require('../lib/rules');
@@ -12,6 +13,7 @@ const readmePath = path.resolve(__dirname, '../README.md');
 const ruleCatalogPath = path.resolve(__dirname, '../docs/rules/README.md');
 
 const ACTIVE_RULE_NAMES = [
+  'context-provider-requires-value',
   'controlled-form-requires-handler',
   'jsx-no-constructed-context-values',
   'jsx-no-key-after-spread',
@@ -19,9 +21,13 @@ const ACTIVE_RULE_NAMES = [
   'no-direct-mutation-state',
   'no-function-default-props',
   'no-implicit-ref-callback-return',
+  'no-invalid-form-action',
   'no-invalid-html-attribute',
+  'no-invalid-title-children',
+  'no-invalid-use-argument',
   'no-misspelled-lifecycle-methods',
   'no-prop-types',
+  'no-uncached-use-promise',
   'prefer-use-state-lazy-initialization',
 ];
 
@@ -57,6 +63,7 @@ describe('React 19 rule surface', () => {
 
   it('generates the React 19 baseline', () => {
     assert.deepStrictEqual(plugin.configs.flat.recommended.rules, {
+      'react/context-provider-requires-value': 'error',
       'react/controlled-form-requires-handler': 'error',
       'react/jsx-no-key-after-spread': 'error',
       'react/jsx-no-constructed-context-values': 'warn',
@@ -64,11 +71,35 @@ describe('React 19 rule surface', () => {
       'react/no-direct-mutation-state': 'error',
       'react/no-function-default-props': 'error',
       'react/no-implicit-ref-callback-return': 'error',
+      'react/no-invalid-form-action': 'error',
       'react/no-invalid-html-attribute': 'error',
+      'react/no-invalid-title-children': 'error',
+      'react/no-invalid-use-argument': 'error',
       'react/no-misspelled-lifecycle-methods': 'error',
       'react/no-prop-types': 'error',
+      'react/no-uncached-use-promise': 'error',
       'react/prefer-use-state-lazy-initialization': 'warn',
     });
+  });
+
+  it('allows ordinary named submitters but reports names overridden by function Actions', () => {
+    const linter = new Linter();
+    const config = [{ files: ['**/*.jsx'], ...plugin.configs.flat.recommended }];
+    const valid = `
+      import { createElement } from 'react';
+      <button type="submit" name="operation" formAction="/save">Save</button>;
+      createElement('button', { type: 'submit', name: 'operation' });
+    `;
+    assert.deepStrictEqual(linter.verify(valid, config, { filename: 'form.jsx' }), []);
+    const messages = linter.verify(
+      '<button type="submit" name="operation" formAction={async () => {}}>Save</button>;',
+      config,
+      { filename: 'form.jsx' },
+    );
+    assert.deepStrictEqual(
+      messages.map(({ ruleId, messageId }) => ({ ruleId, messageId })),
+      [{ ruleId: 'react/no-invalid-form-action', messageId: 'overridden' }],
+    );
   });
 
   it('documents why absent upstream rules are unsupported', () => {
