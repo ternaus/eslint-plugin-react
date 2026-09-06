@@ -25,6 +25,7 @@ ruleTester.run('context-provider-requires-value', rule, {
     '<Theme namespace:value="dark" />;',
     '<UI.Theme.Provider />;',
     `${context} import { createElement } from "react"; createElement(Theme, props);`,
+    `${context} import { createElement } from "react"; function App(undefined) { return createElement(Theme, undefined, child); }`,
     `${context} import { createElement } from "react"; createElement(Theme, { ...props });`,
     `${context} import { createElement } from "react"; createElement(Theme, { [key]: value });`,
     `${context} import { createElement } from "react"; createElement(Theme, { value: undefined });`,
@@ -32,6 +33,14 @@ ruleTester.run('context-provider-requires-value', rule, {
     `${context} React.createElement(Theme, null);`,
   ],
   invalid: [
+    {
+      code: `${context} import { createElement } from "react"; createElement(Theme, undefined, child);`,
+      errors: [{ messageId: 'missingValue' }],
+    },
+    {
+      code: `${context} import * as React from "react"; React.createElement(Theme.Provider, undefined, child);`,
+      errors: [{ messageId: 'missingValue' }],
+    },
     { code: `${context} <Theme />;`, errors: [{ messageId: 'missingValue' }] },
     { code: `${context} <Theme theme="dark" />;`, errors: [{ messageId: 'missingValue' }] },
     { code: `${context} <Theme.Provider />;`, errors: [{ messageId: 'missingValue' }] },

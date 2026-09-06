@@ -22,6 +22,11 @@ ruleTester.run('no-uncached-use-promise', rule, {
     `${client} async function App() { return <div>{use(fetch("/data"))}</div>; }`,
     `${client} use(fetch("/data"));`,
     `${client} function helper() { return use(fetch("/data")); }`,
+    `${client} function Helper() { return use(fetch("/data")); }`,
+    `${client} function Helper() { use(fetch("/data")); return () => <div />; }`,
+    `${client} function Helper() { use(fetch("/data")); return <div /> ? 1 : null; }`,
+    `${client} function Helper() { use(fetch("/data")); return (<div />, null); }`,
+    `${client} function Helper() { use(fetch("/data")); return <div /> && null; }`,
     `${client} function App() { const promise = existingPromise; return <div>{use(promise)}</div>; }`,
     `${client} function App() { let promise = fetch("/data"); promise = existingPromise; return <div>{use(promise)}</div>; }`,
     `${client} function App() { const promise = other(); return <div>{use(promise)}</div>; }`,
@@ -33,6 +38,16 @@ ruleTester.run('no-uncached-use-promise', rule, {
     `${client} function useData() { return use(Promise()); }`,
   ],
   invalid: [
+    ...[
+      `${client} function App({ enabled }) { const data = use(fetch("/data")); return enabled ? <List data={data} /> : null; }`,
+      `${client} function App({ enabled }) { return enabled ? null : <List data={use(new Promise(resolve => resolve(1)))} />; }`,
+      `${client} const App = ({ enabled }) => enabled && <List data={use(fetch("/data"))} />;`,
+      `${client} function App({ fallback }) { return fallback || <List data={use(fetch("/data"))} />; }`,
+      `${client} const App = () => <List data={use(fetch("/data"))} /> || null;`,
+      `${client} const App = ({ fallback }) => fallback ?? <List data={use(fetch("/data"))} />;`,
+      `${client} function App() { const data = use(fetch("/data")); return (trackRender(), <List data={data} />); }`,
+      `${client} const App = ({ enabled }) => (trackRender(), enabled ? <>{use(fetch("/data"))}</> : null);`,
+    ].map((code) => ({ code, errors: [{ messageId: 'uncached' }] })),
     {
       code: `${client} function App() { return <div>{use(fetch("/data"))}</div>; }`,
       errors: [{ messageId: 'uncached' }],

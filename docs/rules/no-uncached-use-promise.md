@@ -46,8 +46,10 @@ follow. Server Components and files with an unknown environment are skipped.
 
 Within those files, the `use` call must belong directly to a synchronous
 function component recognized by its JSX return, or a custom Hook named
-`use` followed by an uppercase letter or digit. Nested event handlers and
-unrecognized wrappers are skipped.
+`use` followed by an uppercase letter or digit. JSX returned through a
+conditional or logical expression, or the last item of a sequence expression,
+also identifies a component. Nested event handlers and unrecognized wrappers
+are skipped.
 
 The rule recognizes direct calls and a local `const` initialized by `fetch`
 or `new Promise` in the same render function. Module-level Promises, mutable

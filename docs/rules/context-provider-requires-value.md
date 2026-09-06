@@ -32,9 +32,9 @@ its application-specific meaning.
 
 The provider must be a local `const` initialized directly by React
 `createContext`. Both `<Context>` and `<Context.Provider>` are checked, as
-are imported React `createElement` calls with a missing, null, or
-object-literal props argument. Named imports, aliases of React imports,
-namespace imports, and static CommonJS imports are recognized.
+are imported React `createElement` calls with a missing, `null`, unshadowed
+`undefined`, or object-literal props argument. Named imports, aliases of React
+imports, namespace imports, and static CommonJS imports are recognized.
 
 Imported application contexts, mutable bindings, context aliases, computed
 member access, unknown props, spreads, and computed object keys are skipped.

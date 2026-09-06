@@ -32,7 +32,8 @@ The rule checks JSX and imported React `createElement` calls. It accounts for
 JSX comments and formatting whitespace, reports direct arrays with more than
 one element, and recognizes directly nested intrinsic JSX or `createElement`
 markup. JSX children or explicit `createElement` child arguments take
-precedence over a `children` prop.
+precedence over a `children` prop. A missing, `null`, or unshadowed `undefined`
+props argument is treated as empty props.
 
 Unknown child values, spreads, computed props, customized built-ins, and
 visible SVG/MathML contexts are skipped. A visible SVG `foreignObject`
