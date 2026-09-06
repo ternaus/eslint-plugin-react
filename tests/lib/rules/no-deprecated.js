@@ -19,6 +19,8 @@ ruleTester.run('no-deprecated', rule, {
     "import { act } from 'react-dom/test-utils'; act(() => {});",
     "import TestRenderer from 'react-test-renderer'; TestRenderer.create(<App />);",
     "import { renderToString } from 'react-dom/server'; renderToString(<App />);",
+    "import { useActionState } from 'react'; useActionState(action, initialState);",
+    "import { useFormState } from 'react-dom'; function App(useFormState) { useFormState(action, initialState); }",
     `
       import * as ReactDOM from 'react-dom';
       function render(ReactDOM) {
@@ -59,7 +61,15 @@ ruleTester.run('no-deprecated', rule, {
     },
     {
       code: "import { useFormState } from 'react-dom'; useFormState(action, initialState);",
-      errors: [{ messageId: 'removed', data: { api: 'useFormState', replacement: 'useActionState' } }],
+      errors: [{ messageId: 'deprecated', data: { api: 'useFormState', replacement: 'useActionState' } }],
+    },
+    {
+      code: "import * as ReactDOM from 'react-dom'; ReactDOM.useFormState(action, initialState);",
+      errors: [{ messageId: 'deprecated', data: { api: 'useFormState', replacement: 'useActionState' } }],
+    },
+    {
+      code: "const { useFormState: useLegacyState } = require('react-dom'); useLegacyState(action, initialState);",
+      errors: [{ messageId: 'deprecated', data: { api: 'useFormState', replacement: 'useActionState' } }],
     },
     {
       code: `

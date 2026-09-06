@@ -36,6 +36,8 @@ React.createElement('form', { method: 'put' });
 ```jsx
 <button type="submit" data-variant="compact" aria-label="Save" />
 
+<button type="submit" name="operation">Save</button>
+
 <div align="center" />
 ```
 

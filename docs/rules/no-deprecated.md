@@ -1,11 +1,17 @@
 # react/no-deprecated
 
-Reports React APIs that are removed in React 19 when the rule can prove their
-origin from an import or a static CommonJS `require`.
+Reports React APIs removed in React 19 and the deprecated `useFormState` API
+when the rule can prove their origin from an import or a static CommonJS
+`require`.
 
 The rule reports `ReactDOM.render`, `hydrate`, `unmountComponentAtNode`,
-`findDOMNode`, `createFactory`, removed server stream renderers,
-`useFormState`, and context declarations removed from React class components.
+`findDOMNode`, `createFactory`, removed server stream renderers, and context
+declarations removed from React class components.
+
+`useFormState` is still available in React 19, but React recommends
+`useActionState`. Its diagnostic says **deprecated**, not **removed**. See the
+[React 19 announcement](https://react.dev/blog/2024/12/05/react-19#new-hook-useactionstate).
+
 It does not report `react-dom/test-utils` `act` or `react-test-renderer`, which
 remain supported APIs.
 

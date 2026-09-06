@@ -14,6 +14,7 @@ const ruleTester = new RuleTester({
 ruleTester.run('no-invalid-html-attribute', rule, {
   valid: [
     '<button type="submit" className="primary" data-variant="compact" aria-label="Save" />',
+    '<button type="submit" name="operation">Save</button>',
     '<input type="email" defaultValue="address@example.com" />',
     '<input value={name} onChange={setName} />',
     '<img alt="Profile photo" src="/profile.webp" />',
@@ -50,11 +51,16 @@ ruleTester.run('no-invalid-html-attribute', rule, {
     "React.createElement('button', { type: 'not-an-html-button-type' });",
     "const React = { createElement() {} }; React.createElement('button', { type: 'not-an-html-button-type' });",
     "import React from 'react'; React.createElement('button', { type: 'submit' });",
+    "import { createElement } from 'react'; createElement('button', { type: 'submit', name: 'operation' });",
     "import { createElement } from 'react'; createElement('input', { type: 'email' });",
     "import React from 'react'; React.createElement('select', { value: status, onChange: handleChange });",
     "import { createElement } from 'react'; createElement('textarea', { value: message, onChange: handleChange });",
   ],
   invalid: [
+    {
+      code: '<div name="operation" />',
+      errors: [{ messageId: 'invalidAttribute', data: { attribute: 'name', element: 'div' } }],
+    },
     {
       code: '<div href="/docs" />',
       errors: [{ messageId: 'invalidAttribute', data: { attribute: 'href', element: 'div' } }],
