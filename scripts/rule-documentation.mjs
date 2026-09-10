@@ -39,11 +39,13 @@ export function renderConfigSummary(rows = getRuleRows()) {
     '| Config | Active rules | Use it when |',
     '| --- | ---: | --- |',
     `| \`recommended\` | ${recommendedCount} | You want the supported baseline of React 19 contracts that Biome does not provide. |`,
+    `| \`all\` | ${rows.length} | You want every rule, including checks with a deliberately narrower static-analysis boundary. |`,
   ].join('\n');
 }
 
 export function renderRuleCatalog(rows = getRuleRows()) {
   const activeCount = rows.length;
+  const recommendedCount = rows.filter((row) => row.recommended !== 'off').length;
 
   const table = rows.map((row) => {
     const rule = `[\`react/${row.name}\`](${row.name}.md)`;
@@ -55,7 +57,7 @@ export function renderRuleCatalog(rows = getRuleRows()) {
     '',
     'Start with the setup in the [repository README](../../README.md). Use this page when you need to choose an additional rule or inspect whether a rule can apply an automatic fix.',
     '',
-    `The plugin exports ${activeCount} active rules, all included in \`recommended\`.`,
+    `The plugin exports ${activeCount} active rules. \`recommended\` includes ${recommendedCount}; \`all\` enables the complete set.`,
     '',
     'This table is exhaustive. For an upstream rule ID that is absent here, see [why this package does not support it](../upstream-rule-support.md).',
     '',

@@ -3,7 +3,7 @@
 > [Sponsor ongoing maintenance on GitHub](https://github.com/sponsors/ternaus)
 
 React 19+ rules for ESLint 10 that Biome does not provide. Use it alongside
-Biome 2.5.8 or later, which owns general JavaScript, JSX, DOM, and React
+Biome 2.5.13 or later, which owns general JavaScript, JSX, DOM, and React
 checks. This independent native-ESM continuation of
 [`jsx-eslint/eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react)
 preserves the `react/*` namespace, upstream Git history, and MIT attribution.
@@ -13,7 +13,7 @@ preserves the `react/*` namespace, upstream Git history, and MIT attribution.
 This package is designed for projects using:
 
 - ESLint 10
-- Biome 2.5.8+
+- Biome 2.5.13+
 - Node.js 22.13, 24, and 26
 - flat config in `eslint.config.js`
 
@@ -27,7 +27,7 @@ React 18 and earlier, ESLint 9, and `.eslintrc*` files are not supported.
 ## Install
 
 ```sh
-yarn add --dev @biomejs/biome@'>=2.5.8' eslint@^10 @ternaus/eslint-plugin-react
+yarn add --dev @biomejs/biome@'>=2.5.13' eslint@^10 @ternaus/eslint-plugin-react
 ```
 
 ### Use it with `eslint-config-next`
@@ -41,7 +41,7 @@ Install Biome, ESLint, and `@ternaus/eslint-plugin-react` as direct
 development dependencies:
 
 ```sh
-yarn add --dev @biomejs/biome@'>=2.5.8' eslint@^10 @ternaus/eslint-plugin-react@8.0.1
+yarn add --dev @biomejs/biome@'>=2.5.13' eslint@^10 @ternaus/eslint-plugin-react@8.0.1
 ```
 
 Enable Biome's `all` preset, including its React domain, as shown in [Use it
@@ -144,12 +144,13 @@ The plugin is always registered as `react`, so rule IDs stay in the familiar
 <!-- rule-config-summary:start -->
 | Config | Active rules | Use it when |
 | --- | ---: | --- |
-| `recommended` | 16 | You want the supported baseline of React 19 contracts that Biome does not provide. |
+| `recommended` | 19 | You want the supported baseline of React 19 contracts that Biome does not provide. |
+| `all` | 20 | You want every rule, including checks with a deliberately narrower static-analysis boundary. |
 <!-- rule-config-summary:end -->
 
-Use `recommended` for normal development. It contains every rule this package
-owns. You can raise the two performance signals to errors when that fits your
-project:
+Use `recommended` for normal development. Use `all` when you also want checks
+whose static-analysis boundary can require project-specific review. You can
+raise the two performance signals to errors when that fits your project:
 
 ```js
 import react from '@ternaus/eslint-plugin-react';
