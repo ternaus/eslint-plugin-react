@@ -2,7 +2,7 @@
 
 Start with the setup in the [repository README](../../README.md). Use this page when you need to choose an additional rule or inspect whether a rule can apply an automatic fix.
 
-The plugin exports 16 active rules, all included in `recommended`.
+The plugin exports 20 active rules. `recommended` includes 19; `all` enables the complete set.
 
 This table is exhaustive. For an upstream rule ID that is absent here, see [why this package does not support it](../upstream-rule-support.md).
 
@@ -16,11 +16,14 @@ A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A 
 | [`react/controlled-form-requires-handler`](controlled-form-requires-handler.md) | Require the React 19 handler contract for controlled DOM form controls | error | correctness | — | no |
 | [`react/jsx-no-constructed-context-values`](jsx-no-constructed-context-values.md) | Disallow Context provider values that change identity on every render | warn | performance | — | no |
 | [`react/jsx-no-key-after-spread`](jsx-no-key-after-spread.md) | Disallow an explicit key prop after a JSX spread | error | correctness | — | no |
+| [`react/no-add-transition-type-outside-transition`](no-add-transition-type-outside-transition.md) | Require addTransitionType calls to run inside a React startTransition callback | off | correctness | — | no |
 | [`react/no-deprecated`](no-deprecated.md) | Disallow removed React APIs and deprecated useFormState | error | correctness | — | no |
 | [`react/no-direct-mutation-state`](no-direct-mutation-state.md) | Disallow direct mutation of this.state | error | correctness | — | no |
 | [`react/no-function-default-props`](no-function-default-props.md) | Disallow function component defaultProps ignored by React 19 | error | correctness | — | no |
 | [`react/no-implicit-ref-callback-return`](no-implicit-ref-callback-return.md) | Disallow ref callbacks that implicitly return an assignment or update | error | correctness | `--fix` | no |
+| [`react/no-invalid-browser-call`](no-invalid-browser-call.md) | Disallow discarded or thrown react-dom browser results | error | correctness | — | no |
 | [`react/no-invalid-form-action`](no-invalid-form-action.md) | Disallow incompatible props and submitter types for form Actions | error | correctness | — | no |
+| [`react/no-invalid-fragment-ref-scroll-into-view`](no-invalid-fragment-ref-scroll-into-view.md) | Disallow invalid options passed to FragmentInstance.scrollIntoView | error | correctness | — | no |
 | [`react/no-invalid-html-attribute`](no-invalid-html-attribute.md) | Disallow static HTML attributes and values forbidden for a React DOM element | error | correctness | — | no |
 | [`react/no-invalid-title-children`](no-invalid-title-children.md) | Disallow multiple children or intrinsic markup in an HTML title | error | correctness | — | no |
 | [`react/no-invalid-use-argument`](no-invalid-use-argument.md) | Disallow statically unsupported arguments to React use | error | correctness | — | no |
@@ -28,3 +31,4 @@ A `--fix` entry means ESLint can apply that rule’s fix with `eslint --fix`. A 
 | [`react/no-prop-types`](no-prop-types.md) | Disallow component propTypes ignored by React 19 | error | correctness | — | no |
 | [`react/no-uncached-use-promise`](no-uncached-use-promise.md) | Disallow fresh fetch or Promise results passed to use during client rendering | error | correctness | — | no |
 | [`react/prefer-use-state-lazy-initialization`](prefer-use-state-lazy-initialization.md) | Prefer lazy initialization for React useState values that call a function | warn | performance | — | no |
+| [`react/view-transition-event-requires-cleanup`](view-transition-event-requires-cleanup.md) | Require cleanup for animations started by ViewTransition event callbacks | warn | correctness | — | no |

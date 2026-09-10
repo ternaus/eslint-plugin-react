@@ -11,8 +11,12 @@ function createRuleConfig(filter) {
 }
 
 const recommendedRules = createRuleConfig(({ recommended }) => recommended !== 'off');
+const completeRules = Object.fromEntries(
+  ruleRegistry.map(({ name, recommended }) => [`react/${name}`, recommended === 'off' ? 'error' : recommended]),
+);
 
 const configs = {
+  all: { rules: completeRules },
   // eslint-config-next reads this legacy field while building its flat config.
   recommended: { rules: recommendedRules },
   flat: Object.create(null),
@@ -39,8 +43,10 @@ function createFlatConfig(rules) {
   };
 }
 
+configs.flat.all = createFlatConfig(completeRules);
 configs.flat.recommended = createFlatConfig(recommendedRules);
 
+configs['flat/all'] = configs.flat.all;
 configs['flat/recommended'] = configs.flat.recommended;
 
 export default plugin;

@@ -81,11 +81,15 @@ export default [
     `import assert from 'node:assert/strict';
 import { ESLint } from 'eslint';
 import react from '${packageName}';
+import all from '${packageName}/configs/all';
 import recommended from '${packageName}/configs/recommended';
 
 assert.equal(react.meta.name, '${packageName}');
+assert.equal(all, react.configs.flat.all);
 assert.equal(recommended, react.configs.flat.recommended);
+assert.equal(react.configs.flat.all.plugins.react, react);
 assert.equal(react.configs.flat.recommended.plugins.react, react);
+assert.equal(react.configs['flat/all'], react.configs.flat.all);
 assert.equal(react.configs['flat/recommended'], react.configs.flat.recommended);
 
 const eslint = new ESLint();
@@ -107,11 +111,15 @@ assert.ok(
     join(consumerDirectory, 'consumer.cjs'),
     `const assert = require('node:assert/strict');
 const react = require('${packageName}');
+const all = require('${packageName}/configs/all');
 const recommended = require('${packageName}/configs/recommended');
 
 assert.equal(react.meta.name, '${packageName}');
+assert.equal(all, react.configs.flat.all);
 assert.equal(recommended, react.configs.flat.recommended);
+assert.equal(react.configs.flat.all.plugins.react, react);
 assert.equal(react.configs.flat.recommended.plugins.react, react);
+assert.equal(react.configs['flat/all'], react.configs.flat.all);
 assert.equal(react.configs['flat/recommended'], react.configs.flat.recommended);
 `,
   );
@@ -119,10 +127,12 @@ assert.equal(react.configs['flat/recommended'], react.configs.flat.recommended);
     join(consumerDirectory, 'consumer.ts'),
     `import { defineConfig } from 'eslint/config';
 import react from '${packageName}';
+import all from '${packageName}/configs/all';
 import recommended from '${packageName}/configs/recommended';
 
-const configs = [react.configs.flat.recommended, recommended];
+const configs = [react.configs.flat.all, react.configs.flat.recommended, all, recommended];
 const aliases = [
+  react.configs['flat/all'],
   react.configs['flat/recommended'],
 ];
 const config = defineConfig({
