@@ -41,6 +41,13 @@ ruleTester.run('no-invalid-fragment-ref-scroll-into-view', rule, {
       <div ref={divRef} />;
       divRef.current.scrollIntoView({ behavior: 'smooth' });
     `,
+    `
+      import { Fragment } from 'react';
+      let ref = createRef();
+      <Fragment ref={ref}><div /></Fragment>;
+      ref = { current: document.body };
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    `,
   ],
   invalid: [
     {

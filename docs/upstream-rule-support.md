@@ -12,7 +12,7 @@ user-visible diagnostic. Run Biome with `rules.preset: "all"`; keeping both
 implementations would make users review duplicate diagnostics and would split
 maintenance of one behavior.
 
-These upstream IDs were removed because Biome 2.5.8 or later owns the check:
+These upstream IDs were removed because Biome 2.5.13 or later owns the check:
 
 | Upstream rule | Biome rule |
 | --- | --- |

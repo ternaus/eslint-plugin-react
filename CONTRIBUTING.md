@@ -35,7 +35,7 @@ syntax and do not add parser-version exceptions or alternate-parser harnesses.
 Keep the exported `react/*` namespace stable. New configuration must be flat
 config, and new runtime files must be ESM with explicit `.js` import extensions.
 Before adding or changing a rule, compare its complete contract with Biome
-2.5.8 or later. If Biome owns that check, remove the local rule instead of
+2.5.13 or later. If Biome owns that check, remove the local rule instead of
 maintaining two versions. Keep the README and rule catalog limited to the
 current package contract. Explain an intentionally unsupported upstream rule
 through the categories in `docs/upstream-rule-support.md` rather than adding a

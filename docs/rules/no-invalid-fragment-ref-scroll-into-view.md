@@ -29,6 +29,7 @@ fragmentRef.current.scrollIntoView(false);
 The rule follows an identifier used directly as the `ref` of an imported
 `Fragment` or `React.Fragment` in the same file. It reports literal non-booleans,
 arrays, objects, templates, and inline functions. Unknown expressions are
-skipped, as are refs also attached to another JSX element and aliases of a ref.
+skipped, as are reassigned refs, refs also attached to another JSX element, and
+aliases of a ref.
 
 There is no automatic fix.

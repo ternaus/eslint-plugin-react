@@ -13,6 +13,7 @@ ruleTester.run('no-invalid-browser-call', rule, {
     "import { browser } from 'react-dom'; const bailout = browser();",
     "import { browser } from 'react-dom'; function read() { return browser(); }",
     "import { browser } from 'react-dom'; controller.abort(browser());",
+    "import { browser } from 'react-dom'; consume((value, browser()));",
     "import { browser } from 'other'; browser();",
     'function browser() {} browser();',
     "import * as ReactDOM from 'react-dom'; ReactDOM[method]();",
@@ -21,6 +22,18 @@ ruleTester.run('no-invalid-browser-call', rule, {
   invalid: [
     {
       code: "import { browser } from 'react-dom'; browser();",
+      errors: [{ messageId: 'unused' }],
+    },
+    {
+      code: "import { browser } from 'react-dom'; void browser();",
+      errors: [{ messageId: 'unused' }],
+    },
+    {
+      code: "import { browser } from 'react-dom'; consume((browser(), value));",
+      errors: [{ messageId: 'unused' }],
+    },
+    {
+      code: "import { browser } from 'react-dom'; (value, browser());",
       errors: [{ messageId: 'unused' }],
     },
     {
