@@ -1,10 +1,11 @@
 import type { Linter, Rule } from 'eslint';
 
 export type FlatConfig = Linter.Config;
-export type FlatConfigName = 'recommended';
+export type FlatConfigName = 'all' | 'recommended';
 export type FlatConfigAliasName = `flat/${FlatConfigName}`;
 
 export type ReactPluginConfigs = NonNullable<Linter.Plugin['configs']> & {
+  readonly all: Pick<FlatConfig, 'rules'>;
   readonly recommended: Pick<FlatConfig, 'rules'>;
   readonly flat: Readonly<Record<FlatConfigName, FlatConfig>>;
 } & Readonly<Record<FlatConfigAliasName, FlatConfig>>;

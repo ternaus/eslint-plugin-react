@@ -1,10 +1,14 @@
 import plugin from '@ternaus/eslint-plugin-react';
+import all from '@ternaus/eslint-plugin-react/configs/all';
 import recommended from '@ternaus/eslint-plugin-react/configs/recommended';
 import type { Linter } from 'eslint';
 
 export const configs: readonly Linter.Config[] = [
+  plugin.configs['flat/all'],
+  plugin.configs.flat.all,
   plugin.configs['flat/recommended'],
   plugin.configs.flat.recommended,
+  all,
   recommended,
 ];
 
